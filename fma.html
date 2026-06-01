@@ -217,17 +217,14 @@ function loadExcel(input){
       const hl=headers.map(h=>h.toLowerCase().replace(/\s/g,''));
       function ci(names){for(const n of names){const idx=hl.indexOf(n.toLowerCase().replace(/\s/g,''));if(idx>=0)return idx;}return-1;}
       const cm={
-        recvDate:ci(['접수날짜','접수
-날짜']),
-        process:ci(['발생공정','발생
-공정']),
+        recvDate:ci(['접수날짜','접수\n날짜']),
+        process:ci(['발생공정','발생\n공정']),
         customer:ci(['고객사']),model:ci(['모델명']),maker:ci(['업체명']),
         sn:ci(['s/n']),defect:ci(['불량내용','불량 내용']),
         qty:ci(['불량수']),memo:ci(['정림 진행 현황']),
         fmaDate:ci(['fma 요청일','fma요청일']),
         rma:ci(['rma no.']),delivDate:ci(['배송완료']),
-        status:ci(['완료
-여부','완료여부']),
+        status:ci(['완료\n여부','완료여부']),
         farDate:ci(['역최종 far','최종far','최종 far']),
         duration:ci(['소요 기간[주]','소요기간']),
         cause:ci(['발생 원인','발생원인']),
@@ -315,7 +312,7 @@ function closeReportModal(e){if(e.target===document.getElementById('reportModal'
 function closeReportModalDirect(){document.getElementById('reportModal').classList.remove('open');document.getElementById('reportModalContent').innerHTML='';}
 function saveAsHtml(){
   const now=new Date().toISOString().split('T')[0];
-  const escaped=JSON.stringify(DATA).replace(/</g,'\u003c').replace(/>/g,'\u003e');
+  const escaped=JSON.stringify(DATA).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
   const html=document.documentElement.outerHTML.replace(/const EMBEDDED=\{lastUpdated:"[^"]*",data:[^}]*\};/,`const EMBEDDED={lastUpdated:"${now}",data:${escaped}};`);
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`fma_${now}.html`;a.click();
