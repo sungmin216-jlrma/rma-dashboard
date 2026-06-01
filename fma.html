@@ -66,29 +66,26 @@ body{background:var(--bg);color:var(--text);font-family:"Malgun Gothic","Apple S
 .filter-sel{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;cursor:pointer;}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;min-width:1150px;table-layout:fixed;}
-table th:nth-child(1){width:40px;}
-table th:nth-child(2){width:85px;}
-table th:nth-child(3){width:90px;}
-table th:nth-child(4){width:75px;}
-table th:nth-child(5){width:105px;}
-table th:nth-child(6){width:85px;}
-table th:nth-child(7){width:120px;}
-table th:nth-child(8){width:50px;}
-table th:nth-child(9){width:85px;}
-table th:nth-child(10){width:240px;}
-table th:nth-child(11){width:65px;}
-table th:nth-child(12){width:70px;}
-table th:nth-child(13){width:100px;}
+table th:nth-child(1){width:36px;}
+table th:nth-child(2){width:82px;}
+table th:nth-child(3){width:210px;}
+table th:nth-child(4){width:44px;}
+table th:nth-child(5){width:82px;}
+table th:nth-child(6){width:280px;}
+table th:nth-child(7){width:62px;}
+table th:nth-child(8){width:68px;}
+table th:nth-child(9){width:96px;}
 thead th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;}
 thead th:hover{color:var(--blue);}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
 tbody tr:hover{background:var(--blue-bg);}
-tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
+tbody td{padding:8px 10px;vertical-align:middle;font-size:12px;}
 .td-muted{color:var(--muted);font-size:11px;}
 .td-clip{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.td-wrap{white-space:normal;word-break:break-all;line-height:1.5;font-size:11px;vertical-align:top;padding-top:11px !important;}
-.td-wrap-ko{white-space:normal;word-break:keep-all;word-wrap:break-word;line-height:1.5;vertical-align:top;padding-top:11px !important;}
+.td-wrap{white-space:normal;word-break:break-all;line-height:1.5;font-size:11px;}
+.td-wrap-ko{white-space:normal;word-break:keep-all;word-wrap:break-word;line-height:1.5;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+table th:nth-child(8),table td:nth-child(8){white-space:nowrap;}
 .badge-done{background:var(--green-bg);color:var(--green-text);}
 .badge-ing{background:var(--orange-bg);color:var(--orange-text);}
 .badge-proc{background:var(--blue-bg);color:var(--blue-text);}
@@ -172,16 +169,12 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
         <thead><tr>
           <th onclick="sortBy(0)">No</th>
           <th onclick="sortBy(1)">접수일</th>
-          <th onclick="sortBy(2)">발생공정</th>
-          <th onclick="sortBy(3)">고객사</th>
-          <th onclick="sortBy(4)">모델명</th>
-          <th onclick="sortBy(5)">RMA No.</th>
-          <th onclick="sortBy(6)">불량내용</th>
-          <th onclick="sortBy(7)">불량수</th>
-          <th onclick="sortBy(8)">FMA 요청일</th>
+          <th onclick="sortBy(2)">제품 정보</th>
+          <th onclick="sortBy(3)">불량수</th>
+          <th onclick="sortBy(4)">FMA 요청일</th>
           <th>FAR 현황 (1차/2차/3차)</th>
-          <th onclick="sortBy(9)">소요기간</th>
-          <th onclick="sortBy(10)">상태</th>
+          <th onclick="sortBy(5)">소요기간</th>
+          <th onclick="sortBy(6)">상태</th>
           <th>분석 리포트</th>
         </tr></thead>
         <tbody id="tableBody"></tbody>
@@ -297,7 +290,7 @@ function renderTable(){
     if(q&&![(d.model||''),(d.defect||''),(d.customer||'')].join('|').toLowerCase().includes(q))return false;
     if(st&&d.status!==st)return false;if(pr&&d.process!==pr)return false;return true;
   });
-  const keys=['_','recvDate','process','customer','model','rma','defect','qty','fmaDate','farDate','duration','status'];
+  const keys=['_','recvDate','process','qty','fmaDate','farDate','duration','status'];
   if(sortCol>0&&sortCol<keys.length){rows.sort((a,b)=>{const k=keys[sortCol];const av=a[k]||'',bv=b[k]||'';if(typeof av==='number')return(av-bv)*sortDir;return String(av).localeCompare(String(bv),'ko')*sortDir;});}
   const body=document.getElementById('tableBody');
   if(!rows.length){body.innerHTML='<tr><td colspan="12" style="text-align:center;padding:32px;color:#94A3B8;">데이터 없음</td></tr>';return;}
@@ -309,26 +302,39 @@ function renderTable(){
     const rb=d.report?`<button class="btn-report-view" onclick="viewReport(${i})">📄 ${esc(d.reportName||'리포트')}</button>`:'';
     const ab=`<label class="btn-report-attach" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="attachReport(${i},this)"></label>`;
     const farCell=`<div style="font-size:11px;">
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
         <span style="background:#EFF6FF;color:#1D4ED8;padding:0 5px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">1차</span>
-        <span style="color:#334155;">${d.far1||'–'}</span>
+        <span style="color:#334155;white-space:nowrap;">${d.far1||'–'}</span>
         <input type="text" value="${esc(d.far1Note||'')}" placeholder="메모" oninput="DATA[${i}].far1Note=this.value"
-          style="flex:1;min-width:0;font-size:11px;padding:2px 5px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;">
+          style="flex:1;min-width:0;font-size:10px;padding:1px 4px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;height:20px;">
       </div>
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
         <span style="background:#F0FDF4;color:#15803D;padding:0 5px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">2차</span>
-        <span style="color:#334155;">${d.far2||'–'}</span>
+        <span style="color:#334155;white-space:nowrap;">${d.far2||'–'}</span>
         <input type="text" value="${esc(d.far2Note||'')}" placeholder="메모" oninput="DATA[${i}].far2Note=this.value"
-          style="flex:1;min-width:0;font-size:11px;padding:2px 5px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;">
+          style="flex:1;min-width:0;font-size:10px;padding:1px 4px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;height:20px;">
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="background:#FFF7ED;color:#C2410C;padding:0 5px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">3차</span>
-        <span style="color:#334155;">${d.far3||'–'}</span>
+        <span style="color:#334155;white-space:nowrap;">${d.far3||'–'}</span>
         <input type="text" value="${esc(d.far3Note||'')}" placeholder="메모" oninput="DATA[${i}].far3Note=this.value"
-          style="flex:1;min-width:0;font-size:11px;padding:2px 5px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;">
+          style="flex:1;min-width:0;font-size:10px;padding:1px 4px;border:1px solid #CBD5E1;border-radius:3px;font-family:inherit;color:#0F172A;height:20px;">
       </div>
     </div>`;
-    return`<tr><td class="td-muted">${idx+1}</td><td class="td-muted" style="white-space:nowrap;">${d.recvDate||''}</td><td><span class="badge badge-proc">${esc(d.process||'')}</span></td><td style="white-space:nowrap;">${esc(d.customer||'')}</td><td class="td-clip" title="${esc(d.model||'')}">${esc(d.model||'')}</td><td class="td-wrap td-muted">${esc(d.rma||'–')}</td><td class="td-wrap-ko">${esc(d.defect||'')}</td><td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td><td class="td-muted" style="white-space:nowrap;">${d.fmaDate||''}</td><td>${farCell}</td><td class="${dc}" style="text-align:center;white-space:nowrap;">${dur!==null?dur+'주':'-'}</td><td>${sb}</td><td><div class="report-cell">${rb}${ab}</div></td></tr>`;
+    const infoCell=`<div>
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;flex-wrap:wrap;">
+        <span class="badge badge-proc" style="flex-shrink:0;">${esc(d.process||'')}</span>
+        <span style="font-size:12px;color:#0F172A;">${esc(d.customer||'')}</span>
+        <span style="font-size:12px;color:#1D4ED8;font-weight:600;">${esc(d.model||'')}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:#64748B;">RMA</span>
+        <span style="font-size:11px;color:#475569;word-break:break-all;">${esc(d.rma||'–')}</span>
+        <span style="color:#CBD5E1;">|</span>
+        <span style="font-size:11px;color:#334155;word-break:keep-all;">${esc(d.defect||'')}</span>
+      </div>
+    </div>`;
+    return`<tr><td class="td-muted">${idx+1}</td><td class="td-muted" style="white-space:nowrap;">${d.recvDate||''}</td><td>${infoCell}</td><td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td><td class="td-muted" style="white-space:nowrap;">${d.fmaDate||''}</td><td>${farCell}</td><td class="${dc}" style="text-align:center;white-space:nowrap;">${dur!==null?dur+'주':'-'}</td><td>${sb}</td><td><div class="report-cell">${rb}${ab}</div></td></tr>`;
   }).join('');
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
