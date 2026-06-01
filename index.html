@@ -59,7 +59,7 @@ body{background:#F0F4F8;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,
         </div>
       </div>
       <div class="card-foot">
-        <span class="card-foot-url">rma.html</span>
+        <span class="card-foot-url" id="rma-date" style="color:#64748B;">로딩 중...</span>
         <span class="card-foot-arrow">열기 →</span>
       </div>
     </a>
@@ -76,7 +76,7 @@ body{background:#F0F4F8;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,
         </div>
       </div>
       <div class="card-foot">
-        <span class="card-foot-url">fma.html</span>
+        <span class="card-foot-url" id="fma-date" style="color:#64748B;">로딩 중...</span>
         <span class="card-foot-arrow">열기 →</span>
       </div>
     </a>
@@ -88,6 +88,17 @@ body{background:#F0F4F8;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,
 const now = new Date();
 document.getElementById('now').innerHTML = now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일<br><span style="font-size:14px;font-weight:700;color:#E0F2FE;">'+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+'</span>';
 document.getElementById('updatedText').textContent = '페이지 접속 시각: ' + now.toLocaleString('ko-KR') + '  ·  최신 현황은 각 대시보드에서 확인하세요.';
+
+fetch('dates.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById('rma-date').textContent = d.rma ? '최종 업데이트: ' + d.rma : 'rma.html';
+    document.getElementById('fma-date').textContent = d.fma ? '최종 업데이트: ' + d.fma : 'fma.html';
+  })
+  .catch(() => {
+    document.getElementById('rma-date').textContent = 'rma.html';
+    document.getElementById('fma-date').textContent = 'fma.html';
+  });
 </script>
 </body>
 </html>
