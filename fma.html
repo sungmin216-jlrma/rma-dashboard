@@ -112,7 +112,7 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
   <div class="topbar-right">
     <div class="topbar-date" id="topbarDate"></div>
     <button class="tb-btn" id="mgrToggleBtn" onclick="toggleManager()">&#9881; Manager</button>
-    <button class="tb-btn save-btn" id="saveHtmlBtn" onclick="saveAsHtml()" style="display:none;">&#128190; Save HTML</button>
+    <button class="tb-btn save-btn" id="saveHtmlBtn" onclick="saveAsHtml()">&#128190; Save HTML</button>
   </div>
 </div>
 <div class="mgr-panel" id="mgrPanel">
@@ -199,6 +199,7 @@ function toggleManager(){
   document.getElementById('saveHtmlBtn').style.display=managerMode?'inline-block':'none';
   document.getElementById('mgrToggleBtn').textContent=managerMode?'✕ Exit Manager':'⚙ Manager';
   document.body.classList.toggle('manager-mode',managerMode);
+  renderTable();
 }
 function loadExcel(input){
   const file=input.files[0];if(!file)return;
@@ -286,7 +287,7 @@ function renderTable(){
     const dc=dur===null?'':dur<=5?'dur-fast':dur<=10?'dur-med':'dur-slow';
     const sb=d.status==='완료'?`<span class="badge badge-done">✓ 완료</span>`:`<span class="badge badge-ing">↻ 진행 중</span>`;
     const rb=d.report?`<button class="btn-report-view" onclick="viewReport(${i})">📄 ${esc(d.reportName||'리포트')}</button>`:'';
-    const ab=managerMode?`<label class="btn-report-attach mgr-only" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="attachReport(${i},this)"></label>`:'';
+    const ab=`<label class="btn-report-attach" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="attachReport(${i},this)"></label>`;
     return`<tr><td class="td-muted">${idx+1}</td><td class="td-muted">${d.recvDate||''}</td><td><span class="badge badge-proc">${esc(d.process||'')}</span></td><td>${esc(d.customer||'')}</td><td class="td-clip" title="${esc(d.model||'')}">${esc(d.model||'')}</td><td class="td-clip" title="${esc(d.defect||'')}">${esc(d.defect||'')}</td><td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td><td class="td-muted">${d.fmaDate||''}</td><td class="td-muted">${d.farDate||'-'}</td><td class="${dc}" style="text-align:center;">${dur!==null?dur+'주':'-'}</td><td>${sb}</td><td><div class="report-cell">${rb}${ab}</div></td></tr>`;
   }).join('');
 }
