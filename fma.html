@@ -65,7 +65,20 @@ body{background:var(--bg);color:var(--text);font-family:"Malgun Gothic","Apple S
 .search-input:focus{border-color:#3B82F6;}
 .filter-sel{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;cursor:pointer;}
 .table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;min-width:1050px;}
+table{width:100%;border-collapse:collapse;min-width:1150px;table-layout:fixed;}
+table th:nth-child(1){width:40px;}
+table th:nth-child(2){width:85px;}
+table th:nth-child(3){width:90px;}
+table th:nth-child(4){width:75px;}
+table th:nth-child(5){width:105px;}
+table th:nth-child(6){width:85px;}
+table th:nth-child(7){width:120px;}
+table th:nth-child(8){width:50px;}
+table th:nth-child(9){width:85px;}
+table th:nth-child(10){width:240px;}
+table th:nth-child(11){width:65px;}
+table th:nth-child(12){width:70px;}
+table th:nth-child(13){width:100px;}
 thead th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;}
 thead th:hover{color:var(--blue);}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
@@ -73,8 +86,8 @@ tbody tr:hover{background:var(--blue-bg);}
 tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
 .td-muted{color:var(--muted);font-size:11px;}
 .td-clip{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.td-wrap{max-width:140px;white-space:normal;word-break:break-all;line-height:1.4;font-size:11px;}
-.td-wrap-ko{max-width:160px;white-space:normal;word-break:keep-all;line-height:1.5;}
+.td-wrap{white-space:normal;word-break:break-all;line-height:1.5;font-size:11px;vertical-align:top;padding-top:11px !important;}
+.td-wrap-ko{white-space:normal;word-break:keep-all;word-wrap:break-word;line-height:1.5;vertical-align:top;padding-top:11px !important;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
 .badge-done{background:var(--green-bg);color:var(--green-text);}
 .badge-ing{background:var(--orange-bg);color:var(--orange-text);}
@@ -295,30 +308,30 @@ function renderTable(){
     const sb=d.status==='완료'?`<span class="badge badge-done">✓ 완료</span>`:`<span class="badge badge-ing">↻ 진행 중</span>`;
     const rb=d.report?`<button class="btn-report-view" onclick="viewReport(${i})">📄 ${esc(d.reportName||'리포트')}</button>`:'';
     const ab=`<label class="btn-report-attach" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="attachReport(${i},this)"></label>`;
-    const farCell=`<div style="font-size:11px;min-width:200px;">
-      <div style="margin-bottom:5px;">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-          <span style="background:#EFF6FF;color:#1D4ED8;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;flex-shrink:0;">1차</span>
-          <span style="color:#0F172A;">${d.far1||'–'}</span>
+    const farCell=`<div style="font-size:11px;">
+      <div style="margin-bottom:6px;border-bottom:1px solid #F1F5F9;padding-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
+          <span style="background:#EFF6FF;color:#1D4ED8;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">1차</span>
+          <span style="color:#334155;font-size:11px;">${d.far1||'–'}</span>
         </div>
-        <input type="text" value="${esc(d.far1Note||'')}" placeholder="메모 입력..." oninput="DATA[${i}].far1Note=this.value"
-          style="width:100%;font-size:11px;padding:3px 6px;border:1px solid #E2E8F0;border-radius:4px;font-family:inherit;color:#0F172A;">
+        <textarea oninput="DATA[${i}].far1Note=this.value" placeholder="메모 입력..."
+          style="width:100%;height:44px;font-size:11px;padding:4px 6px;border:1px solid #CBD5E1;border-radius:4px;font-family:inherit;color:#0F172A;resize:vertical;line-height:1.4;">${esc(d.far1Note||'')}</textarea>
       </div>
-      <div style="margin-bottom:5px;">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-          <span style="background:#F0FDF4;color:#15803D;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;flex-shrink:0;">2차</span>
-          <span style="color:#0F172A;">${d.far2||'–'}</span>
+      <div style="margin-bottom:6px;border-bottom:1px solid #F1F5F9;padding-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
+          <span style="background:#F0FDF4;color:#15803D;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">2차</span>
+          <span style="color:#334155;font-size:11px;">${d.far2||'–'}</span>
         </div>
-        <input type="text" value="${esc(d.far2Note||'')}" placeholder="메모 입력..." oninput="DATA[${i}].far2Note=this.value"
-          style="width:100%;font-size:11px;padding:3px 6px;border:1px solid #E2E8F0;border-radius:4px;font-family:inherit;color:#0F172A;">
+        <textarea oninput="DATA[${i}].far2Note=this.value" placeholder="메모 입력..."
+          style="width:100%;height:44px;font-size:11px;padding:4px 6px;border:1px solid #CBD5E1;border-radius:4px;font-family:inherit;color:#0F172A;resize:vertical;line-height:1.4;">${esc(d.far2Note||'')}</textarea>
       </div>
       <div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-          <span style="background:#FFF7ED;color:#C2410C;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;flex-shrink:0;">3차</span>
-          <span style="color:#0F172A;">${d.far3||'–'}</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
+          <span style="background:#FFF7ED;color:#C2410C;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0;">3차</span>
+          <span style="color:#334155;font-size:11px;">${d.far3||'–'}</span>
         </div>
-        <input type="text" value="${esc(d.far3Note||'')}" placeholder="메모 입력..." oninput="DATA[${i}].far3Note=this.value"
-          style="width:100%;font-size:11px;padding:3px 6px;border:1px solid #E2E8F0;border-radius:4px;font-family:inherit;color:#0F172A;">
+        <textarea oninput="DATA[${i}].far3Note=this.value" placeholder="메모 입력..."
+          style="width:100%;height:44px;font-size:11px;padding:4px 6px;border:1px solid #CBD5E1;border-radius:4px;font-family:inherit;color:#0F172A;resize:vertical;line-height:1.4;">${esc(d.far3Note||'')}</textarea>
       </div>
     </div>`;
     return`<tr><td class="td-muted">${idx+1}</td><td class="td-muted" style="white-space:nowrap;">${d.recvDate||''}</td><td><span class="badge badge-proc">${esc(d.process||'')}</span></td><td style="white-space:nowrap;">${esc(d.customer||'')}</td><td class="td-clip" title="${esc(d.model||'')}">${esc(d.model||'')}</td><td class="td-wrap td-muted">${esc(d.rma||'–')}</td><td class="td-wrap-ko">${esc(d.defect||'')}</td><td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td><td class="td-muted" style="white-space:nowrap;">${d.fmaDate||''}</td><td>${farCell}</td><td class="${dc}" style="text-align:center;white-space:nowrap;">${dur!==null?dur+'주':'-'}</td><td>${sb}</td><td><div class="report-cell">${rb}${ab}</div></td></tr>`;
