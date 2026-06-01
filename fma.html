@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FMA 분석 현황판</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;--border2:#CBD5E1;--text:#0F172A;--muted:#64748B;--blue:#1D4ED8;--blue-bg:#EFF6FF;--blue-text:#1E40AF;--green:#15803D;--green-bg:#F0FDF4;--green-text:#166534;--orange:#C2410C;--orange-bg:#FFF7ED;--orange-text:#9A3412;--red:#DC2626;--red-bg:#FEF2F2;--red-text:#991B1B;--purple:#6D28D9;--header:#1E3A5F;}
+body{background:var(--bg);color:var(--text);font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;font-size:13px;min-height:100vh;}
+/* Nav */
+.sitenav{background:#0F172A;padding:0 28px;height:36px;display:flex;align-items:center;font-size:12px;}
+.sitenav a{color:#94A3B8;text-decoration:none;padding:0 14px;height:36px;display:flex;align-items:center;border-right:1px solid #1E293B;}
+.sitenav a:hover{color:#E0F2FE;}
+.sitenav a.active{color:#7DD3FC;font-weight:700;border-bottom:2px solid #2563EB;}
+/* Topbar */
+.topbar{background:var(--header);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:36px;z-index:200;}
+.topbar-logo{color:#93C5FD;font-size:18px;font-weight:700;}
+.topbar-sub{color:#93C5FD;font-size:11px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.tb-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#E0F2FE;transition:.15s;}
+.tb-btn:hover{background:rgba(255,255,255,.2);}
+.tb-btn.save-btn{background:#15803D;border-color:#15803D;color:#fff;}
+.topbar-date{color:#93C5FD;font-size:11px;text-align:right;}
+/* Manager */
+.mgr-panel{background:#0F172A;border-bottom:2px solid #2563EB;padding:14px 28px;display:none;}
+.mgr-panel.open{display:block;}
+.mgr-panel h3{color:#93C5FD;font-size:12px;font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.mgr-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.mgr-row label{color:#94A3B8;font-size:12px;}
+.file-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px dashed #3B82F6;background:rgba(59,130,246,.1);color:#93C5FD;font-size:12px;font-family:inherit;cursor:pointer;transition:.15s;}
+.file-btn:hover{background:rgba(59,130,246,.2);}
+.file-btn input{display:none;}
+.mgr-status{color:#4ADE80;font-size:12px;}
+.mgr-info{color:#64748B;font-size:11px;margin-top:6px;}
+/* Main */
+.main{max-width:1400px;margin:0 auto;padding:24px 28px;}
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.kpi-label{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.kpi-value{font-size:30px;font-weight:700;line-height:1;}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:5px;}
+.kv-blue{color:var(--blue)}.kv-green{color:var(--green)}.kv-orange{color:var(--orange)}.kv-red{color:var(--red)}.kv-purple{color:var(--purple);}
+/* Charts */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+.card-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px;}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.prog-label{font-size:12px;color:var(--text);width:100px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prog-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:var(--green);}
+.prog-num{font-size:11px;color:var(--muted);width:30px;text-align:right;flex-shrink:0;}
+.legend{display:flex;gap:16px;margin-bottom:12px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.leg-dot{width:10px;height:10px;border-radius:2px;}
+/* Table */
+.table-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.table-header h2{font-size:14px;font-weight:600;}
+.table-header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.search-input{padding:6px 12px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;width:200px;}
+.search-input:focus{border-color:#3B82F6;}
+.filter-sel{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;cursor:pointer;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:1050px;}
+thead th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--blue);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:hover{background:var(--blue-bg);}
+tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
+.td-muted{color:var(--muted);font-size:11px;}
+.td-clip{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.badge-done{background:var(--green-bg);color:var(--green-text);}
+.badge-ing{background:var(--orange-bg);color:var(--orange-text);}
+.badge-proc{background:var(--blue-bg);color:var(--blue-text);}
+.dur-fast{color:var(--green);font-weight:600;}
+.dur-med{color:#D97706;font-weight:600;}
+.dur-slow{color:var(--red);font-weight:600;}
+.report-cell{display:flex;gap:6px;align-items:center;}
+.btn-report-view{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-family:inherit;cursor:pointer;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-text);transition:.15s;white-space:nowrap;}
+.btn-report-view:hover{background:var(--blue);color:#fff;}
+.btn-report-attach{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-family:inherit;cursor:pointer;border:1px dashed var(--border2);background:var(--surface2);color:var(--muted);transition:.15s;white-space:nowrap;}
+.btn-report-attach:hover{border-color:var(--blue);color:var(--blue);}
+.btn-report-attach input{display:none;}
+.mgr-only{display:none;}
+.manager-mode .mgr-only{display:inline-flex;}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:12px;width:480px;max-width:95vw;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:16px;}
+.modal p{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
+.btn-close{padding:7px 16px;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);font-size:12px;font-family:inherit;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="sitenav">
+  <a href="index.html">&#127968; Hub</a>
+  <a href="rma.html">&#128230; RMA</a>
+  <a href="fma.html" class="active">&#128300; FMA</a>
+</div>
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">&#128300; FMA &#BD84;&#C11D; &#D604;&#D669;&#D310;</div>
+    <div class="topbar-sub">&#D488;&#C9C8;&#D300; FMA &#BD84;&#C11D; &#D604;&#D669; &middot; &#C790;&#B3D9; &#C9D1;&#ACC4;</div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-date" id="topbarDate"></div>
+    <button class="tb-btn" id="mgrToggleBtn" onclick="toggleManager()">&#9881; Manager</button>
+    <button class="tb-btn save-btn" id="saveHtmlBtn" onclick="saveAsHtml()" style="display:none;">&#128190; Save HTML</button>
+  </div>
+</div>
+<div class="mgr-panel" id="mgrPanel">
+  <h3>Manager Mode</h3>
+  <div class="mgr-row">
+    <label>Excel/CSV Load:</label>
+    <label class="file-btn">&#128194; Select File (Excel/CSV)<input type="file" id="excelInput" accept=".xlsx,.xls,.csv" onchange="loadExcel(this)"></label>
+    <span class="mgr-status" id="loadStatus"></span>
+  </div>
+  <div class="mgr-info">Attach reports via the &#128206; button on each row. Click Save HTML after all updates.</div>
+</div>
+<div class="main">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">&#128203; &#C804;&#CCB4; &#BD84;&#C11D; &#AC74;</div><div class="kpi-value kv-blue" id="kTotal">0</div><div class="kpi-sub">&#B204;&#C801; &#C811;&#C218;</div></div>
+    <div class="kpi"><div class="kpi-label">&#9203; &#C9C4;&#D589; &#C911;</div><div class="kpi-value kv-orange" id="kProg">0</div><div class="kpi-sub">&#BD84;&#C11D; &#C9C4;&#D589; &#C911;</div></div>
+    <div class="kpi"><div class="kpi-label">&#9989; &#C644;&#B8CC;</div><div class="kpi-value kv-green" id="kDone">0</div><div class="kpi-sub" id="kRate">&#C644;&#B8CC;&#C728; --%</div></div>
+    <div class="kpi"><div class="kpi-label">&#9888;&#65039; &#CD1D; &#BD88;&#B7C9; &#C218;&#B7C9;</div><div class="kpi-value kv-red" id="kQty">0</div><div class="kpi-sub">EA &#B204;&#C801;</div></div>
+    <div class="kpi"><div class="kpi-label">&#8987; &#D3C9;&#ADE0; &#C18C;&#C694;&#AE30;&#AC04;</div><div class="kpi-value kv-purple" id="kDur">-</div><div class="kpi-sub">&#C8FC; (&#C644;&#B8CC; &#AC74; &#AE30;&#C900;)</div></div>
+  </div>
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-title">&#BC1C;&#C0DD;&#ACF5;&#C815;&#BCC4; &#D604;&#D669;</div>
+      <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#15803D;"></div>&#C644;&#B8CC;</div><div class="leg-item"><div class="leg-dot" style="background:#C2410C;"></div>&#C9C4;&#D589; &#C911;</div></div>
+      <div style="position:relative;height:200px;"><canvas id="procChart" role="img" aria-label="FMA process chart">No data</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">&#ACE0;&#AC1D;&#C0AC;&#BCC4; &#D604;&#D669;</div>
+      <div id="custBars"></div>
+    </div>
+  </div>
+  <div class="table-section">
+    <div class="table-header">
+      <h2>&#BD84;&#C11D; &#AC74; &#D604;&#D669; &#C694;&#C57D;</h2>
+      <div class="table-header-right">
+        <input class="search-input" id="searchInput" placeholder="&#128269; &#BAA8;&#B378;&#BA85; &middot; &#BD88;&#B7C9;&#B0B4;&#C6A9; &#AC80;&#C0C9;" oninput="renderTable()">
+        <select class="filter-sel" id="filterStatus" onchange="renderTable()"><option value="">&#C804;&#CCB4; &#C0C1;&#D0DC;</option><option value="&#C644;&#B8CC;">&#C644;&#B8CC;</option><option value="&#C9C4;&#D589; &#C911;">&#C9C4;&#D589; &#C911;</option></select>
+        <select class="filter-sel" id="filterProcess" onchange="renderTable()"><option value="">&#C804;&#CCB4; &#ACF5;&#C815;</option></select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th onclick="sortBy(0)">No</th>
+          <th onclick="sortBy(1)">&#C811;&#C218;&#C77C;</th>
+          <th onclick="sortBy(2)">&#BC1C;&#C0DD;&#ACF5;&#C815;</th>
+          <th onclick="sortBy(3)">&#ACE0;&#AC1D;&#C0AC;</th>
+          <th onclick="sortBy(4)">&#BAA8;&#B378;&#BA85;</th>
+          <th onclick="sortBy(5)">&#BD88;&#B7C9;&#B0B4;&#C6A9;</th>
+          <th onclick="sortBy(6)">&#BD88;&#B7C9;&#C218;</th>
+          <th onclick="sortBy(7)">FMA &#C694;&#C2ED;&#C77C;</th>
+          <th onclick="sortBy(8)">&#CD5C;&#C885; FAR</th>
+          <th onclick="sortBy(9)">&#C18C;&#C694;&#AE30;&#AC04;</th>
+          <th onclick="sortBy(10)">&#C0C1;&#D0DC;</th>
+          <th>&#BD84;&#C11D; &#B9AC;&#D3EC;&#D2B8;</th>
+        </tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="footer" id="footerDate"></div>
+<div class="modal-bg" id="reportModal" onclick="closeReportModal(event)">
+  <div class="modal">
+    <h3 id="reportModalTitle">&#BD84;&#C11D; &#B9AC;&#D3EC;&#D2B8;</h3>
+    <p id="reportModalInfo"></p>
+    <div id="reportModalContent"></div>
+    <div class="modal-actions"><button class="btn-close" onclick="closeReportModalDirect()">&#B2EB;&#AE30;</button></div>
+  </div>
+</div>
+<script>
+const EMBEDDED={lastUpdated:"2026-06-01",data:[{"recvDate": "2025-11-19", "process": "Medison OQC", "customer": "Kortek", "model": "P215HAN01.1", "maker": "Samsung Medison", "sn": "Q55A25P5KLZZZZ1900\nQ55A4736QLZZZZ1900\nQ55A40P8XHZZZZ1900", "defect": "Flicker", "qty": 3, "memo": "FMA 요청, 정림 Board Kit 동봉\nDHL TRK. : 2862474871  11/21 발송 25일 배송완료예정", "fmaDate": "2025-11-19", "rma": "702510106891", "delivDate": "2025-11-25", "status": "완료", "farDate": "2026-04-13", "duration": 20.8, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-01-16", "process": "Line", "customer": "Kortek", "model": "G154EVN01.0", "maker": "Samsung Medison", "sn": "415275E8HFZYZS0101\n415276H4DFZYZS0101\n415272L8UFZYZS0101", "defect": "H/Mura", "qty": 1, "memo": "", "fmaDate": "2026-01-19", "rma": "702610100413", "delivDate": "2026-02-02", "status": "완료", "farDate": "2026-03-05", "duration": 6.8, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-01-21", "process": "Line", "customer": "Kortek", "model": "G156HAB03.2", "maker": "Samsung Medison", "sn": "6R5B5EG4BTZZZS0100\n6R5B5ET4KJZZZS0100", "defect": "Set 기준 하단 Clip mura 형태", "qty": 2, "memo": "", "fmaDate": "2026-01-22", "rma": "702610100415\n762612100245", "delivDate": "2026-01-27", "status": "완료", "farDate": "2026-03-13", "duration": 7.4, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-01-18", "process": "Field", "customer": "Kortek", "model": "G140HAB01.2", "maker": "Samsung Medison", "sn": "D35534N8DUZZZS0100", "defect": "간헐적 터치 안됨", "qty": 1, "memo": "터치 로그 분석 후 FMA 진행 요청 늦어짐.", "fmaDate": "2026-02-12", "rma": "762612100467", "delivDate": "2026-02-25", "status": "완료", "farDate": "2026-03-26", "duration": 6.2, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-01-22", "process": "Field", "customer": "Kortek", "model": "G140HAB01.2", "maker": "Samsung Medison", "sn": "D345B2K4GSZZZS0100", "defect": "터치 입력 동작 무", "qty": 1, "memo": "", "fmaDate": "2026-01-23", "rma": "762612100246", "delivDate": "2026-02-02", "status": "완료", "farDate": "2026-04-30", "duration": 14.0, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-03-17", "process": "Field", "customer": "Kortek", "model": "G140HAB01.2", "maker": "Samsung Medison", "sn": "DF5580C6TRZZZS0100", "defect": "Line Defect", "qty": 1, "memo": "SZ Inventory 기간으로 tw로 변경 중 발송 지연", "fmaDate": "2026-03-18", "rma": "702610101420", "delivDate": "", "status": "완료", "farDate": "2026-05-20", "duration": 9.2, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-03-17", "process": "Field", "customer": "Kortek", "model": "G140HAB01.2", "maker": "Samsung Medison", "sn": "D3553792VUZZZS0100", "defect": "Abnormal Display", "qty": 1, "memo": "SZ Inventory 기간으로 tw로 변경 중 발송 지연", "fmaDate": "2026-03-18", "rma": "702610101420", "delivDate": "", "status": "완료", "farDate": "2026-05-26", "duration": 10.0, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-03-16", "process": "개발", "customer": "Kortek", "model": "G270QAN01.4", "maker": "GE Austria", "sn": "ZA5A9R78KJZZZS0101", "defect": "HCR_Abnormal Display_Beckett", "qty": 1, "memo": "개발 제품으로 FAE 통해 분석진행", "fmaDate": "2026-03-18", "rma": "NO없이 진행", "delivDate": "2026-03-24", "status": "완료", "farDate": "2026-04-07", "duration": 3.0, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-03-26", "process": "공정", "customer": "Kortek vina", "model": "G133HAN01.1", "maker": "innocon", "sn": "305B9B07RKZZZS0101\n305B8B944PZZZS0101", "defect": "Greenish", "qty": 2, "memo": "", "fmaDate": "2026-04-07", "rma": "702610101723", "delivDate": "2026-04-14", "status": "완료", "farDate": "2026-05-14", "duration": 5.6, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-04-01", "process": "IQC", "customer": "Kortek", "model": "G140HAB01.2", "maker": "Samsung Medison", "sn": "DF55A7E6WUZZZS0100\nDF5576R5VHZZZS0100\nD355A8K9HQZZZS0100\nD355ABW7MHZZZS0100\nDF557776CVZZZS0100\nDF55A7V3PHZZZS0100", "defect": "TP Glass chipping Issue", "qty": 6, "memo": "", "fmaDate": "2026-04-02", "rma": "732612100608", "delivDate": "2026-04-16", "status": "완료", "farDate": "2026-04-23", "duration": 3.2, "cause": "", "report": null, "reportName": null}, {"recvDate": "2026-04-23", "process": "Field", "customer": "Kortek", "model": "G156HAB03.2", "maker": "Samsung Medison", "sn": "5Y5B4VJ9KTZZZS0100", "defect": "Ghost touch", "qty": 1, "memo": "재현 안됨으로 정림 분석 리포트 작성 중", "fmaDate": "2026-04-23", "rma": "FMA 미 지행", "delivDate": "", "status": "진행 中", "farDate": "", "duration": -6590.8, "cause": "", "report": null, "reportName": null}]};
+let DATA=JSON.parse(JSON.stringify(EMBEDDED.data));
+let procChart=null,sortCol=-1,sortDir=1,managerMode=false;
+window.onload=()=>{
+  const now=new Date();
+  document.getElementById('topbarDate').innerHTML='<div style="font-size:10px;color:#93C5FD;">Last updated</div><div style="color:#E0F2FE;font-size:12px;font-weight:600;">'+EMBEDDED.lastUpdated+'</div>';
+  document.getElementById('footerDate').textContent='FMA Dashboard · '+EMBEDDED.lastUpdated;
+  refreshAll();
+};
+function refreshAll(){updateKPI();updateCharts();populateFilters();renderTable();}
+function toggleManager(){
+  managerMode=!managerMode;
+  document.getElementById('mgrPanel').classList.toggle('open',managerMode);
+  document.getElementById('saveHtmlBtn').style.display=managerMode?'inline-block':'none';
+  document.getElementById('mgrToggleBtn').textContent=managerMode?'✕ Exit Manager':'⚙ Manager';
+  document.body.classList.toggle('manager-mode',managerMode);
+}
+function loadExcel(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,dateNF:'yyyy-mm-dd'});
+      let hdr=-1,headers=[];
+      for(let i=0;i<Math.min(rows.length,10);i++){
+        const r=rows[i].join('|').toLowerCase();
+        if(r.includes('고객사')&&r.includes('모델명')){hdr=i;headers=rows[i].map(h=>String(h||'').trim());break;}
+      }
+      if(hdr<0){document.getElementById('loadStatus').textContent='⚠ Header not found';return;}
+      const hl=headers.map(h=>h.toLowerCase().replace(/\s/g,''));
+      function ci(names){for(const n of names){const idx=hl.indexOf(n.toLowerCase().replace(/\s/g,''));if(idx>=0)return idx;}return-1;}
+      const cm={
+        recvDate:ci(['접수날짜','접수\n날짜']),
+        process:ci(['발생공정','발생\n공정']),
+        customer:ci(['고객사']),model:ci(['모델명']),maker:ci(['업체명']),
+        sn:ci(['s/n']),defect:ci(['불량내용','불량 내용']),
+        qty:ci(['불량수']),memo:ci(['정림 진행 현황']),
+        fmaDate:ci(['fma 요청일','fma요청일']),
+        rma:ci(['rma no.']),delivDate:ci(['배송완료']),
+        status:ci(['완료\n여부','완료여부']),
+        farDate:ci(['역최종 far','최종far','최종 far']),
+        duration:ci(['소요 기간[주]','소요기간']),
+        cause:ci(['발생 원인','발생원인']),
+      };
+      const rmap={};DATA.forEach(d=>{if(d.report)rmap[d.model+'_'+d.recvDate]={report:d.report,reportName:d.reportName};});
+      DATA=[];
+      for(let i=hdr+1;i<rows.length;i++){
+        const r=rows[i];if(!r||r.every(c=>!c))continue;
+        const g=k=>cm[k]>=0?String(r[cm[k]]||'').trim():'';
+        const rd=g('recvDate'),mo=g('model'),key=mo+'_'+rd;
+        DATA.push({recvDate:rd,process:g('process'),customer:g('customer'),model:mo,maker:g('maker'),sn:g('sn'),defect:g('defect'),qty:parseInt(g('qty'))||0,memo:g('memo'),fmaDate:g('fmaDate'),rma:g('rma'),delivDate:g('delivDate'),status:g('status')||'진행 중',farDate:g('farDate'),duration:parseFloat(g('duration'))||null,cause:g('cause'),report:rmap[key]?.report||null,reportName:rmap[key]?.reportName||null});
+      }
+      DATA=DATA.filter(d=>d.customer||d.model||d.defect);
+      document.getElementById('loadStatus').textContent='✅ '+DATA.length+'건 로드됨';
+      refreshAll();
+    }catch(err){document.getElementById('loadStatus').textContent='⚠ '+err.message;}
+  };
+  reader.readAsArrayBuffer(file);
+}
+function updateKPI(){
+  const t=DATA.length,d=DATA.filter(x=>x.status==='완료').length,p=t-d;
+  const qty=DATA.reduce((s,x)=>s+(parseInt(x.qty)||0),0);
+  const durs=DATA.filter(x=>x.duration&&x.status==='완료').map(x=>parseFloat(x.duration));
+  const avg=durs.length?(durs.reduce((a,b)=>a+b,0)/durs.length).toFixed(1):'-';
+  document.getElementById('kTotal').textContent=t;document.getElementById('kDone').textContent=d;
+  document.getElementById('kProg').textContent=p;document.getElementById('kQty').textContent=qty;
+  document.getElementById('kDur').textContent=avg;
+  document.getElementById('kRate').textContent=t?'완료율 '+Math.round(d/t*100)+'%':'완료율 --%';
+}
+function updateCharts(){
+  const procs=[...new Set(DATA.map(d=>d.process).filter(Boolean))];
+  if(procChart)procChart.destroy();
+  procChart=new Chart(document.getElementById('procChart'),{type:'bar',data:{labels:procs,datasets:[{label:'완료',data:procs.map(p=>DATA.filter(d=>d.process===p&&d.status==='완료').length),backgroundColor:'#15803D'},{label:'진행 중',data:procs.map(p=>DATA.filter(d=>d.process===p&&d.status!=='완료').length),backgroundColor:'#C2410C'}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{font:{size:11},color:'#64748B'},grid:{color:'rgba(0,0,0,.06)'}},y:{stacked:true,ticks:{font:{size:11},color:'#64748B'},grid:{display:false}}}}});
+  const custs=[...new Set(DATA.map(d=>d.customer).filter(Boolean))];
+  const mx=Math.max(...custs.map(c=>DATA.filter(d=>d.customer===c).length),1);
+  document.getElementById('custBars').innerHTML=custs.map(c=>{const n=DATA.filter(d=>d.customer===c).length;return`<div class="prog-row"><div class="prog-label" title="${c}">${c}</div><div class="prog-track"><div class="prog-fill" style="width:${Math.round(n/mx*100)}%"></div></div><div class="prog-num">${n}건</div></div>`;}).join('');
+}
+function populateFilters(){
+  const procs=[...new Set(DATA.map(d=>d.process).filter(Boolean))].sort();
+  const s=document.getElementById('filterProcess'),cv=s.value;
+  s.innerHTML='<option value="">전체 공정</option>'+procs.map(p=>`<option value="${p}">${p}</option>`).join('');s.value=cv;
+}
+function sortBy(c){if(sortCol===c)sortDir*=-1;else{sortCol=c;sortDir=1;}renderTable();}
+function renderTable(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase();
+  const st=document.getElementById('filterStatus').value;
+  const pr=document.getElementById('filterProcess').value;
+  let rows=DATA.filter(d=>{
+    if(q&&![(d.model||''),(d.defect||''),(d.customer||'')].join('|').toLowerCase().includes(q))return false;
+    if(st&&d.status!==st)return false;if(pr&&d.process!==pr)return false;return true;
+  });
+  const keys=['_','recvDate','process','customer','model','defect','qty','fmaDate','farDate','duration','status'];
+  if(sortCol>0&&sortCol<keys.length){rows.sort((a,b)=>{const k=keys[sortCol];const av=a[k]||'',bv=b[k]||'';if(typeof av==='number')return(av-bv)*sortDir;return String(av).localeCompare(String(bv),'ko')*sortDir;});}
+  const body=document.getElementById('tableBody');
+  if(!rows.length){body.innerHTML='<tr><td colspan="12" style="text-align:center;padding:32px;color:#94A3B8;">데이터 없음</td></tr>';return;}
+  body.innerHTML=rows.map((d,idx)=>{
+    const i=DATA.indexOf(d);
+    const dur=d.duration&&d.duration>0?parseFloat(d.duration):null;
+    const dc=dur===null?'':dur<=5?'dur-fast':dur<=10?'dur-med':'dur-slow';
+    const sb=d.status==='완료'?`<span class="badge badge-done">✓ 완료</span>`:`<span class="badge badge-ing">↻ 진행 중</span>`;
+    const rb=d.report?`<button class="btn-report-view" onclick="viewReport(${i})">📄 ${esc(d.reportName||'리포트')}</button>`:'';
+    const ab=managerMode?`<label class="btn-report-attach mgr-only" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="attachReport(${i},this)"></label>`:'';
+    return`<tr><td class="td-muted">${idx+1}</td><td class="td-muted">${d.recvDate||''}</td><td><span class="badge badge-proc">${esc(d.process||'')}</span></td><td>${esc(d.customer||'')}</td><td class="td-clip" title="${esc(d.model||'')}">${esc(d.model||'')}</td><td class="td-clip" title="${esc(d.defect||'')}">${esc(d.defect||'')}</td><td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td><td class="td-muted">${d.fmaDate||''}</td><td class="td-muted">${d.farDate||'-'}</td><td class="${dc}" style="text-align:center;">${dur!==null?dur+'주':'-'}</td><td>${sb}</td><td><div class="report-cell">${rb}${ab}</div></td></tr>`;
+  }).join('');
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function attachReport(idx,input){
+  const file=input.files[0];if(!file)return;
+  const r=new FileReader();r.onload=e=>{DATA[idx].report=e.target.result;DATA[idx].reportName=file.name;renderTable();};r.readAsDataURL(file);
+}
+function viewReport(idx){
+  const d=DATA[idx];if(!d.report)return;
+  document.getElementById('reportModalTitle').textContent='📄 '+(d.reportName||'뺄석 리포트');
+  document.getElementById('reportModalInfo').textContent=d.customer+' · '+d.model+' · '+d.defect;
+  const c=document.getElementById('reportModalContent');
+  if(d.report.startsWith('data:application/pdf')||(d.reportName||'').toLowerCase().endsWith('.pdf'))
+    c.innerHTML=`<iframe src="${d.report}" style="width:100%;height:500px;border:1px solid #E2E8F0;border-radius:6px;"></iframe>`;
+  else if(/data:image/.test(d.report))
+    c.innerHTML=`<img src="${d.report}" style="max-width:100%;border-radius:6px;">`;
+  else
+    c.innerHTML=`<a href="${d.report}" download="${esc(d.reportName||'report')}" style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;color:#1D4ED8;font-weight:600;text-decoration:none;">📥 파일 다운로드 (${esc(d.reportName||'')})</a>`;
+  document.getElementById('reportModal').classList.add('open');
+}
+function closeReportModal(e){if(e.target===document.getElementById('reportModal'))closeReportModalDirect();}
+function closeReportModalDirect(){document.getElementById('reportModal').classList.remove('open');document.getElementById('reportModalContent').innerHTML='';}
+function saveAsHtml(){
+  const now=new Date().toISOString().split('T')[0];
+  const escaped=JSON.stringify(DATA).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
+  const html=document.documentElement.outerHTML.replace(/const EMBEDDED=\{lastUpdated:"[^"]*",data:[^}]*\};/,`const EMBEDDED={lastUpdated:"${now}",data:${escaped}};`);
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`fma_${now}.html`;a.click();
+  alert('✅ 저장됨! 이 파일을 fma.html로 이름 바꾸고 폴더에 덮어쓰기 하세요.');
+}
+</script>
+</body>
+</html>
