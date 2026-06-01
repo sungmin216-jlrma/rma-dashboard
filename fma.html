@@ -165,8 +165,8 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
           <th onclick="sortBy(7)">FMA 요청일</th>
           <th onclick="sortBy(8)">최종 FAR</th>
           <th onclick="sortBy(9)">소요기간</th>
-          <th onclick="sortBy(10)">&#C0C1;&#D0DC;</th>
-          <th>&#BD84;&#C11D; &#B9AC;&#D3EC;&#D2B8;</th>
+          <th onclick="sortBy(10)">상태</th>
+          <th>분석 리포트</th>
         </tr></thead>
         <tbody id="tableBody"></tbody>
       </table>
@@ -176,10 +176,10 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
 <div class="footer" id="footerDate"></div>
 <div class="modal-bg" id="reportModal" onclick="closeReportModal(event)">
   <div class="modal">
-    <h3 id="reportModalTitle">&#BD84;&#C11D; &#B9AC;&#D3EC;&#D2B8;</h3>
+    <h3 id="reportModalTitle">분석 리포트</h3>
     <p id="reportModalInfo"></p>
     <div id="reportModalContent"></div>
-    <div class="modal-actions"><button class="btn-close" onclick="closeReportModalDirect()">&#B2EB;&#AE30;</button></div>
+    <div class="modal-actions"><button class="btn-close" onclick="closeReportModalDirect()">닫기</button></div>
   </div>
 </div>
 <script>
