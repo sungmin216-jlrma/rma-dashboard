@@ -106,8 +106,8 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
 </div>
 <div class="topbar">
   <div>
-    <div class="topbar-logo">&#128300; FMA &#BD84;&#C11D; &#D604;&#D669;&#D310;</div>
-    <div class="topbar-sub">&#D488;&#C9C8;&#D300; FMA &#BD84;&#C11D; &#D604;&#D669; &middot; &#C790;&#B3D9; &#C9D1;&#ACC4;</div>
+    <div class="topbar-logo">🔬 FMA 분석 현황판</div>
+    <div class="topbar-sub">품질팀 FMA 분석 현황 · 자동 집계</div>
   </div>
   <div class="topbar-right">
     <div class="topbar-date" id="topbarDate"></div>
@@ -126,45 +126,45 @@ tbody td{padding:10px 12px;vertical-align:middle;font-size:12px;}
 </div>
 <div class="main">
   <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-label">&#128203; &#C804;&#CCB4; &#BD84;&#C11D; &#AC74;</div><div class="kpi-value kv-blue" id="kTotal">0</div><div class="kpi-sub">&#B204;&#C801; &#C811;&#C218;</div></div>
-    <div class="kpi"><div class="kpi-label">&#9203; &#C9C4;&#D589; &#C911;</div><div class="kpi-value kv-orange" id="kProg">0</div><div class="kpi-sub">&#BD84;&#C11D; &#C9C4;&#D589; &#C911;</div></div>
-    <div class="kpi"><div class="kpi-label">&#9989; &#C644;&#B8CC;</div><div class="kpi-value kv-green" id="kDone">0</div><div class="kpi-sub" id="kRate">&#C644;&#B8CC;&#C728; --%</div></div>
-    <div class="kpi"><div class="kpi-label">&#9888;&#65039; &#CD1D; &#BD88;&#B7C9; &#C218;&#B7C9;</div><div class="kpi-value kv-red" id="kQty">0</div><div class="kpi-sub">EA &#B204;&#C801;</div></div>
-    <div class="kpi"><div class="kpi-label">&#8987; &#D3C9;&#ADE0; &#C18C;&#C694;&#AE30;&#AC04;</div><div class="kpi-value kv-purple" id="kDur">-</div><div class="kpi-sub">&#C8FC; (&#C644;&#B8CC; &#AC74; &#AE30;&#C900;)</div></div>
+    <div class="kpi"><div class="kpi-label">📋 전체 분석 건</div><div class="kpi-value kv-blue" id="kTotal">0</div><div class="kpi-sub">누적 접수</div></div>
+    <div class="kpi"><div class="kpi-label">⏳ 진행 중</div><div class="kpi-value kv-orange" id="kProg">0</div><div class="kpi-sub">분석 진행 중</div></div>
+    <div class="kpi"><div class="kpi-label">✅ 완료</div><div class="kpi-value kv-green" id="kDone">0</div><div class="kpi-sub" id="kRate">완료율 --%</div></div>
+    <div class="kpi"><div class="kpi-label">⚠️ 총 불량 수량</div><div class="kpi-value kv-red" id="kQty">0</div><div class="kpi-sub">EA 누적</div></div>
+    <div class="kpi"><div class="kpi-label">⏱ 평균 소요기간</div><div class="kpi-value kv-purple" id="kDur">-</div><div class="kpi-sub">주 (완료 건 기준)</div></div>
   </div>
   <div class="charts-row">
     <div class="card">
-      <div class="card-title">&#BC1C;&#C0DD;&#ACF5;&#C815;&#BCC4; &#D604;&#D669;</div>
-      <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#15803D;"></div>&#C644;&#B8CC;</div><div class="leg-item"><div class="leg-dot" style="background:#C2410C;"></div>&#C9C4;&#D589; &#C911;</div></div>
+      <div class="card-title">발생공정별 현황</div>
+      <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#15803D;"></div>완료</div><div class="leg-item"><div class="leg-dot" style="background:#C2410C;"></div>진행 중</div></div>
       <div style="position:relative;height:200px;"><canvas id="procChart" role="img" aria-label="FMA process chart">No data</canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">&#ACE0;&#AC1D;&#C0AC;&#BCC4; &#D604;&#D669;</div>
+      <div class="card-title">고객사별 현황</div>
       <div id="custBars"></div>
     </div>
   </div>
   <div class="table-section">
     <div class="table-header">
-      <h2>&#BD84;&#C11D; &#AC74; &#D604;&#D669; &#C694;&#C57D;</h2>
+      <h2>분석 건 현황 요약</h2>
       <div class="table-header-right">
-        <input class="search-input" id="searchInput" placeholder="&#128269; &#BAA8;&#B378;&#BA85; &middot; &#BD88;&#B7C9;&#B0B4;&#C6A9; &#AC80;&#C0C9;" oninput="renderTable()">
-        <select class="filter-sel" id="filterStatus" onchange="renderTable()"><option value="">&#C804;&#CCB4; &#C0C1;&#D0DC;</option><option value="&#C644;&#B8CC;">&#C644;&#B8CC;</option><option value="&#C9C4;&#D589; &#C911;">&#C9C4;&#D589; &#C911;</option></select>
-        <select class="filter-sel" id="filterProcess" onchange="renderTable()"><option value="">&#C804;&#CCB4; &#ACF5;&#C815;</option></select>
+        <input class="search-input" id="searchInput" placeholder="🔍 모델명 · 불량내용 검색" oninput="renderTable()">
+        <select class="filter-sel" id="filterStatus" onchange="renderTable()"><option value="">전체 상태</option><option value="완료">완료</option><option value="진행 中">진행 중</option></select>
+        <select class="filter-sel" id="filterProcess" onchange="renderTable()"><option value="">전체 공정</option></select>
       </div>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr>
           <th onclick="sortBy(0)">No</th>
-          <th onclick="sortBy(1)">&#C811;&#C218;&#C77C;</th>
-          <th onclick="sortBy(2)">&#BC1C;&#C0DD;&#ACF5;&#C815;</th>
-          <th onclick="sortBy(3)">&#ACE0;&#AC1D;&#C0AC;</th>
-          <th onclick="sortBy(4)">&#BAA8;&#B378;&#BA85;</th>
-          <th onclick="sortBy(5)">&#BD88;&#B7C9;&#B0B4;&#C6A9;</th>
-          <th onclick="sortBy(6)">&#BD88;&#B7C9;&#C218;</th>
-          <th onclick="sortBy(7)">FMA &#C694;&#C2ED;&#C77C;</th>
-          <th onclick="sortBy(8)">&#CD5C;&#C885; FAR</th>
-          <th onclick="sortBy(9)">&#C18C;&#C694;&#AE30;&#AC04;</th>
+          <th onclick="sortBy(1)">접수일</th>
+          <th onclick="sortBy(2)">발생공정</th>
+          <th onclick="sortBy(3)">고객사</th>
+          <th onclick="sortBy(4)">모델명</th>
+          <th onclick="sortBy(5)">불량내용</th>
+          <th onclick="sortBy(6)">불량수</th>
+          <th onclick="sortBy(7)">FMA 요청일</th>
+          <th onclick="sortBy(8)">최종 FAR</th>
+          <th onclick="sortBy(9)">소요기간</th>
           <th onclick="sortBy(10)">&#C0C1;&#D0DC;</th>
           <th>&#BD84;&#C11D; &#B9AC;&#D3EC;&#D2B8;</th>
         </tr></thead>
@@ -217,14 +217,17 @@ function loadExcel(input){
       const hl=headers.map(h=>h.toLowerCase().replace(/\s/g,''));
       function ci(names){for(const n of names){const idx=hl.indexOf(n.toLowerCase().replace(/\s/g,''));if(idx>=0)return idx;}return-1;}
       const cm={
-        recvDate:ci(['접수날짜','접수\n날짜']),
-        process:ci(['발생공정','발생\n공정']),
+        recvDate:ci(['접수날짜','접수
+날짜']),
+        process:ci(['발생공정','발생
+공정']),
         customer:ci(['고객사']),model:ci(['모델명']),maker:ci(['업체명']),
         sn:ci(['s/n']),defect:ci(['불량내용','불량 내용']),
         qty:ci(['불량수']),memo:ci(['정림 진행 현황']),
         fmaDate:ci(['fma 요청일','fma요청일']),
         rma:ci(['rma no.']),delivDate:ci(['배송완료']),
-        status:ci(['완료\n여부','완료여부']),
+        status:ci(['완료
+여부','완료여부']),
         farDate:ci(['역최종 far','최종far','최종 far']),
         duration:ci(['소요 기간[주]','소요기간']),
         cause:ci(['발생 원인','발생원인']),
@@ -297,7 +300,7 @@ function attachReport(idx,input){
 }
 function viewReport(idx){
   const d=DATA[idx];if(!d.report)return;
-  document.getElementById('reportModalTitle').textContent='📄 '+(d.reportName||'뺄석 리포트');
+  document.getElementById('reportModalTitle').textContent='📄 '+(d.reportName||'분석 리포트');
   document.getElementById('reportModalInfo').textContent=d.customer+' · '+d.model+' · '+d.defect;
   const c=document.getElementById('reportModalContent');
   if(d.report.startsWith('data:application/pdf')||(d.reportName||'').toLowerCase().endsWith('.pdf'))
@@ -312,7 +315,7 @@ function closeReportModal(e){if(e.target===document.getElementById('reportModal'
 function closeReportModalDirect(){document.getElementById('reportModal').classList.remove('open');document.getElementById('reportModalContent').innerHTML='';}
 function saveAsHtml(){
   const now=new Date().toISOString().split('T')[0];
-  const escaped=JSON.stringify(DATA).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
+  const escaped=JSON.stringify(DATA).replace(/</g,'\u003c').replace(/>/g,'\u003e');
   const html=document.documentElement.outerHTML.replace(/const EMBEDDED=\{lastUpdated:"[^"]*",data:[^}]*\};/,`const EMBEDDED={lastUpdated:"${now}",data:${escaped}};`);
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`fma_${now}.html`;a.click();
