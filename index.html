@@ -46,6 +46,7 @@ body{background:#F0F4F8;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,
     🕐 <span id="updatedText">로딩 중...</span>
   </div>
 
+  <!-- Row 1: RMA + FMA -->
   <div class="grid">
     <a class="card" href="rma.html">
       <div class="card-body">
@@ -77,6 +78,34 @@ body{background:#F0F4F8;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,
       </div>
       <div class="card-foot">
         <span id="fma-date" style="color:#64748B;font-size:16px;font-weight:600;">로딩 중...</span>
+        <span class="card-foot-arrow">열기 →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Row 2: EC NOTICE (전체 폭) -->
+  <div style="margin-bottom:20px;">
+    <a class="card" href="ec-notice/index.html">
+      <div class="card-body" style="display:flex;align-items:center;gap:28px;">
+        <div style="font-size:40px;flex-shrink:0;">📋</div>
+        <div style="flex:1;">
+          <div class="card-title">AUO(ADP) EC Notice 대시보드</div>
+          <div class="card-desc" style="margin-top:6px;">
+            EC 발생 현황 · BU별 / 연도별 집계 · Notice·Report 첨부 관리<br>
+            모델별 변경 이력 추적 · 파일 누적 관리
+          </div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill blue">GDBU · PDBU</span>
+            <span class="pill green">Notice 첨부</span>
+            <span class="pill orange">Report 첨부</span>
+            <span class="pill">연도별 현황</span>
+            <span class="pill">모델 이력</span>
+          </div>
+        </div>
+        <div style="flex-shrink:0;font-size:13px;color:#2563EB;font-weight:700;padding-right:8px;">열기 →</div>
+      </div>
+      <div class="card-foot">
+        <span id="ec-date" style="color:#64748B;font-size:13px;">ec-notice/index.html</span>
         <span class="card-foot-arrow">열기 →</span>
       </div>
     </a>
