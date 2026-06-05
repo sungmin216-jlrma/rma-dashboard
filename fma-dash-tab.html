@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>LCD Panel 품질 분석 대시보드 — FMA Report</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background: #f5f6f8; color: #1f2937; line-height: 1.55;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 64px; }
+
+.cover {
+  background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+  color: #fff; border-radius: 16px; padding: 36px 32px;
+  margin-bottom: 24px; box-shadow: 0 8px 24px rgba(30, 58, 138, .12);
+}
+.cover .eyebrow { font-size: 13px; letter-spacing: .14em; opacity: .8; text-transform: uppercase; }
+.cover h1 { font-size: 30px; margin: 8px 0 4px; font-weight: 700; }
+.cover .sub { opacity: .85; font-size: 14px; }
+.cover .meta { margin-top: 14px; font-size: 13px; opacity: .8; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.toc a { background: rgba(255,255,255,.15); color: #fff; padding: 5px 12px;
+  border-radius: 999px; font-size: 12px; text-decoration: none;
+  border: 1px solid rgba(255,255,255,.2); }
+.toc a:hover { background: rgba(255,255,255,.25); }
+
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.kpi { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.kpi .v { font-size: 28px; font-weight: 700; color: #111827; }
+.kpi .l { font-size: 12px; color: #6b7280; margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
+.kpi.accent .v { color: #2563eb; }
+
+.card { background: #fff; border-radius: 14px; padding: 22px 24px;
+  margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.card h2 { margin: 0 0 14px; font-size: 17px; font-weight: 700; color: #1f2937;
+  border-left: 4px solid #2563eb; padding-left: 10px; }
+.card .sub { color: #6b7280; font-size: 12px; margin-bottom: 14px; }
+
+/* BU group */
+.bu-group { margin-bottom: 18px; }
+.bu-group:last-child { margin-bottom: 0; }
+.bu-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px;
+  margin-bottom: 10px; font-size: 13px; font-weight: 700;
+}
+.bu-header .bu-name { font-size: 14px; letter-spacing: .04em; }
+.bu-header .bu-meta { margin-left: auto; font-size: 12px; font-weight: 500; opacity: .85; }
+.bu-gdbu { background: #e0e7ff; color: #3730a3; }
+.bu-mnt  { background: #fce7f3; color: #9d174d; }
+.bu-pdbu { background: #fef3c7; color: #92400e; }
+.bu-auto { background: #d1fae5; color: #065f46; }
+.bu-etc  { background: #f3f4f6; color: #374151; }
+
+/* Horizontal bar list */
+.hbar-list { display: flex; flex-direction: column; gap: 8px; }
+.hbar-row { display: grid; grid-template-columns: 200px 1fr 60px; gap: 12px; align-items: center; font-size: 13px; }
+.hbar-row .lbl { font-weight: 600; color: #1f2937; white-space: nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hbar-row .lbl .inch { color: #6b7280; font-weight: 500; font-size: 12px; margin-left: 4px; }
+.hbar-row .track { background: #eef2f7; border-radius: 6px; height: 22px; position: relative; overflow: hidden; }
+.hbar-row .fill { background: linear-gradient(90deg, #3b82f6, #2563eb); height: 100%; border-radius: 6px;
+  display:flex; align-items:center; justify-content:flex-end; padding: 0 8px;
+  color: #fff; font-weight:600; font-size: 12px; transition: width .6s ease; }
+.hbar-row .fill.warm { background: linear-gradient(90deg, #f59e0b, #ea580c); }
+.hbar-row .val { text-align: right; font-weight:700; color:#1f2937; font-size:13px; }
+.hbar-row .val small { color:#6b7280; font-weight:500; }
+@media (max-width: 760px) {
+  .hbar-row { grid-template-columns: 150px 1fr 56px; }
+  .kpis { grid-template-columns: repeat(2,1fr); }
+}
+
+/* Cause cards (clickable) */
+.cause-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.cause-card { padding: 16px; border-radius: 12px; color: #fff;
+  display:flex; flex-direction:column; justify-content:space-between; min-height: 130px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+}
+.cause-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.18); }
+.cause-card .num { font-size: 32px; font-weight: 800; line-height: 1; }
+.cause-card .pct { font-size: 13px; opacity: .9; margin-top: 4px; }
+.cause-card .lbl { font-size: 13px; font-weight: 600; line-height: 1.3; margin-top: 10px; }
+.cause-card .bar { height: 4px; background: rgba(255,255,255,.35); border-radius: 2px; margin-top: 10px; overflow:hidden; }
+.cause-card .bar i { display:block; height:100%; background:#fff; border-radius:2px; }
+.cause-card .more { font-size: 11px; opacity: .85; margin-top: 8px; font-weight: 500; }
+
+/* Modal */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(15,23,42,.55);
+  display: none; align-items: flex-start; justify-content: center;
+  z-index: 1000; padding: 40px 20px; overflow-y: auto;
+}
+.modal-bg.open { display: flex; }
+.modal { background: #fff; border-radius: 14px; max-width: 960px; width: 100%;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25); overflow: hidden; }
+.modal-header {
+  padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;
+  color: #fff; background: #1e3a8a;
+}
+.modal-header h3 { margin: 0; font-size: 18px; font-weight: 700; }
+.modal-header .meta { font-size: 12px; opacity: .9; margin-top: 4px; }
+.modal-close {
+  background: rgba(255,255,255,.2); color: #fff; border: 0;
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  font-size: 20px; line-height: 1; display:flex; align-items:center; justify-content:center;
+}
+.modal-close:hover { background: rgba(255,255,255,.35); }
+.modal-body { padding: 18px 22px 24px; max-height: 70vh; overflow-y: auto; }
+.modal-body table { width:100%; border-collapse: collapse; font-size: 13px; }
+.modal-body th, .modal-body td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #eef0f3; vertical-align: top; }
+.modal-body th { background: #f9fafb; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .04em; }
+.modal-body tr:hover td { background: #f9fafb; }
+
+/* Matrix */
+.matrix-wrap { overflow-x: auto; }
+.matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+.matrix th, .matrix td { padding: 6px 8px; text-align: center; border: 1px solid #e5e7eb; }
+.matrix th { background: #f3f4f6; font-weight: 600; }
+.matrix th.sticky { position: sticky; left: 0; background: #f3f4f6; z-index: 1; text-align: left; }
+.matrix td.row-h { text-align: left; font-weight: 600; background: #f9fafb; position: sticky; left: 0; }
+.matrix td.has { font-weight: 600; }
+
+/* Detail list */
+.list-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.list-tools input, .list-tools select {
+  padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; background: #fff;
+}
+table.list { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.list th, table.list td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #eef0f3; }
+table.list th { background: #f9fafb; font-size: 12px; color: #374151; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; user-select: none; }
+table.list tr:hover td { background: #f9fafb; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.tag-cause { background: #eef2ff; color: #4338ca; }
+.tag-sym   { background: #fef3c7; color: #92400e; }
+.tag-cust  { background: #ecfdf5; color: #047857; }
+.footer-note { text-align: center; color: #9ca3af; font-size: 12px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cover">
+  <div class="eyebrow">LCD 품질관리 · 분석 리포트 대시보드</div>
+  <h1>FMA Report 종합 분석</h1>
+  <div class="sub">폴더: <code style="background:rgba(255,255,255,.15);padding:2px 6px;border-radius:4px">C:\Users\sungm\Desktop\FMA Report</code></div>
+  <div class="meta">집계 기간: 04-26-2023 ~ 2026-5-23 · 총 57건 / 총 62개 패널 / 25개 모델</div>
+  <div class="toc">
+    <a href="#sec-model">모델별</a>
+    <a href="#sec-sym">증상별</a>
+    <a href="#sec-cause">원인별</a>
+    <a href="#sec-matrix">모델×증상</a>
+    <a href="#sec-list">상세 리스트</a>
+  </div>
+</div>
+
+<div class="kpis">
+  <div class="kpi accent"><div class="v">57</div><div class="l">총 분석 건수</div></div>
+  <div class="kpi"><div class="v">62</div><div class="l">총 불량 패널 수량</div></div>
+  <div class="kpi"><div class="v">25</div><div class="l">대상 모델 수</div></div>
+  <div class="kpi"><div class="v">26</div><div class="l">불량 증상 유형</div></div>
+</div>
+
+<div class="card" id="sec-model">
+  <h2>모델별 불량 수량</h2>
+  <div class="sub">BU별로 그룹화 · 각 BU 안에서 인치 오름차순 — G(GDBU) · M(MNT) · P(PDBU) · A(AUTO)</div>
+  <div id="modelList"></div>
+</div>
+
+<div class="card" id="sec-sym">
+  <h2>불량 증상별 수량</h2>
+  <div class="sub">Defect Phenomenon / 결함 증상 (내림차순 · 전체 대비 %)</div>
+  <div id="sympList" class="hbar-list"></div>
+</div>
+
+<div class="card" id="sec-cause">
+  <h2>불량 원인 분포</h2>
+  <div class="sub">Root Cause 자동 분류 — 카드를 <b>클릭</b>하면 해당 원인에 속한 케이스 목록이 펼쳐집니다</div>
+  <div id="causeGrid" class="cause-grid"></div>
+</div>
+
+<div class="modal-bg" id="causeModal" onclick="if(event.target===this) closeCauseModal()">
+  <div class="modal">
+    <div class="modal-header" id="modalHeader">
+      <div>
+        <h3 id="modalTitle">원인</h3>
+        <div class="meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeCauseModal()" aria-label="닫기">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="card" id="sec-matrix">
+  <h2>모델 × 증상 매트릭스</h2>
+  <div class="sub">셀 값 = 해당 모델에서 발생한 증상 수량 (빈 셀은 0)</div>
+  <div class="matrix-wrap"><table class="matrix" id="matrix"></table></div>
+</div>
+
+<div class="card" id="sec-list">
+  <h2>상세 리포트 리스트</h2>
+  <div class="sub">컬럼 헤더 클릭 시 정렬 · 검색창에 키워드 입력 가능</div>
+  <div class="list-tools">
+    <input id="filter" type="text" placeholder="검색 (모델/증상/원인/파일명)" style="min-width:260px">
+    <select id="symFilter"><option value="">모든 증상</option></select>
+    <select id="causeFilter"><option value="">모든 원인</option></select>
+    <select id="modelFilter"><option value="">모든 모델</option></select>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="list" id="listTbl">
+    <thead>
+      <tr>
+        <th data-k="issue_date">날짜</th>
+        <th data-k="model">모델</th>
+        <th data-k="symptom">증상</th>
+        <th data-k="qty">수량</th>
+        <th data-k="cause_category">원인 분류</th>
+        <th data-k="customer">고객</th>
+        <th data-k="rma">RMA</th>
+        <th data-k="file">파일명</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  </div>
+</div>
+
+<div class="footer-note">생성: 2026-05-29 · 폴더의 PDF를 추가/삭제한 뒤 "업데이트해줘"라고 요청하면 최신 데이터로 새로 그립니다.</div>
+</div>
+
+<script>
+const REPORTS = [{"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "가로 라인 결함 (Horizontal Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "백라이트 불량 (BLU Defect)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "백라이트 불량 (BLU Defect)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN01.0", "symptom": "화면 안 나옴 (No Display)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN02.0", "symptom": "가로 라인 결함 (Horizontal Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN02.0", "symptom": "백라이트 불량 (BLU Defect)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "P495IVN_댐코씨에스아이_PanelSN불량유형_2025-09-29.pdf", "model": "P495IVN02.0", "symptom": "가로 라인 결함 (Horizontal Line)", "qty": 1, "customer": "댐코씨에스아이", "rma": null, "issue_date": "2025-09-29", "root_cause": null, "cause_category": "기타"}, {"file": "A070VW08_화면 이상 표시_762512101089_-_JUNGLIM.pdf", "model": "A070VW08", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G104STN01.6_화면 이상 표시_noRMA_2026-05-13_CIMON.pdf", "model": "G104STN01.6", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G140HAB01.2_IC 본딩 불량_762412102904_2024-11-04_고객사미확인.pdf", "model": "G140HAB01.2", "symptom": "IC 본딩 불량 (V-Line / IC Bonding)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "전기·회로 결함"}, {"file": "G140HAB01.2_터치 동작 불량_702410109075_-_JUNGLIM.pdf", "model": "G140HAB01.2", "symptom": "터치 동작 불량 (Touch Function NG)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G140HAB01.2_터치 패널 불량_702410104684_2024-07-10_JUNGLIM.pdf", "model": "G140HAB01.2", "symptom": "터치 패널 불량 (TP NG)", "qty": 1, "customer": "JUNGLIM", "rma": "702410104684", "issue_date": "2024-07-10", "root_cause": "• Step1: Preliminary test the TP function and drawing is both OK © 2020 AU OptronicsCorporation –Proprietary and Confidential ---PAGE--- Root Cause Analysis • Step2: Imitate client’s way to heat up the TP IC. There is breakpoint in drawing test and ghost touch phenomenon. TP func", "cause_category": "전기·회로 결함"}, {"file": "G140HAB01.2_터치 패널 불량_702410106147_2024-08-28_JUNGLIM.pdf", "model": "G140HAB01.2", "symptom": "터치 패널 불량 (TP NG)", "qty": 1, "customer": "JUNGLIM", "rma": "702410106147", "issue_date": "2024-08-28", "root_cause": "• Step1: Preliminary test the TP function and drawing is both OK © 2020 AU OptronicsCorporation –Proprietary and Confidential ---PAGE--- Root Cause Analysis • Step2: To heat up the TP IC. There is breakpoint in drawing test and ghost touch phenomenon. TP function test is also FAI", "cause_category": "전기·회로 결함"}, {"file": "G140HAB01.2_터치 패널 이물_762412103136_2024-11-15_고객사미확인.pdf", "model": "G140HAB01.2", "symptom": "터치 패널 이물 (TP Particle)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "이물질 (Foreign/Particle)"}, {"file": "G140HAB01.2_화면 안 나옴_762412103169_2024-11-22_고객사미확인.pdf", "model": "G140HAB01.2", "symptom": "화면 안 나옴 (No Display)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G140HAB01_백색 줄무늬_762512101084_-_JUNGLIM.pdf", "model": "G140HAB01", "symptom": "백색 줄무늬 (White Stripe)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G140STN01.6_세로 라인 결함_762512103039_2025-11-10_CIMON.pdf", "model": "G140STN01.6", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "JUNGLIM", "rma": "762512103039", "issue_date": "2025-11-10", "root_cause": "• Step1: OM check the V -line position is X=2129 、2132； • Step2: OM check the corresponding X=2129 、2132 IC output bonding are OK ； X=2192 、2132 Check the IC bump indentation is normal © ---PAGE--- Root Cause Analysis Step3 : Observe under polarized light that there are foreign m", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "G150XAN01.2_화면 안 나옴_noRMA_-_JUNGLIM.pdf", "model": "G150XAN01.2", "symptom": "화면 안 나옴 (No Display)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G156HAN05_IC 본딩 불량_762512100787_-_JUNGLIM.pdf", "model": "G156HAN05", "symptom": "IC 본딩 불량 (V-Line / IC Bonding)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "전기·회로 결함"}, {"file": "G215HAN01.5_세로 라인 결함_732612100609_2026-04-16_JUNGLIM.pdf", "model": "G215HAN01.5", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "JUNGLIM", "rma": "732612100609", "issue_date": "2026-04-16", "root_cause": "Step 1: Visual Inspection • Conducted visual inspection on panel front and rear sides. • No external abnormality observed, including damage, contamination, or deformation. • Panel appearance is within normal condition. © ---PAGE--- Root Cause Analysis Step 2: Visibility Condition", "cause_category": "물리적 손상 (Impact/Damage)"}, {"file": "G238HAN02.0_빛샘_762412102376_-_JUNGLIM.pdf", "model": "G238HAN02.0", "symptom": "빛샘 (Light Leakage)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "G238HAN02.0_빛샘_762512100257_-_JUNGLIM.pdf", "model": "G238HAN02.0", "symptom": "빛샘 (Light Leakage)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": "： ⚫ Countermeasure： ⚫ ⚫ © ---PAGE--- ◼ To add the check item into FD---The 3 sides of the no metal ◼ Follow-up promotion before input into production ① frame model need to check BL~Cell separation and light Check the BL incoming material status at the assembly leakage is NG line ", "cause_category": "기타"}, {"file": "G270QAN01.4_X-Short 라인_noRMA_2026-03-27_JUNGLIM.pdf", "model": "G270QAN01.4", "symptom": "X-Short 라인 (X-Line)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": "2026-03-27", "root_cause": "• Step1: After separate the panel, the particle-induced damage was observed on both the TFT and CF sides. On the TFT side, the gate lines have been severely damaged TFT Side The red box indicates the gate line, which is used to control the TFT on/off switching. Under Micro-scope ", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "G320ZAN02.5 Checksum比对.pdf", "model": "G320ZAN02.5", "symptom": "기타", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "JUNGLIM -G133HAN01.1 Greenish display NDF (RMA 702610101722).pdf", "model": "G133HAN01.1", "symptom": "수신검사 부적합 (NDF)", "qty": 1, "customer": "JUNGLIM", "rma": "702610101722", "issue_date": "2026-04-29", "root_cause": "Step 1: Panel Verification • The panel was evaluated under the L64 pattern and gray-scale (gradient) patterns. • No visible abnormality or greenish phenomenon was observed during these tests. • The display appearance remained uniform across the panel under both test conditions. R", "cause_category": "기타"}, {"file": "JUNGLIM-G140HAB01.2 NDF (RMA 702610101420).pdf", "model": "G140HAB01.2", "symptom": "수신검사 부적합 (NDF)", "qty": 1, "customer": "JUNGLIM", "rma": "702610101420", "issue_date": "2026-05-13", "root_cause": "Step 1: Bonding and Routing Inspection Findings: 1. Conductive particle distribution at the IC bonding area is normal and uniform. 2. No abnormality is observed in bonding quality. 3. Signal routing/traces are confirmed to be intact and continuous. © 2020 AU OptronicsCorporation ", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "JUNGLIM-G140HAB01.2 VLD (RMA 702610101420).pdf", "model": "G140HAB01.2", "symptom": "세로 라인 결함 (V-Line / Vertical Line)", "qty": 1, "customer": "JUNGLIM", "rma": "702610101420", "issue_date": "2026-05-08", "root_cause": "Step 1: Line Tracing Inspection: Abnormality was found at the X2 IC bonding area along the V-line path. Findings: 1. Local bonding line shows poor compression contact. 2. Compared to the normal region, the affected area shows unclear conductive particle distribution, indicating i", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "Junglim- M238HVN01.0 Abnormal Display (U103 NG)2026-05-26.pdf", "model": "M238HVN01.0", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": "2026-5-23", "root_cause": "Step 1: Inspection Result 1. Visual inspection was performed on panel, PCB, and COF areas for all returned samples (#1 ~ #4 ). 2. No visible abnormality was found on : Observation • Panel surfac e • All samples show normal external appearance despite exhibiting abnormal • PCB boa", "cause_category": "기타"}, {"file": "Junglim-G121EAN01.1 Abnormal display (RMA 702610101723 ).pdf", "model": "G121EAN01.1", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "JUNGLIM", "rma": "732610101723", "issue_date": null, "root_cause": "Step 1: When the panel is powered on, vertical rainbow stripes appear briefly, followed by a rapid transition to a black screen. © ---PAGE--- Root Cause Analysis Step 2: Abnormal voltage outputs were identified during electrical measurement. Measurement Result Compared with speci", "cause_category": "기타"}, {"file": "Junglim-G140HAB01.2 TP NG (RMA 762612100246).pdf", "model": "G140HAB01.2", "symptom": "터치 패널 불량 (TP NG)", "qty": 1, "customer": "JUNGLIM", "rma": "762612100246", "issue_date": "2026-02-10", "root_cause": "• Step 1: Visual Inspection: No abnormality was found on the panel appearanceNo cosmetic defect, damage, or contamination was observed on either front or back side © ---PAGE--- Root Cause Analysis • Step 2: Functional Verification: The TP NG issue reported by customer was recheck", "cause_category": "전기·회로 결함"}, {"file": "M238HVN01.0_액정 흘러내림 얼룩_702510103977_-_JUNGLIM.pdf", "model": "M238HVN01.0", "symptom": "액정 흘러내림 얼룩 (Gravity Mura)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": "1.We can see the gravity mura just take out from the box and turn on. 2.We see there is obvious top mark on the PS of the return samples. 3.No MFG centration on the return NG samples and the monitor data are all OK and pass the thermal test (100% perform). 4.This issue was found ", "cause_category": "외력/Cell Gap"}, {"file": "P215HAN01.1_백라이트 이물_702310110829_2023-12-07_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P215HAN01.1_백라이트 이물_702310110829_2023-12-19_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P215HAN01.1_백라이트 이물_703210110829_2024-01-04_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P215HAN01.1_백라이트 이물_noRMA_2024-02-19_JUNGLIM.pdf", "model": "P215HAN01.1", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": "2024-02-19", "root_cause": "3) Powered on the panels and BL Particles were found. 4) Particles for 3 panels were confirmed out of IIS spec as listed below. ② SN Size Type ③ ①Q53A6D22MQZZZZ1900 No particle found ④ ②Q53A6D22MAZZZZ1900 0.6 Point ① ③Q53A83L2KRZZZZ1900 2 Line ④Q53A83L2MHZZZZ1900 1 Point 5) After", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P215HAN01.1_백라이트 이물_noRMA_2025-01-13_ADP.pdf", "model": "P215HAN01.1", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": "2025-01-13", "root_cause": "3) Turn Panel found BL Particle. 4) Particle was out of Auo Z-spec(0.5mm) 5) After decape panel, we find the particle SN Size Type ①Q53A8003FAZZZZ1900 1 Point ②Q53A83L2KRZZZZ1900 2 Line Film-side OC-side ② ① © ---PAGE--- Root Cause Analysis 5) FITR below: SN Size Type FTIR ① Q53A", "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P215HAN01.1_백색 화면 채도 이상_702410106390_-_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "백색 화면 채도 이상 (White Screen Saturation)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P215HAN01.1_세로 블록 얼룩_702410108200_2024-11-19_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "세로 블록 얼룩 (V-Block)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "Mura/얼룩"}, {"file": "P215HAN01.1_십자 라인 결함_702410108719_2024-12-11_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "십자 라인 결함 (Cross Line)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P215HAN01.1_얼룩 결함_noRMA_2025-01-15_KORTEK.pdf", "model": "P215HAN01.1", "symptom": "얼룩 결함 (Stain Mura)", "qty": 1, "customer": "KORTEK", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "Mura/얼룩"}, {"file": "P215HAN01.1_화면 떨림_702410106389_2024-09-11_KORTEK.pdf", "model": "P215HAN01.1", "symptom": "화면 떨림 (Flicker)", "qty": 1, "customer": "KORTEK", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P215HAN01.1_화면 안 나옴_702310100829_2023-12-07_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "화면 안 나옴 (No Display)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P215HAN01.1_화면 이상 표시_noRMA_2023-12-01_고객사미확인.pdf", "model": "P215HAN01.1", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P215HAN01_백라이트 이물_noRMA_2023-11-21_KORTEK.pdf", "model": "P215HAN01", "symptom": "백라이트 이물 (BL Particle)", "qty": 1, "customer": "KORTEK", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "이물질 (Foreign/Particle)"}, {"file": "P320HVN02.0F2_마일러 절연필름 미부착_noRMA_2024-03-16_JUNGLIM.pdf", "model": "P320HVN02.0F2", "symptom": "마일러 절연필름 미부착 (Mylar Missing - ECR)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": "2024-03-16", "root_cause": null, "cause_category": "공정 변경 (ECR)"}, {"file": "P320HVN02.0_가로 블록 얼룩_noRMA_2023-12-25_JUNGLIM.pdf", "model": "P320HVN02.0", "symptom": "가로 블록 얼룩 (H-Block)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "Mura/얼룩"}, {"file": "P320HVN06.0_가로 블록 얼룩_noRMA_04-26-2023_코리스.pdf", "model": "P320HVN06.0", "symptom": "가로 블록 얼룩 (H-Block)", "qty": 1, "customer": "코리스", "rma": null, "issue_date": "04-26-2023", "root_cause": "⚫패널을 켜면 고객이 컴프레인한 결함인 가로 블록 증상이 발견 됩니다. ⚫ 셀을 분해하면, ESD (Electrostatic Discharge) 흔적 발견. A-308, ChungAng Circulation Complex, Kyunginro 53gil 15, Guro-Ku, Seoul, Korea TEL ) 02-2686-3553, FAX ) 02-2686-3554 ---PAGE--- • Step 2 Fact & Data Finding analysis 시정 조치 ■ 대책 – ESD 피해 방지 ES", "cause_category": "ESD (정전기)"}, {"file": "P320HVN06.1_화면 이상 표시_noRMA_2024-08-12_GTT.pdf", "model": "P320HVN06.1", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P320HVN07.2_액정 기포_noRMA_2025-03-28_JUNGLIM.pdf", "model": "P320HVN07.2", "symptom": "액정 기포 (LC Bubble)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": "Conclusion 1. LC Bubble defect was cause by unknown chemical liquid. 2. LC Bubble area TFT circuit was corrosion. ---PAGE--- Innovating Life", "cause_category": "화학액 부식 (Chemical/Corrosion)"}, {"file": "P370IVN02.2_LED 구동보드 손상_noRMA_-_고객사미확인.pdf", "model": "P370IVN02.2", "symptom": "LED 구동보드 손상 (DB/D27 Damage)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "물리적 손상 (Impact/Damage)"}, {"file": "P370IVN02.2_화면 안 나옴_702410101441_2024-02-29_ADP.pdf", "model": "P370IVN02.2", "symptom": "화면 안 나옴 (No Display)", "qty": 1, "customer": "JUNGLIM", "rma": "702410101441", "issue_date": "2024-02-29", "root_cause": "• Step1: Check LED found D27 damage. D27(fail) D28(OK) Remove Cell Surface found damage © ---PAGE--- Conclusion ⚫ Conclusion and Countermeasure LED Mura due to D27 LED damage LED Light Bar will pass to Lextar for advanced analysis; Final report – Due date: 2024/3/18 40.32323.016 ", "cause_category": "물리적 손상 (Impact/Damage)"}, {"file": "P370IVN02.2_화면 안 나옴_noRMA_2025-10-20_JUNGLIM.pdf", "model": "P370IVN02.2", "symptom": "화면 안 나옴 (No Display)", "qty": 6, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": "1. Customer complained No Display (BLU Off). 2. We check the symptom was Back light shutdown by LED DB NG 3. To Check the DB board ‘s MOS to ground Impedance is 151.4KΩ and MOS fail (OK sample is 6.05MΩ ). OK sample NG sample 6.05MΩ 151.4KΩ © ---PAGE--- Problem Statement ⚫ Descri", "cause_category": "전기·회로 결함"}, {"file": "P370IVN02.2_화면 이상 표시_noRMA_2022-11-11_고객사미확인.pdf", "model": "P370IVN02.2", "symptom": "화면 이상 표시 (Abnormal Display)", "qty": 1, "customer": "고객사미확인", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}, {"file": "P485IVN01.1B1_편광판 AG코팅 미처리_noRMA_2025-08-14_JUNGLIM.pdf", "model": "P485IVN01.1B1", "symptom": "편광판 AG코팅 미처리 (PF/AG Coating Missing)", "qty": 1, "customer": "JUNGLIM", "rma": null, "issue_date": null, "root_cause": null, "cause_category": "기타"}];
+
+const groupCount = (arr, key) => arr.reduce((m,x) => {
+  const k = x[key] || "(미지정)"; m[k] = (m[k] || 0) + (x.qty || 1); return m;
+}, {});
+const sortedByValue = obj => Object.entries(obj).sort((a,b) => b[1]-a[1]);
+
+const byModel    = sortedByValue(groupCount(REPORTS, "model"));
+const bySymptom  = sortedByValue(groupCount(REPORTS, "symptom"));
+const byCause    = sortedByValue(groupCount(REPORTS, "cause_category"));
+const totalQty   = REPORTS.reduce((s,r) => s + (r.qty || 1), 0);
+
+function renderHBar(elId, data, opts) {
+  const max = Math.max(...data.map(d => d[1]));
+  const total = data.reduce((s,d)=>s+d[1],0);
+  const el = document.getElementById(elId);
+  el.innerHTML = data.map(([label, val]) => {
+    const pct = (val/max*100).toFixed(1);
+    const share = (val/total*100).toFixed(1);
+    return `
+      <div class="hbar-row">
+        <div class="lbl" title="${label}">${label}</div>
+        <div class="track"><div class="fill ${opts.color||''}" style="width:${pct}%">${val}</div></div>
+        <div class="val">${val}<small> · ${share}%</small></div>
+      </div>`;
+  }).join("");
+}
+renderHBar("sympList",  bySymptom, { color: "warm" });
+
+// ---- BU classification ----
+function parseModelMeta(model) {
+  const m = model && model.match(/^([GMPA])(\d{3})/i);
+  if (!m) return { bu: "기타", buClass: "etc", inch: 9999, inchLabel: "" };
+  const letter = m[1].toUpperCase();
+  const num = parseInt(m[2], 10);
+  const inch = num / 10;
+  const buMap = {
+    G: { bu: "GDBU", buClass: "gdbu" },
+    M: { bu: "MNT",  buClass: "mnt"  },
+    P: { bu: "PDBU", buClass: "pdbu" },
+    A: { bu: "AUTO", buClass: "auto" },
+  };
+  return { ...buMap[letter], inch, inchLabel: inch.toFixed(1) + '"' };
+}
+const BU_ORDER = ["GDBU", "MNT", "PDBU", "AUTO", "기타"];
+
+const buGroups = {};
+byModel.forEach(([model, val]) => {
+  const meta = parseModelMeta(model);
+  (buGroups[meta.bu] = buGroups[meta.bu] || []).push({ model, val, ...meta });
+});
+Object.values(buGroups).forEach(g => g.sort((a,b) => a.inch - b.inch || b.val - a.val));
+
+const globalMax = Math.max(...byModel.map(x => x[1]));
+
+const modelHtml = BU_ORDER.filter(bu => buGroups[bu]).map(bu => {
+  const items = buGroups[bu];
+  const buSum = items.reduce((s,x) => s + x.val, 0);
+  const cls = items[0].buClass;
+  const rows = items.map(({model, val, inchLabel}) => {
+    const pct = (val/globalMax*100).toFixed(1);
+    const share = (val/totalQty*100).toFixed(1);
+    return `
+      <div class="hbar-row">
+        <div class="lbl" title="${model}">${model}<span class="inch">${inchLabel}</span></div>
+        <div class="track"><div class="fill" style="width:${pct}%">${val}</div></div>
+        <div class="val">${val}<small> · ${share}%</small></div>
+      </div>`;
+  }).join("");
+  return `
+    <div class="bu-group">
+      <div class="bu-header bu-${cls}">
+        <span class="bu-name">${bu}</span>
+        <span class="bu-meta">${items.length}개 모델 · 총 ${buSum}건</span>
+      </div>
+      <div class="hbar-list">${rows}</div>
+    </div>`;
+}).join("");
+document.getElementById("modelList").innerHTML = modelHtml;
+
+// Cause cards
+const causePalette = [
+  "linear-gradient(135deg,#4f46e5,#7c3aed)",
+  "linear-gradient(135deg,#0ea5e9,#2563eb)",
+  "linear-gradient(135deg,#f59e0b,#dc2626)",
+  "linear-gradient(135deg,#10b981,#0d9488)",
+  "linear-gradient(135deg,#db2777,#be185d)",
+  "linear-gradient(135deg,#84cc16,#65a30d)",
+  "linear-gradient(135deg,#0891b2,#0e7490)",
+  "linear-gradient(135deg,#6366f1,#4338ca)",
+  "linear-gradient(135deg,#94a3b8,#64748b)",
+];
+const causeColorByLabel = {};
+const causeEl = document.getElementById("causeGrid");
+causeEl.innerHTML = byCause.map(([label, val], i) => {
+  const pct = (val/totalQty*100).toFixed(1);
+  const bg = causePalette[i % causePalette.length];
+  causeColorByLabel[label] = bg;
+  const safe = label.replace(/'/g, "\\'");
+  return `
+    <div class="cause-card" style="background:${bg}" onclick="openCauseModal('${safe}')">
+      <div>
+        <div class="num">${val}</div>
+        <div class="pct">전체 ${pct}%</div>
+      </div>
+      <div>
+        <div class="lbl">${label}</div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="more">▸ 클릭하여 ${val}건 상세보기</div>
+      </div>
+    </div>`;
+}).join("");
+
+function openCauseModal(label) {
+  const cases = REPORTS.filter(r => (r.cause_category || "기타") === label);
+  document.getElementById("modalTitle").textContent = "원인 분류: " + label;
+  document.getElementById("modalMeta").textContent =
+    cases.length + "건 · 총 " + cases.reduce((s,r)=>s+(r.qty||1),0) + "개 패널";
+  document.getElementById("modalHeader").style.background = causeColorByLabel[label] || "#1e3a8a";
+
+  const sorted = cases.slice().sort((a,b) => (b.issue_date||"").localeCompare(a.issue_date||""));
+  const rows = sorted.map((r,i) => `
+    <tr>
+      <td style="color:#9ca3af;width:30px">${i+1}</td>
+      <td style="white-space:nowrap">${r.issue_date || "-"}</td>
+      <td><b>${r.model || "-"}</b></td>
+      <td><span class="tag tag-sym">${r.symptom || "-"}</span></td>
+      <td style="text-align:center">${r.qty}</td>
+      <td>${r.rma || "-"}</td>
+      <td style="color:#6b7280;font-size:12px" title="${r.file}">${r.file}</td>
+    </tr>`).join("");
+  document.getElementById("modalBody").innerHTML = `
+    <table>
+      <thead><tr><th>#</th><th>날짜</th><th>모델</th><th>증상</th><th>수량</th><th>RMA</th><th>파일</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  document.getElementById("causeModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeCauseModal() {
+  document.getElementById("causeModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeCauseModal(); });
+
+// Matrix
+const models = byModel.map(x => x[0]);
+const symptoms = bySymptom.map(x => x[0]);
+const matrix = {};
+REPORTS.forEach(r => {
+  const m = r.model || "(미지정)";
+  const s = r.symptom || "(미지정)";
+  matrix[m] = matrix[m] || {};
+  matrix[m][s] = (matrix[m][s] || 0) + (r.qty || 1);
+});
+const mTbl = document.getElementById("matrix");
+let mh = "<thead><tr><th class='sticky'>모델 \\ 증상</th>";
+symptoms.forEach(s => { mh += `<th>${s}</th>`; });
+mh += "<th>합계</th></tr></thead><tbody>";
+models.forEach(m => {
+  mh += `<tr><td class='row-h'>${m}</td>`;
+  let sum = 0;
+  symptoms.forEach(s => {
+    const v = (matrix[m] && matrix[m][s]) || 0;
+    sum += v;
+    if (v > 0) {
+      const op = Math.min(0.18 + v*0.20, 0.85);
+      mh += `<td class='has' style="background: rgba(37,99,235,${op}); color:${v>=2?'#fff':'#1e3a8a'}">${v}</td>`;
+    } else {
+      mh += `<td>·</td>`;
+    }
+  });
+  mh += `<td style="font-weight:700;background:#f3f4f6">${sum}</td></tr>`;
+});
+mh += "</tbody>";
+mTbl.innerHTML = mh;
+
+// Detail list
+const tbody = document.querySelector("#listTbl tbody");
+const filterIn   = document.getElementById("filter");
+const symFilter  = document.getElementById("symFilter");
+const causeFilter= document.getElementById("causeFilter");
+const modelFilter= document.getElementById("modelFilter");
+[...new Set(REPORTS.map(r => r.symptom).filter(Boolean))].sort().forEach(s => {
+  symFilter.innerHTML += `<option value="${s}">${s}</option>`;
+});
+[...new Set(REPORTS.map(r => r.cause_category).filter(Boolean))].sort().forEach(s => {
+  causeFilter.innerHTML += `<option value="${s}">${s}</option>`;
+});
+[...new Set(REPORTS.map(r => r.model).filter(Boolean))].sort().forEach(s => {
+  modelFilter.innerHTML += `<option value="${s}">${s}</option>`;
+});
+let sortKey = "issue_date", sortAsc = false;
+function render() {
+  const q = filterIn.value.trim().toLowerCase();
+  const sf = symFilter.value, cf = causeFilter.value, mf = modelFilter.value;
+  const rows = REPORTS.filter(r => {
+    if (sf && r.symptom !== sf) return false;
+    if (cf && r.cause_category !== cf) return false;
+    if (mf && r.model !== mf) return false;
+    if (!q) return true;
+    return Object.values(r).some(v => (v||"").toString().toLowerCase().includes(q));
+  });
+  rows.sort((a,b) => {
+    const av = a[sortKey] ?? "", bv = b[sortKey] ?? "";
+    if (typeof av === "number" && typeof bv === "number") return sortAsc ? av-bv : bv-av;
+    return sortAsc ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+  });
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.issue_date || "-"}</td>
+      <td><b>${r.model || "-"}</b></td>
+      <td><span class="tag tag-sym">${r.symptom || "-"}</span></td>
+      <td style="text-align:center">${r.qty}</td>
+      <td><span class="tag tag-cause">${r.cause_category || "-"}</span></td>
+      <td>${r.customer ? `<span class='tag tag-cust'>${r.customer}</span>` : "-"}</td>
+      <td>${r.rma || "-"}</td>
+      <td style="color:#6b7280;font-size:12px;max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.file}">${r.file}</td>
+    </tr>
+  `).join("");
+}
+filterIn.addEventListener("input", render);
+symFilter.addEventListener("change", render);
+causeFilter.addEventListener("change", render);
+modelFilter.addEventListener("change", render);
+document.querySelectorAll("#listTbl th").forEach(th => {
+  th.addEventListener("click", () => {
+    const k = th.dataset.k;
+    if (k === sortKey) sortAsc = !sortAsc;
+    else { sortKey = k; sortAsc = (k === "qty") ? false : true; }
+    render();
+  });
+});
+render();
+</script>
+</body>
+</html>
