@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FMA 분석 현황판</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface2: #F1F5F9;
+  --border: #E2E8F0;
+  --border2: #CBD5E1;
+  --text: #0F172A;
+  --muted: #64748B;
+  --blue: #1D4ED8;
+  --blue-bg: #EFF6FF;
+  --blue-text: #1E40AF;
+  --green: #15803D;
+  --green-bg: #F0FDF4;
+  --green-text: #166534;
+  --orange: #C2410C;
+  --orange-bg: #FFF7ED;
+  --orange-text: #9A3412;
+  --red: #DC2626;
+  --red-bg: #FEF2F2;
+  --red-text: #991B1B;
+  --purple: #6D28D9;
+  --purple-bg: #F5F3FF;
+  --purple-text: #5B21B6;
+  --header: #1E3A5F;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif; font-size: 13px; min-height: 100vh; }
+
+/* ── Top Bar ── */
+.topbar { background: var(--header); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.topbar-logo { color: #93C5FD; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+.topbar-sub { color: #93C5FD; font-size: 11px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.tb-btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-family: inherit; cursor: pointer; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1); color: #E0F2FE; transition: .15s; }
+.tb-btn:hover { background: rgba(255,255,255,.2); }
+.tb-btn.accent { background: #2563EB; border-color: #2563EB; color: #fff; }
+.tb-btn.accent:hover { background: #1D4ED8; }
+.tb-btn.save-btn { background: #15803D; border-color: #15803D; color: #fff; }
+.tb-btn.save-btn:hover { background: #166534; }
+.topbar-date { color: #93C5FD; font-size: 11px; text-align: right; }
+
+/* ── Manager Panel ── */
+.mgr-panel { background: #0F172A; border-bottom: 2px solid #2563EB; padding: 14px 28px; display: none; }
+.mgr-panel.open { display: block; }
+.mgr-panel h3 { color: #93C5FD; font-size: 12px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+.mgr-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.mgr-row label { color: #94A3B8; font-size: 12px; }
+.file-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px dashed #3B82F6; background: rgba(59,130,246,.1); color: #93C5FD; font-size: 12px; font-family: inherit; cursor: pointer; transition: .15s; }
+.file-btn:hover { background: rgba(59,130,246,.2); border-style: solid; }
+.file-btn input { display: none; }
+.mgr-status { color: #4ADE80; font-size: 12px; }
+.mgr-info { color: #64748B; font-size: 11px; margin-top: 6px; }
+
+/* ── Main Layout ── */
+.main { max-width: 1400px; margin: 0 auto; padding: 24px 28px; }
+
+/* ── KPI Grid ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.kpi-value { font-size: 30px; font-weight: 700; line-height: 1; }
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.kv-blue { color: var(--blue); }
+.kv-green { color: var(--green); }
+.kv-orange { color: var(--orange); }
+.kv-red { color: var(--red); }
+.kv-purple { color: var(--purple); }
+
+/* ── Charts Row ── */
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.card-title { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .4px; }
+
+/* ── Progress Bars ── */
+.prog-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.prog-label { font-size: 12px; color: var(--text); width: 100px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prog-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 4px; background: var(--green); }
+.prog-fill.ing { background: var(--orange); }
+.prog-num { font-size: 11px; color: var(--muted); width: 30px; text-align: right; flex-shrink: 0; }
+
+/* ── Main Table ── */
+.table-section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+.table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-header h2 { font-size: 14px; font-weight: 600; color: var(--text); }
+.table-header-right { display: flex; gap: 8px; align-items: center; }
+.search-input { padding: 6px 12px; border: 1px solid var(--border2); border-radius: 6px; font-size: 12px; font-family: inherit; background: var(--surface2); color: var(--text); outline: none; width: 200px; }
+.search-input:focus { border-color: #3B82F6; }
+.filter-sel { padding: 6px 10px; border: 1px solid var(--border2); border-radius: 6px; font-size: 12px; font-family: inherit; background: var(--surface2); color: var(--text); outline: none; cursor: pointer; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+thead th { background: var(--surface2); padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .4px; cursor: pointer; user-select: none; }
+thead th:hover { color: var(--blue); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:hover { background: var(--blue-bg); }
+tbody td { padding: 10px 12px; vertical-align: middle; font-size: 12px; }
+.td-muted { color: var(--muted); font-size: 11px; }
+.td-clip { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Badges ── */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.badge-done { background: var(--green-bg); color: var(--green-text); }
+.badge-ing { background: var(--orange-bg); color: var(--orange-text); }
+.badge-proc { background: var(--blue-bg); color: var(--blue-text); }
+
+/* ── Duration color ── */
+.dur-fast { color: var(--green); font-weight: 600; }
+.dur-med { color: #D97706; font-weight: 600; }
+.dur-slow { color: var(--red); font-weight: 600; }
+
+/* ── Report buttons ── */
+.report-cell { display: flex; gap: 6px; align-items: center; }
+.btn-report-view { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-family: inherit; cursor: pointer; border: 1px solid var(--blue); background: var(--blue-bg); color: var(--blue-text); transition: .15s; white-space: nowrap; }
+.btn-report-view:hover { background: var(--blue); color: #fff; }
+.btn-report-attach { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-family: inherit; cursor: pointer; border: 1px dashed var(--border2); background: var(--surface2); color: var(--muted); transition: .15s; white-space: nowrap; }
+.btn-report-attach:hover { border-color: var(--blue); color: var(--blue); }
+.btn-report-attach input { display: none; }
+.mgr-only { display: none; }
+.manager-mode .mgr-only { display: inline-flex; }
+
+/* ── Legend ── */
+.legend { display: flex; gap: 16px; margin-bottom: 12px; }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.leg-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ── Footer ── */
+.footer { text-align: center; color: var(--muted); font-size: 11px; padding: 20px; }
+
+/* ── Modal ── */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; display: none; align-items: center; justify-content: center; }
+.modal-bg.open { display: flex; }
+.modal { background: #fff; border-radius: 12px; width: 480px; max-width: 95vw; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+.modal p { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.btn-close { padding: 7px 16px; border-radius: 6px; border: 1px solid var(--border2); background: var(--surface2); font-size: 12px; font-family: inherit; cursor: pointer; }
+.btn-close:hover { background: var(--border); }
+
+/* ── Upload progress ── */
+.upload-hint { font-size: 11px; color: #64748B; padding: 3px 0; }
+.report-name { font-size: 11px; color: var(--green); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Column map info */
+.col-map-info { background: #1E293B; color: #94A3B8; padding: 10px 14px; border-radius: 6px; font-size: 11px; margin-top: 10px; line-height: 1.7; }
+.col-map-info b { color: #93C5FD; }
+</style>
+</head>
+<body>
+
+<!-- Site Nav -->
+
+
+<!-- Top Bar -->
+<div class="topbar" id="topbar">
+  <div class="topbar-left">
+    <div>
+      <div class="topbar-logo">📊 FMA 분석 현황판</div>
+      <div class="topbar-sub">품질팀 FMA 분석 현황 · 자동 집계</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-date" id="topbarDate"></div>
+    <button class="tb-btn" id="mgrToggleBtn" onclick="toggleManager()">⚙ 관리자 모드</button>
+    <button class="tb-btn save-btn" id="saveHtmlBtn" onclick="saveAsHtml()" style="display:none;">💾 현황판 저장</button>
+  </div>
+</div>
+
+<!-- Manager Panel -->
+<div class="mgr-panel" id="mgrPanel">
+  <h3>관리자 모드 — 과장님 전용</h3>
+  <div class="mgr-row">
+    <label>Excel/CSV 불러오기:</label>
+    <label class="file-btn">
+      📂 파일 선택 (Excel / CSV)
+      <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" onchange="loadExcel(this)">
+    </label>
+    <span class="mgr-status" id="loadStatus"></span>
+  </div>
+  <div class="col-map-info" id="colMapInfo" style="display:none;"></div>
+  <div class="mgr-info">
+    리포트 첨부는 현황 테이블의 각 행 📎 버튼을 클릭하세요. 모든 작업 후 <b style="color:#4ADE80">💾 현황판 저장</b> 버튼으로 HTML 파일을 저장하면 부사장님이 열었을 때 최신 데이터가 표시됩니다.
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">📋 전체 분석 건</div>
+      <div class="kpi-value kv-blue" id="kTotal">0</div>
+      <div class="kpi-sub">누적 접수</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">⏳ 진행 중</div>
+      <div class="kpi-value kv-orange" id="kProg">0</div>
+      <div class="kpi-sub">분석 진행 중</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">✅ 완료</div>
+      <div class="kpi-value kv-green" id="kDone">0</div>
+      <div class="kpi-sub" id="kRate">완료율 –%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">⚠️ 총 불량 수량</div>
+      <div class="kpi-value kv-red" id="kQty">0</div>
+      <div class="kpi-sub">EA 누적</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">⏱ 평균 소요기간</div>
+      <div class="kpi-value kv-purple" id="kDur">–</div>
+      <div class="kpi-sub">주 (완료 건 기준)</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-title">발생공정별 현황</div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#15803D;"></div>완료</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#C2410C;"></div>진행 중</div>
+      </div>
+      <div style="position:relative; height:200px;">
+        <canvas id="procChart" role="img" aria-label="발생공정별 완료·진행 현황">데이터 없음</canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">고객사별 현황</div>
+      <div id="custBars"></div>
+    </div>
+  </div>
+
+  <!-- Main Table -->
+  <div class="table-section">
+    <div class="table-header">
+      <h2>분석 건 현황 요약</h2>
+      <div class="table-header-right">
+        <input class="search-input" id="searchInput" placeholder="🔍 모델명 · 불량내용 검색" oninput="renderTable()">
+        <select class="filter-sel" id="filterStatus" onchange="renderTable()">
+          <option value="">전체 상태</option>
+          <option value="완료">완료</option>
+          <option value="진행 中">진행 중</option>
+        </select>
+        <select class="filter-sel" id="filterProcess" onchange="renderTable()">
+          <option value="">전체 공정</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy(0)">No</th>
+            <th onclick="sortBy(1)">접수일 ↕</th>
+            <th onclick="sortBy(2)">발생공정 ↕</th>
+            <th onclick="sortBy(3)">고객사 ↕</th>
+            <th onclick="sortBy(4)">모델명 ↕</th>
+            <th onclick="sortBy(5)">불량내용 ↕</th>
+            <th onclick="sortBy(6)">불량수 ↕</th>
+            <th onclick="sortBy(7)">FMA 요청일 ↕</th>
+            <th onclick="sortBy(8)">최종 FAR ↕</th>
+            <th onclick="sortBy(9)">소요기간 ↕</th>
+            <th onclick="sortBy(10)">상태 ↕</th>
+            <th>분석 리포트</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="footer" id="footerDate"></div>
+
+<!-- Report View Modal -->
+<div class="modal-bg" id="reportModal" onclick="closeReportModal(event)">
+  <div class="modal">
+    <h3 id="reportModalTitle">분석 리포트</h3>
+    <p id="reportModalInfo"></p>
+    <div id="reportModalContent"></div>
+    <div class="modal-actions">
+      <button class="btn-close" onclick="closeReportModalDirect()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// EMBEDDED DATA — 이 섹션은 "현황판 저장" 시 자동 업데이트됩니다
+// ═══════════════════════════════════════════════════════
+const EMBEDDED = {
+  lastUpdated: "2026-06-01",
+  data: [
+    {recvDate:"2025-11-19",process:"Medison OQC",customer:"Kortek",model:"P215HAN01.1",maker:"Samsung Medison",defect:"Flicker",qty:3,fmaDate:"2025-11-19",farDate:"2026-04-13",duration:20.8,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-01-16",process:"Line",customer:"Kortek",model:"G154EVN01.0",maker:"Samsung Medison",defect:"H/Mura",qty:1,fmaDate:"2026-01-19",farDate:"2026-03-10",duration:6.8,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-01-21",process:"Line",customer:"Kortek",model:"G156HAB03.2",maker:"Samsung Medison",defect:"Set 기준 하단 Clip mura",qty:2,fmaDate:"2026-01-22",farDate:"2026-03-16",duration:7.4,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-01-18",process:"Field",customer:"Kortek",model:"G140HAB01.2",maker:"Samsung Medison",defect:"간헐적 터치 안됨",qty:1,fmaDate:"2026-02-12",farDate:"2026-04-08",duration:6.2,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-01-22",process:"Field",customer:"Kortek",model:"G140HAB01.2",maker:"Samsung Medison",defect:"터치 입력 동작 무",qty:1,fmaDate:"2026-01-23",farDate:"2026-05-04",duration:14,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-03-17",process:"Field",customer:"Kortek",model:"G140HAB01.2",maker:"Samsung Medison",defect:"Line Defect",qty:1,fmaDate:"2026-03-18",farDate:"2026-05-20",duration:9.2,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-03-17",process:"Field",customer:"Kortek",model:"G140HAB01.2",maker:"Samsung Medison",defect:"Abnormal Display",qty:1,fmaDate:"2026-03-18",farDate:"2026-05-26",duration:10,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-03-16",process:"개발",customer:"Kortek",model:"G270QAN01.4",maker:"GE Austria",defect:"HCR_Abnormal Display",qty:1,fmaDate:"2026-03-18",farDate:"2026-04-01",duration:3,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-03-26",process:"공정",customer:"Kortek vina",model:"G133HAN01.1",maker:"innocon",defect:"Greenish",qty:2,fmaDate:"2026-04-07",farDate:"2026-05-26",duration:5.6,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-04-01",process:"IQC",customer:"Kortek",model:"G140HAB01.2",maker:"Samsung Medison",defect:"TP Glass chipping Issue",qty:6,fmaDate:"2026-04-02",farDate:"2026-04-24",duration:3.2,status:"완료",report:null,reportName:null},
+    {recvDate:"2026-04-23",process:"Field",customer:"Kortek",model:"G156HAB03.2",maker:"Samsung Medison",defect:"Ghost touch",qty:1,fmaDate:"2026-04-23",farDate:"",duration:null,status:"진행 中",report:null,reportName:null},
+  ]
+};
+// ═══════════════════════════════════════════════════════
+
+let DATA = JSON.parse(JSON.stringify(EMBEDDED.data));
+let procChart = null;
+let sortCol = -1, sortDir = 1;
+let managerMode = false;
+
+// ── Init ──
+window.onload = () => {
+  const now = new Date();
+  const ds = now.toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('topbarDate').innerHTML = `<div style="font-size:10px;color:#93C5FD;">최종 업데이트</div><div style="color:#E0F2FE;font-size:12px;font-weight:600;">${EMBEDDED.lastUpdated || ds}</div>`;
+  document.getElementById('footerDate').textContent = `FMA 분석 현황판 · 품질팀 · 기준일 ${EMBEDDED.lastUpdated || ds}`;
+  refreshAll();
+};
+
+function refreshAll() {
+  updateKPI();
+  updateCharts();
+  populateFilters();
+  renderTable();
+}
+
+// ── Manager Mode ──
+function toggleManager() {
+  managerMode = !managerMode;
+  document.getElementById('mgrPanel').classList.toggle('open', managerMode);
+  document.getElementById('saveHtmlBtn').style.display = managerMode ? 'inline-block' : 'none';
+  document.getElementById('mgrToggleBtn').textContent = managerMode ? '✕ 관리자 종료' : '⚙ 관리자 모드';
+  document.body.classList.toggle('manager-mode', managerMode);
+}
+
+// ── Excel Load ──
+function loadExcel(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      let rows;
+      if (file.name.endsWith('.csv')) {
+        const text = new TextDecoder('utf-8').decode(e.target.result);
+        rows = parseCSV(text);
+      } else {
+        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:false, dateNF:'yyyy-mm-dd'});
+      }
+      // Find header row
+      let headerRow = -1;
+      const keyHeaders = ['접수', '고객', '모델', '불량'];
+      for (let i = 0; i < Math.min(rows.length, 10); i++) {
+        const r = rows[i].join('|').toLowerCase();
+        if (keyHeaders.filter(k => r.includes(k)).length >= 3) { headerRow = i; break; }
+      }
+      if (headerRow < 0) {
+        document.getElementById('loadStatus').textContent = '⚠ 헤더 행을 찾을 수 없습니다. 접수날짜/고객사/모델명/불량내용 열이 있는지 확인하세요.';
+        return;
+      }
+      const headers = rows[headerRow].map(h => String(h||'').trim());
+      // Map columns
+      const colMap = {};
+      const mappings = {
+        recvDate: ['접수날짜','접수 날짜','접수일','접수\n날짜'],
+        process:  ['발생공정','발생\n공정','공정'],
+        customer: ['고객사'],
+        model:    ['모델명'],
+        maker:    ['업체명'],
+        defect:   ['불량내용','불량 내용'],
+        qty:      ['불량수','불량수량'],
+        fmaDate:  ['FMA 요청일','fma요청일'],
+        farDate:  ['최종 FAR','최종FAR','최종\nfar','최종 far'],
+        duration: ['소요 기간[주]','소요기간','소요기간(주)'],
+        status:   ['완료\n여부','완료여부','상태'],
+      };
+      const hl = headers.map(h => h.toLowerCase().replace(/\s/g,''));
+      for (const [key, names] of Object.entries(mappings)) {
+        for (const name of names) {
+          const idx = hl.indexOf(name.toLowerCase().replace(/\s/g,''));
+          if (idx >= 0) { colMap[key] = idx; break; }
+        }
+      }
+      // Preserve existing reports
+      const reportMap = {};
+      DATA.forEach((d,i) => {
+        if (d.report) reportMap[d.model + '_' + d.recvDate] = {report: d.report, reportName: d.reportName};
+      });
+      DATA = [];
+      for (let i = headerRow + 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.every(c => !c)) continue;
+        const get = (key) => colMap[key] !== undefined ? String(r[colMap[key]] || '').trim() : '';
+        const recvDate = fmtDate(get('recvDate'));
+        const model = get('model');
+        const key = model + '_' + recvDate;
+        const d = {
+          recvDate, process: get('process'), customer: get('customer'),
+          model, maker: get('maker'), defect: get('defect'),
+          qty: parseInt(get('qty')) || 0,
+          fmaDate: fmtDate(get('fmaDate')), farDate: fmtDate(get('farDate')),
+          duration: parseFloat(get('duration')) || null,
+          status: get('status') || '진행 中',
+          report: reportMap[key]?.report || null,
+          reportName: reportMap[key]?.reportName || null,
+        };
+        if (!d.customer && !d.model && !d.defect) continue;
+        DATA.push(d);
+      }
+      const mapInfo = Object.entries(colMap).map(([k,v]) => `<b>${k}</b> → 열${v+1}(${headers[v]})`).join('  ·  ');
+      document.getElementById('colMapInfo').innerHTML = `컬럼 매핑: ${mapInfo}`;
+      document.getElementById('colMapInfo').style.display = 'block';
+      document.getElementById('loadStatus').textContent = `✅ ${DATA.length}건 불러옴`;
+      document.getElementById('loadStatus').style.color = '#4ADE80';
+      refreshAll();
+    } catch(err) {
+      document.getElementById('loadStatus').textContent = '⚠ 오류: ' + err.message;
+    }
+  };
+  if (file.name.endsWith('.csv')) reader.readAsArrayBuffer(file);
+  else reader.readAsArrayBuffer(file);
+}
+
+function fmtDate(v) {
+  if (!v) return '';
+  // Already formatted
+  if (/^\d{4}-\d{2}-\d{2}/.test(v)) return v.substring(0,10);
+  // Excel serial number
+  const n = parseFloat(v);
+  if (!isNaN(n) && n > 40000 && n < 60000) {
+    const d = new Date(Math.round((n - 25569) * 86400 * 1000));
+    return d.toISOString().split('T')[0];
+  }
+  // Korean date formats
+  const m = v.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);
+  if (m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+  return v;
+}
+
+function parseCSV(text) {
+  const rows = []; let row = []; let inQ = false; let cell = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '"') { if (inQ && text[i+1]==='"') {cell+='"';i++;} else inQ=!inQ; }
+    else if (c===',' && !inQ) { row.push(cell); cell=''; }
+    else if ((c==='\n'||c==='\r') && !inQ) { if(c==='\r'&&text[i+1]==='\n')i++; row.push(cell); cell=''; rows.push(row); row=[]; }
+    else cell+=c;
+  }
+  if (cell||row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+// ── KPI ──
+function updateKPI() {
+  const total = DATA.length;
+  const done = DATA.filter(d=>d.status==='완료').length;
+  const prog = total - done;
+  const qty = DATA.reduce((s,d)=>s+(parseInt(d.qty)||0),0);
+  const durs = DATA.filter(d=>d.duration&&d.status==='완료').map(d=>parseFloat(d.duration));
+  const avg = durs.length ? (durs.reduce((a,b)=>a+b,0)/durs.length).toFixed(1) : '–';
+  document.getElementById('kTotal').textContent = total;
+  document.getElementById('kDone').textContent = done;
+  document.getElementById('kProg').textContent = prog;
+  document.getElementById('kQty').textContent = qty;
+  document.getElementById('kDur').textContent = avg;
+  document.getElementById('kRate').textContent = total ? `완료율 ${Math.round(done/total*100)}%` : '완료율 –%';
+}
+
+// ── Charts ──
+function updateCharts() {
+  const processes = [...new Set(DATA.map(d=>d.process).filter(Boolean))];
+  const doneCts = processes.map(p => DATA.filter(d=>d.process===p&&d.status==='완료').length);
+  const ingCts  = processes.map(p => DATA.filter(d=>d.process===p&&d.status!=='완료').length);
+  if (procChart) procChart.destroy();
+  procChart = new Chart(document.getElementById('procChart'), {
+    type:'bar',
+    data: {
+      labels: processes,
+      datasets: [
+        { label:'완료', data:doneCts, backgroundColor:'#15803D' },
+        { label:'진행 중', data:ingCts, backgroundColor:'#C2410C' }
+      ]
+    },
+    options: {
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ stacked:true, ticks:{font:{size:11},color:'#64748B'}, grid:{color:'rgba(0,0,0,.06)'} },
+        y:{ stacked:true, ticks:{font:{size:11},color:'#64748B'}, grid:{display:false} }
+      }
+    }
+  });
+  // Customer bars
+  const custs = [...new Set(DATA.map(d=>d.customer).filter(Boolean))];
+  const maxCt = Math.max(...custs.map(c=>DATA.filter(d=>d.customer===c).length),1);
+  document.getElementById('custBars').innerHTML = custs.map(c => {
+    const total = DATA.filter(d=>d.customer===c).length;
+    const pct = Math.round(total/maxCt*100);
+    return `<div class="prog-row">
+      <div class="prog-label" title="${c}">${c}</div>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="prog-num">${total}건</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Filters ──
+function populateFilters() {
+  const procs = [...new Set(DATA.map(d=>d.process).filter(Boolean))].sort();
+  const sel = document.getElementById('filterProcess');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">전체 공정</option>' + procs.map(p=>`<option value="${p}">${p}</option>`).join('');
+  sel.value = cur;
+}
+
+// ── Table ──
+let sortedData = [];
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+  renderTable();
+}
+function renderTable() {
+  const q = (document.getElementById('searchInput').value||'').toLowerCase();
+  const st = document.getElementById('filterStatus').value;
+  const pr = document.getElementById('filterProcess').value;
+  let rows = DATA.filter(d => {
+    if (q && ![(d.model||''),(d.defect||''),(d.customer||'')].join('|').toLowerCase().includes(q)) return false;
+    if (st && d.status !== st) return false;
+    if (pr && d.process !== pr) return false;
+    return true;
+  });
+  const keys = ['_i','recvDate','process','customer','model','defect','qty','fmaDate','farDate','duration','status'];
+  if (sortCol >= 0 && sortCol < keys.length) {
+    rows.sort((a,b) => {
+      const k = keys[sortCol];
+      const av = a[k]||'', bv = b[k]||'';
+      if (typeof av === 'number') return (av-bv)*sortDir;
+      return String(av).localeCompare(String(bv),'ko')*sortDir;
+    });
+  }
+  sortedData = rows;
+  const body = document.getElementById('tableBody');
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:32px;color:#94A3B8;">데이터 없음</td></tr>'; return; }
+  body.innerHTML = rows.map((d, idx) => {
+    const i = DATA.indexOf(d);
+    const dur = d.duration && d.duration > 0 ? parseFloat(d.duration) : null;
+    const durClass = dur === null ? '' : dur <= 5 ? 'dur-fast' : dur <= 10 ? 'dur-med' : 'dur-slow';
+    const statusBadge = d.status === '완료'
+      ? `<span class="badge badge-done">✓ 완료</span>`
+      : `<span class="badge badge-ing">⟳ 진행 중</span>`;
+    const procBadge = `<span class="badge badge-proc">${d.process||''}</span>`;
+    const reportBtn = d.report
+      ? `<button class="btn-report-view" onclick="viewReport(${i})">📄 ${escHtml(d.reportName||'리포트')}</button>`
+      : '';
+    const attachBtn = managerMode
+      ? `<label class="btn-report-attach mgr-only" style="display:inline-flex;">📎 첨부<input type="file" accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg" onchange="attachReport(${i},this)"></label>`
+      : '';
+    return `<tr>
+      <td class="td-muted">${idx+1}</td>
+      <td class="td-muted">${d.recvDate||''}</td>
+      <td>${procBadge}</td>
+      <td>${escHtml(d.customer||'')}</td>
+      <td class="td-clip" title="${escHtml(d.model||'')}">${escHtml(d.model||'')}</td>
+      <td class="td-clip" title="${escHtml(d.defect||'')}">${escHtml(d.defect||'')}</td>
+      <td style="text-align:center;font-weight:700;color:#1D4ED8;">${d.qty||0}</td>
+      <td class="td-muted">${d.fmaDate||''}</td>
+      <td class="td-muted">${d.farDate||'–'}</td>
+      <td class="${durClass}" style="text-align:center;">${dur !== null ? dur+'주' : '–'}</td>
+      <td>${statusBadge}</td>
+      <td><div class="report-cell">${reportBtn}${attachBtn}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Report Attach ──
+function attachReport(idx, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    DATA[idx].report = e.target.result;
+    DATA[idx].reportName = file.name;
+    renderTable();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Report View ──
+function viewReport(idx) {
+  const d = DATA[idx];
+  if (!d.report) return;
+  document.getElementById('reportModalTitle').textContent = '📄 ' + (d.reportName || '분석 리포트');
+  document.getElementById('reportModalInfo').textContent = `${d.customer} · ${d.model} · ${d.defect}`;
+  const content = document.getElementById('reportModalContent');
+  if (d.report.startsWith('data:application/pdf') || (d.reportName||'').toLowerCase().endsWith('.pdf')) {
+    content.innerHTML = `<iframe src="${d.report}" style="width:100%;height:500px;border:1px solid #E2E8F0;border-radius:6px;"></iframe>`;
+  } else if (/data:image/.test(d.report)) {
+    content.innerHTML = `<img src="${d.report}" style="max-width:100%;border-radius:6px;">`;
+  } else {
+    content.innerHTML = `<a href="${d.report}" download="${escHtml(d.reportName||'report')}" style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;color:#1D4ED8;font-weight:600;text-decoration:none;">📥 파일 다운로드 (${escHtml(d.reportName||'')})</a>`;
+  }
+  document.getElementById('reportModal').classList.add('open');
+}
+function closeReportModal(e) { if(e.target===document.getElementById('reportModal')) closeReportModalDirect(); }
+function closeReportModalDirect() {
+  document.getElementById('reportModal').classList.remove('open');
+  document.getElementById('reportModalContent').innerHTML='';
+}
+
+// ── Save as HTML ──
+function saveAsHtml() {
+  const now = new Date().toISOString().split('T')[0];
+  const escaped = JSON.stringify(DATA).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
+  const html = document.documentElement.outerHTML
+    .replace(
+      /const EMBEDDED = \{[\s\S]*?\};/,
+      `const EMBEDDED = { lastUpdated: "${now}", data: ${escaped} };`
+    );
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `FMA_현황판_${now}.html`;
+  a.click();
+  alert(`✅ 현황판이 저장되었습니다.\n\n파일명: FMA_현황판_${now}.html\n\n이 파일을 공유 폴더에 저장(덮어쓰기)하면\n부사장님이 열었을 때 최신 데이터가 표시됩니다.`);
+}
+</script>
+</body>
+</html>
