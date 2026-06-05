@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUO(ADP) EC Notice Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    color: white; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+  header span { font-size: 12px; opacity: 0.7; }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; gap: 10px; padding: 12px 24px;
+    background: white; border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap; flex-shrink: 0;
+  }
+  .stat-card {
+    background: #f8f9ff; border: 1px solid #e0e6ff;
+    border-radius: 8px; padding: 8px 16px;
+    text-align: center; min-width: 90px;
+    position: relative;
+  }
+  #total-card { cursor: pointer; min-width: 110px; }
+  #total-card:hover { background: #eef2ff; }
+  .stat-card .num { font-size: 22px; font-weight: 700; color: #0f3460; }
+  .stat-card .lbl { font-size: 11px; color: #888; margin-top: 2px; }
+  .stat-notice { border-color: #b3d4f5; background: #e8f4fd; }
+  .stat-notice .num { color: #1565c0; }
+  .stat-report { border-color: #a5d6a7; background: #e8f5e9; }
+  .stat-report .num { color: #2e7d32; }
+  .stat-warn { border-color: #ffcc80; background: #fff8e1; }
+  .stat-warn .num { color: #e65100; }
+  .year-chevron { font-size: 10px; margin-left: 4px; display: inline-block; transition: transform .2s; }
+  .num-row { display: flex; align-items: baseline; justify-content: center; gap: 2px; }
+  .unit { font-size: 13px; font-weight: 600; color: #6b7280; }
+  .sg-sub .unit { font-size: 10px; color: #9ca3af; }
+
+
+  /* ── GROUPED STAT CARDS ── */
+  .sg-card {
+    display: flex; align-items: stretch;
+    padding: 0; min-width: 0; background: white;
+    border: 1.5px solid #dde3f5; border-radius: 10px;
+    overflow: visible; gap: 0;
+  }
+  .sg-main {
+    padding: 10px 16px; text-align: center; min-width: 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .sg-divider {
+    width: 1px; background: #e8ecf8; flex-shrink: 0; margin: 8px 0;
+  }
+  .sg-subs {
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 4px; padding: 8px 14px;
+  }
+  .sg-sub {
+    display: flex; align-items: baseline; gap: 5px; white-space: nowrap;
+  }
+  .sg-sub-num {
+    font-size: 16px; font-weight: 700; color: #0f3460; line-height: 1;
+  }
+  .sg-sub-lbl {
+    font-size: 11px; color: #6b7280;
+  }
+  .sg-gdbu   .sg-sub-num { color: #1565c0; }
+  .sg-pdbu   .sg-sub-num { color: #c0392b; }
+  .sg-report .sg-sub-num { color: #2e7d32; }
+  .sg-warn   .sg-sub-num { color: #e65100; }
+  .sg-notice-num { color: #1565c0 !important; }
+  .sg-year-num   { color: #0369a1 !important; }
+  .sg-year-card  { position: relative; cursor: pointer; }
+  .sg-year-card:hover { background: #f5f8ff; }
+
+  /* YEAR DROPDOWN */
+  #year-dropdown {
+    display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 100;
+    background: white; border: 1px solid #d0d8f0; border-radius: 10px;
+    padding: 14px 16px; min-width: 200px;
+    box-shadow: 0 6px 20px rgba(15,52,96,.15);
+    text-align: left;
+  }
+  .ydd-title { font-size: 11px; font-weight: 700; color: #0f3460; margin-bottom: 10px; letter-spacing:.5px; }
+
+  /* TOOLBAR */
+  .toolbar {
+    display: flex; gap: 8px; padding: 10px 24px;
+    background: white; border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap; align-items: center; flex-shrink: 0;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 220px; }
+  .search-wrap input {
+    width: 100%; padding: 7px 32px 7px 12px;
+    border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none;
+  }
+  .search-wrap input:focus { border-color: #0f3460; }
+  #search-clear {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: #aaa; font-size: 15px;
+    display: none; line-height: 1; padding: 0;
+  }
+  #search-clear.visible { display: block; }
+  .toolbar select {
+    padding: 7px 10px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 13px; background: white; cursor: pointer; outline: none;
+  }
+  .toolbar select:focus { border-color: #0f3460; }
+  .btn-reset  { background: #f3f4f6; color: #444; border: 1px solid #d1d5db; border-radius: 6px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
+  .btn-export { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; border-radius: 6px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
+  .add-btn    { background: #0f3460; color: white; border: none; border-radius: 6px; padding: 7px 14px; font-size: 13px; cursor: pointer; font-weight: 600; }
+  .add-btn:hover { background: #1a4a80; }
+  .count-badge { margin-left: auto; background: #0f3460; color: white; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+
+  /* TABLE AREA — scrollable with sticky header */
+  .table-wrap { flex: 1; overflow-y: auto; padding: 12px 24px 24px; }
+  table { width: 100%; border-collapse: collapse; background: white;
+    border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  thead { position: sticky; top: 0; z-index: 10; }
+  thead tr { background: #0f3460; color: white; }
+  thead th {
+    padding: 10px 10px; font-size: 12px; font-weight: 600;
+    text-align: left; white-space: nowrap; cursor: pointer; user-select: none;
+    position: sticky; top: 0; z-index: 10;
+    background: #0f3460; color: white;
+  }
+  thead th:hover { background: #1a4a80; }
+  thead th.sorted-asc::after  { content: ' ▲'; font-size: 10px; }
+  thead th.sorted-desc::after { content: ' ▼'; font-size: 10px; }
+  tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+  tbody tr:hover { background: #f5f8ff; }
+  tbody td { padding: 8px 10px; font-size: 12px; vertical-align: middle; }
+
+  .ec-no { font-weight: 700; color: #0f3460; white-space: nowrap; }
+  .bu-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+  .bu-GDBU { background: #e8f4fd; color: #1a6fb5; }
+  .bu-PDBU { background: #fdecea; color: #c0392b; }
+  .model    { font-family: monospace; font-size: 11px; color: #555; }
+  .new-name { font-family: monospace; font-size: 11px; color: #27ae60; }
+  .ec-item  { max-width: 200px; line-height: 1.4; }
+  .file-link { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; text-decoration: none; margin: 1px; white-space: nowrap; }
+  .link-notice { background: #e8f4fd; color: #1565c0; border: 1px solid #b3d4f5; }
+  .link-report { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+  .file-link:hover { opacity: .75; }
+  .date    { white-space: nowrap; font-size: 11px; color: #777; }
+  .remarks { max-width: 160px; font-size: 11px; color: #888; line-height: 1.4; }
+  .status-gd { background:#fff3cd; color:#856404; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:700; }
+  .no-results { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+
+  /* INLINE EDIT */
+  .ec-item-wrap, .remarks-wrap { display: flex; align-items: center; gap: 4px; max-width: 200px; }
+  .ec-item-text, .remarks-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .edit-icon { cursor: pointer; font-size: 12px; opacity: 0; flex-shrink: 0; transition: opacity .15s; }
+  .ec-item-wrap:hover .edit-icon, .remarks-wrap:hover .edit-icon { opacity: .7; }
+  .ec-item-input, .remarks-input { flex: 1; padding: 3px 6px; border: 1px solid #0f3460; border-radius: 4px; font-size: 12px; min-width: 120px; }
+
+  /* ADD MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 12px; padding: 24px; width: 640px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
+  .modal h2 { font-size: 16px; margin-bottom: 18px; color: #0f3460; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 12px; font-weight: 600; color: #555; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 7px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #0f3460; }
+  .form-group textarea { resize: vertical; min-height: 56px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+  .btn-cancel { background: #f0f0f0; color: #555; border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; font-size: 13px; }
+  .btn-save   { background: #0f3460; color: white; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-save-mail { background: #1565c0; color: white; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 600; }
+
+  /* MAIL MODAL */
+  #mail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+  #mail-overlay.open { display: flex; }
+  .mail-modal { background: white; border-radius: 12px; padding: 24px; width: 640px; max-width: 95vw; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
+  .mail-modal h2 { font-size: 15px; margin-bottom: 12px; color: #0f3460; }
+  #mail-preview-body { background: #f8f9ff; border: 1px solid #dde3f5; border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.9; max-height: 300px; overflow-y: auto; white-space: pre-wrap; }
+  #mail-preview-body table { border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+  #mail-preview-body th, #mail-preview-body td { border: 1px solid #ccc; padding: 5px 10px; }
+  .mail-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+  .mail-copy-btn { background: #0f3460; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .mail-copy-btn.copied { background: #16a34a; }
+  .mail-close-btn { background: #f0f0f0; color: #555; border: none; border-radius: 6px; padding: 8px 14px; font-size: 13px; cursor: pointer; }
+
+  /* TEAM MEMO */
+  .memo-section { padding: 10px 24px 16px; background: #fafbff; border-top: 1px solid #e8ecf5; flex-shrink: 0; }
+  .memo-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #0f3460; }
+  #team-memo { width: 100%; height: 52px; padding: 7px 10px; border: 1px solid #dde3f5; border-radius: 6px; font-size: 13px; resize: none; font-family: inherit; background: white; }
+  #team-memo:focus { outline: none; border-color: #0f3460; }
+  #memo-saved-lbl { font-size: 11px; color: #16a34a; }
+
+  @media (max-width: 600px) {
+    .stats-bar, .toolbar, .table-wrap { padding: 10px 12px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📋 AUO(ADP) EC Notice Dashboard</h1>
+  <span id="last-updated">마지막 업데이트: 2026-06-02</span>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+
+  <!-- 카드1: 전체 / GDBU / PDBU -->
+  <div class="stat-card sg-card">
+    <div class="sg-main">
+      <div class="num-row"><span class="num" id="stat-total">0</span><span class="unit">건</span></div>
+      <div class="lbl">전체</div>
+    </div>
+    <div class="sg-divider"></div>
+    <div class="sg-subs">
+      <div class="sg-sub sg-gdbu">
+        <span class="sg-sub-num" id="stat-gdbu">0</span><span class="unit">건</span>
+        <span class="sg-sub-lbl">GDBU</span>
+      </div>
+      <div class="sg-sub sg-pdbu">
+        <span class="sg-sub-num" id="stat-pdbu">0</span><span class="unit">건</span>
+        <span class="sg-sub-lbl">PDBU</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드2: Notice첨부 / Report첨부 / Notice없음 -->
+  <div class="stat-card sg-card">
+    <div class="sg-main">
+      <div class="num-row"><span class="num sg-notice-num" id="stat-has-notice">0</span><span class="unit">건</span></div>
+      <div class="lbl">Notice 첨부</div>
+    </div>
+    <div class="sg-divider"></div>
+    <div class="sg-subs">
+      <div class="sg-sub sg-report">
+        <span class="sg-sub-num" id="stat-has-report">0</span><span class="unit">건</span>
+        <span class="sg-sub-lbl">Report 첨부</span>
+      </div>
+      <div class="sg-sub sg-warn">
+        <span class="sg-sub-num" id="stat-no-notice">0</span><span class="unit">건</span>
+        <span class="sg-sub-lbl">Notice 없음</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드3: 연도별 (클릭 시 드롭다운) -->
+  <div class="stat-card sg-card sg-year-card" id="total-card" onclick="toggleYearDD()" title="연도별 현황 보기">
+    <div class="sg-main" style="cursor:pointer">
+      <div style="display:flex;align-items:center;justify-content:center;gap:4px;">
+        <div class="lbl" id="stat-cur-year-lbl2">2026년</div>
+        <span id="year-chevron" class="year-chevron">▼</span>
+      </div>
+      <div class="num-row"><span class="num sg-year-num" id="stat-2026">0</span><span class="unit">건</span></div>
+    </div>
+    <div class="sg-divider"></div>
+    <div class="sg-subs">
+      <div class="sg-sub">
+        <span class="sg-sub-num" id="stat-2025">0</span><span class="unit">건</span>
+        <span class="sg-sub-lbl" id="stat-cur-year-lbl">2025년</span>
+      </div>
+      <div class="sg-sub" style="cursor:pointer">
+        <span class="sg-sub-lbl" style="font-size:11px">📅 연도별</span>
+      </div>
+    </div>
+    <div id="year-dropdown">
+      <div class="ydd-title">연도별 EC 건수</div>
+      <div id="year-bars"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="🔍  EC No, 모델명, EC ITEM 검색..." oninput="onSearchInput()">
+    <button id="search-clear" onclick="clearSearch()">✕</button>
+  </div>
+  <select id="filter-bu">
+    <option value="">전체 BU</option>
+    <option value="GDBU">GDBU</option>
+    <option value="PDBU">PDBU</option>
+  </select>
+  <select id="filter-year">
+    <option value="">전체 연도</option>
+  </select>
+  <select id="filter-has-file">
+    <option value="">파일 여부</option>
+    <option value="notice">Notice 있음</option>
+    <option value="report">Report 있음</option>
+    <option value="both">둘 다 있음</option>
+    <option value="no-notice">Notice 없음</option>
+  </select>
+  <button class="btn-reset" onclick="resetAllFilters()">↺ 초기화</button>
+  <button class="btn-export" onclick="exportCSV()">↓ CSV</button>
+  <button class="add-btn" onclick="openModal()">+ 새 EC 추가</button>
+  <span class="count-badge" id="result-count">0 건</span>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrap">
+  <table id="ec-table">
+    <thead>
+      <tr>
+        <th style="width:32px">#</th>
+        <th onclick="sortTable('ec_no')">ADP EC No.</th>
+        <th onclick="sortTable('bu')">BU</th>
+        <th onclick="sortTable('issue_date')">Issue Date</th>
+        <th onclick="sortTable('model_name')">Model Name</th>
+        <th>New Name</th>
+        <th>EC ITEM</th>
+        <th>EC Notice</th>
+        <th>EC Report</th>
+        <th onclick="sortTable('target_phase')">Target Phase-in</th>
+        <th>Remarks</th>
+        <th onclick="sortTable('status')">Status</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+  <div class="no-results" id="no-results" style="display:none">검색 결과가 없습니다.</div>
+</div>
+
+<!-- TEAM MEMO -->
+<div class="memo-section">
+  <div class="memo-header">
+    📝 팀 메모
+    <span id="memo-saved-lbl"></span>
+  </div>
+  <textarea id="team-memo" placeholder="팀 내부 메모를 여기에 입력하세요... (자동 저장)" oninput="saveMemo()"></textarea>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>새 EC Notice 추가</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>ADP EC No. *</label><input type="text" id="f-ec_no" placeholder="예: GP260500xxx"></div>
+      <div class="form-group"><label>BU *</label><select id="f-bu"><option value="GDBU">GDBU</option><option value="PDBU">PDBU</option></select></div>
+      <div class="form-group"><label>Issue Date</label><input type="date" id="f-issue_date"></div>
+      <div class="form-group"><label>Target Phase-in</label><input type="text" id="f-target_phase" placeholder="예: 2026년 10월 1일"></div>
+      <div class="form-group"><label>Model Name</label><input type="text" id="f-model_name" placeholder="예: G150XTN03.404"></div>
+      <div class="form-group"><label>New Name</label><input type="text" id="f-new_name" placeholder="예: G150XTN03.410"></div>
+      <div class="form-group full"><label>EC ITEM</label><input type="text" id="f-ec_item" placeholder="변경 항목 설명"></div>
+      <div class="form-group"><label>EC Notice 파일명</label><input type="text" id="f-ec_notice" placeholder="파일명.pdf"></div>
+      <div class="form-group"><label>EC Report 파일명</label><input type="text" id="f-ec_report" placeholder="파일명.pdf"></div>
+      <div class="form-group"><label>Q'ty</label><input type="text" id="f-qty"></div>
+      <div class="form-group"><label>Status</label><input type="text" id="f-status"></div>
+      <div class="form-group full"><label>Remarks</label><textarea id="f-remarks"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">취소</button>
+      <button class="btn-save-mail" onclick="addRecordAndMail()">저장 + 메일 초안</button>
+      <button class="btn-save" onclick="addRecord()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIL MODAL -->
+<div id="mail-overlay">
+  <div class="mail-modal">
+    <h2>📧 메일 초안 미리보기</h2>
+    <div id="mail-preview-body"></div>
+    <div class="mail-actions">
+      <button class="mail-close-btn" onclick="document.getElementById('mail-overlay').classList.remove('open')">닫기</button>
+      <button class="mail-copy-btn" id="mail-copy-btn" onclick="copyMailText()">📋 텍스트 복사</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW_DATA = [{"ec_no":"GD230604131","bu":"GDBU","ec_item":"Tcon IC    / LC /    Backlight","ec_notice":"GD230604131_2023-06-15-04-35-30-793.pdf","ec_report":"G185HAN01.000_EC_Report_20230609.pdf","issue_date":"2023/07/03","model_name":"G185HAN01.000","new_name":"G185HAN01.004","qty":"","remarks":"","status":"","target_phase":"2024년 3월 22일"},{"ec_no":"GD230404056","bu":"GDBU","ec_item":"Reflector","ec_notice":"GD230404056_2023-05-04-11-31-32-367.pdf","ec_report":"G190EAN01.6_Engineering_Change_Request_(Reflector)20230428.pdf","issue_date":"2023/07/03","model_name":"G190EAN01.600","new_name":"G190EAN01.6","qty":"","remarks":"","status":"","target_phase":"2023년 9월 4일"},{"ec_no":"GD230504074","bu":"GDBU","ec_item":"EDID Code","ec_notice":"GD230504074_2023-05-30-11-20-40-764.pdf","ec_report":"G270ZAN01.5_ECR.pdf","issue_date":"2023/07/03","model_name":"G270ZAN01.501","new_name":"G270ZAN01.503","qty":"3","remarks":"","status":"","target_phase":"2023년 6월 1일"},{"ec_no":"GD230604146","bu":"GDBU","ec_item":"Cell fab    G-IC    PCBa re-layout","ec_notice":"GD230604146_2023-07-03-04-56-30-395.pdf","ec_report":"ADP_G121EAN01.001__EC_Notice.pdf","issue_date":"2023/05/02","model_name":"G121EAN01.000","new_name":"G121EAN01.001","qty":"2","remarks":"24년 7월 MP Start","status":"","target_phase":"2024년 1월 29일"},{"ec_no":"GD230304032","bu":"GDBU","ec_item":"Reflector","ec_notice":"GD230304032_2023-05-02-09-37-59-643.pdf","ec_report":"G240UAN01.2_Engineering_Change_Request(Reflector).pdf","issue_date":"2023/03/08","model_name":"G240UAN01.200","new_name":"G240UAN01.200","qty":"","remarks":"","status":"","target_phase":"2023년 7월 31일"},{"ec_no":"GD230204013","bu":"GDBU","ec_item":"Prism","ec_notice":"","ec_report":"","issue_date":"2023/02/27","model_name":"G050VTN01.0","new_name":"G050VTN01.0","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD230204008","bu":"GDBU","ec_item":"1. Power IC    2. LED Driver IC","ec_notice":"","ec_report":"","issue_date":"2023/02/27","model_name":"G156XW01.1","new_name":"G156XW01.1","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD230204000","bu":"GDBU","ec_item":"Reflector","ec_notice":"","ec_report":"","issue_date":"2023/02/07","model_name":"G215HAN01.1","new_name":"G215HAN01.1","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD230203991","bu":"GDBU","ec_item":"Reflector","ec_notice":"","ec_report":"","issue_date":"2023/02/01","model_name":"G215HAN01.6","new_name":"G215HAN01.6","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD230103985","bu":"GDBU","ec_item":"Reflector Change","ec_notice":"GD230103985_2023-02-06-03-15-13-541.pdf","ec_report":"M240UAN01.0_Engineering_Change_Request(Reflector).pdf","issue_date":"2023/01/31","model_name":"M240UAN01.0G0","new_name":"M240UAN01.0","qty":"","remarks":"","status":"","target_phase":"2023년 4월 28일"},{"ec_no":"GD230103981","bu":"GDBU","ec_item":"1. Common mode choke    2. Variable Resistor    * PCBa re-layout","ec_notice":"GD230103981_2023-02-02-09-18-15-785.pdf","ec_report":"ADP_G170ETN02.001_G170ETN02.1__ECR.pdf","issue_date":"2023/01/12","model_name":"G170ETN02.1","new_name":"G170ETN02.1","qty":"","remarks":"","status":"","target_phase":"2023년 10월 31일"},{"ec_no":"GD230103954","bu":"GDBU","ec_item":"Reflector","ec_notice":"GD230103954_2023-02-02-09-16-51-449.pdf","ec_report":"G238HAN02.0_Engineering_Change_Request.pdf","issue_date":"2023/10/23","model_name":"G238HAN02.0","new_name":"G238HAN02.0","qty":"","remarks":"","status":"","target_phase":"2023년 4월 28일"},{"ec_no":"GD230404038","bu":"GDBU","ec_item":"1. TAC    2. LED D-IC    3. backlight connector","ec_notice":"GD230404038_2023-04-10-10-34-57-834.pdf","ec_report":"","issue_date":"2022/12/03","model_name":"G320ZAN01.003","new_name":"G320ZAN01.006","qty":"","remarks":"","status":"","target_phase":"2023년 6월 9일"},{"ec_no":"GD221003896","bu":"GDBU","ec_item":"1. TCON IC    2. LED driver IC    3. BLU LED","ec_notice":"","ec_report":"","issue_date":"2022/11/24","model_name":"G190EG01.1","new_name":"G190EG01.1","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD221103898","bu":"GDBU","ec_item":"1. LED Driver IC    2. Tcon    3. Reflector    4. COF","ec_notice":"","ec_report":"","issue_date":"2022/11/24","model_name":"G240UAN01.1","new_name":"G240UAN01.1","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD221103901","bu":"GDBU","ec_item":"1. Level shift IC    2. Power IC    3. D-Vcom","ec_notice":"","ec_report":"","issue_date":"2022/11/24","model_name":"G150XAN01.0","new_name":"G150XAN01.0","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD221103910","bu":"GDBU","ec_item":"1. LED D-IC    2. Tcon    3. Reflector    4. COF","ec_notice":"","ec_report":"","issue_date":"2022/11/21","model_name":"G240UAN01.0","new_name":"G240UAN01.0","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD221003866","bu":"GDBU","ec_item":"Backlight connector","ec_notice":"","ec_report":"","issue_date":"2022/10/17","model_name":"G156HAN04.0","new_name":"G156HAN04.0","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD220803763","bu":"GDBU","ec_item":"1. TCON IC    2. Source IC    3. Gate IC    4. LED driver IC","ec_notice":"GD220803763_2022-08-29-05-25-26-513.pdf","ec_report":"G170EG01_V1__ECN_20220812.pdf","issue_date":"2022/10/17","model_name":"G170EG01.101","new_name":"G170EG01.104","qty":"","remarks":"","status":"","target_phase":"2023년 3월 1일"},{"ec_no":"GD220803762","bu":"GDBU","ec_item":"1. Cell    2. BLU    3. IC","ec_notice":"GD220803762_2022-08-29-05-25-20-140.pdf","ec_report":"G104XVN01_EC_Notice_2208.pdf","issue_date":"2022/08/12","model_name":"G104XVN01.000","new_name":"G104XVN01.010","qty":"","remarks":"","status":"","target_phase":"2023년 7월 31일"},{"ec_no":"GD220603720","bu":"GDBU","ec_item":"1. new Cell glass    2. Gate IC    3. BLU unit","ec_notice":"","ec_report":"","issue_date":"2022/07/05","model_name":"G121EAN01.1","new_name":"G121EAN01.102","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"GD230904216","bu":"GDBU","ec_item":"T-con IC, LC, BLU, PCBA","ec_notice":"GD230904216_2023-09-22-02-36-08-998.pdf","ec_report":"G185HAN01.001_EC_Report_20230911.pdf","issue_date":"2023/09/11","model_name":"G185HAN01.001","new_name":"G185HAN01.005","qty":"","remarks":"","status":"","target_phase":"2024년 3월 22일"},{"ec_no":"GD230804167","bu":"GDBU","ec_item":"T-con IC, LC, BLU, PCBA","ec_notice":"GD230804167_2023-09-22-02-35-53-191.pdf","ec_report":"G185HAN01.100_EC_Report_20230814.pdf","issue_date":"2023/08/21","model_name":"G185HAN01.100","new_name":"G185HAN01.102","qty":"","remarks":"","status":"","target_phase":"2024년 3월 22일"},{"ec_no":"GD230804196","bu":"GDBU","ec_item":"Reflector","ec_notice":"GD230804196_2023-09-22-02-51-46-779.pdf","ec_report":"G270QAN01.2_EC_Report_0831Y23.pdf","issue_date":"2023/08/31","model_name":"G270QAN01.200","new_name":"G270QAN01.2","qty":"","remarks":"","status":"","target_phase":"2023년 11월 30일"},{"ec_no":"GD230904208","bu":"GDBU","ec_item":"Reflector+LED Driver IC","ec_notice":"GD231104252_2023-11-14-09-35-38-171.pdf","ec_report":"","issue_date":"2023/11/30","model_name":"G270ZAN01.101","new_name":"G270ZAN01.104","qty":"","remarks":"","status":"","target_phase":"2023년 11월 30일"},{"ec_no":"PD230805813","bu":"PDBU","ec_item":"Front bezel color (silver to black)","ec_notice":"PD230805813_2023-09-25-03-25-30-886.pdf","ec_report":"","issue_date":"2023/08/21","model_name":"P320HVN04.4","new_name":"P320HVN04.4","qty":"","remarks":"","status":"","target_phase":"2023년 12월 7일"},{"ec_no":"PD230805798","bu":"PDBU","ec_item":"FFC 2nd Source Implementation(Jinrun)","ec_notice":"","ec_report":"","issue_date":"2023/08/21","model_name":"P320HVN04.5","new_name":"P320HVN04.5","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"PD230805795","bu":"PDBU","ec_item":"FFC 2nd Source Implementation(Jinrun)","ec_notice":"","ec_report":"","issue_date":"2023/08/21","model_name":"P320HVN07.1","new_name":"P320HVN07.1","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"PD230805796","bu":"PDBU","ec_item":"FFC 2nd Source Implementation(Jinrun)","ec_notice":"","ec_report":"","issue_date":"2023/08/21","model_name":"P320HVN07.2","new_name":"P320HVN07.2","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"PD230805794","bu":"PDBU","ec_item":"New OC tape EC","ec_notice":"PD230805794_2023-08-21-05-29-02-163.pdf","ec_report":"P320HVN02.0_OC_tape_EC%E5%A0%B1%E5%91%8A.pdf","issue_date":"2023/08/05","model_name":"P320HVN02.0","new_name":"P320HVN02.0","qty":"","remarks":"","status":"","target_phase":""},{"ec_no":"PD230905826","bu":"PDBU","ec_item":"Add 3 alignment holes on shielding cover","ec_notice":"PD230905826_2023-09-25-03-25-08-540.pdf","ec_report":"","issue_date":"2023/09/12","model_name":"P215HAN02.0","new_name":"P215HAN02.0","qty":"","remarks":"","status":"","target_phase":"2023년 9월 26일"},{"ec_no":"PD231005832","bu":"PDBU","ec_item":"Light Wire EC(Dual Source-Fast supply)","ec_notice":"PD231005832_2023-10-25-09-13-05-978.pdf","ec_report":"Light_wire_EC_report(P294IVN_P286IVN01_%25ED%2595%25B4%25EB%258B%25B9)%201.pdf","issue_date":"2023/10/12","model_name":"P286IVN01.100","new_name":"P286IVN01.110","qty":"","remarks":"","status":"","target_phase":"2023년 11월 10일"},{"ec_no":"PD231005836","bu":"PDBU","ec_item":"Light Wire EC(Dual Source-Fast supply)","ec_notice":"PD231005836_2023-10-25-09-13-21-228.pdf","ec_report":"Light_wire_EC_report(P294IVN_P286IVN01_%25ED%2595%25B4%25EB%258B%25B9).pdf","issue_date":"2023/10/12","model_name":"P294IVN01.100","new_name":"P294IVN01.110","qty":"","remarks":"","status":"","target_phase":"2023년 11월 10일"},{"ec_no":"GD231004240","bu":"GDBU","ec_item":"T-con IC and Protection Film Change","ec_notice":"GD231004240_2023-11-01-11-58-57-689_(002).pdf","ec_report":"G240HW01_V100_Engineering_Change_Report.pdf","issue_date":"2023/10/02","model_name":"G240HW01.100","new_name":"G240HW01.104","qty":"","remarks":"","status":"","target_phase":"2024년 3월 31일"},{"ec_no":"GD230904224","bu":"GDBU","ec_item":"Gate IC EC, PCBA layout change","ec_notice":"GD230904224_2023-11-01-11-59-49-368_(002).pdf","ec_report":"","issue_date":"2023/09/25","model_name":"G121EAN01.2","new_name":"G121EAN01.202","qty":"","remarks":"","status":"","target_phase":"2024년 3월 29일"},{"ec_no":"GD231004245","bu":"GDBU","ec_item":"Gate IC EC, PCBA layout change","ec_notice":"GD231004245_2023-11-01-11-59-35-280_(002).pdf","ec_report":"","issue_date":"2023/10/26","model_name":"G121EAN01.3","new_name":"G121EAN01.301","qty":"","remarks":"","status":"","target_phase":"2024년 4월 30일"},{"ec_no":"GD231204294","bu":"GDBU","ec_item":"Additional Cell tape and Conducive tape","ec_notice":"GD231204294_2023-12-05-12-44-03-429.pdf","ec_report":"G133HAN01.1_EC_Report_20231129.pdf","issue_date":"2023/12/05","model_name":"G133HAN01.100","new_name":"G133HAN01.101","qty":"","remarks":"","status":"","target_phase":"2024년 1월 31일"},{"ec_no":"GD231104265","bu":"GDBU","ec_item":"POL, Reflector Vendor Change","ec_notice":"GD231104265_2023-12-05-10-19-55-239.pdf","ec_report":"G270HAN01_001_Engineering_Change_Request_-_20231107-FAE.pdf","issue_date":"2023/11/26","model_name":"G270HAN01.000","new_name":"G270HAN01.101","qty":"","remarks":"","status":"","target_phase":"2024년 2월 29일"},{"ec_no":"GD231104292","bu":"GDBU","ec_item":"LED driver ic, PCB","ec_notice":"GD231104292_2023-12-04-03-11-52-800.pdf","ec_report":"G156HAN05.0_LED_driver_EC_Report_20231127.pdf","issue_date":"2023/11/28","model_name":"G156HAN05.000","new_name":"G156HAN05.004","qty":"","remarks":"","status":"","target_phase":"2024년 1월 31일"},{"ec_no":"PD230705784","bu":"PDBU","ec_item":"LC + BLU + BEZEL Color (to Black)","ec_notice":"PD230705784_P550HVN06.6_(EC).pdf","ec_report":"P550HVN06.6_EC_Comparison_Table.pdf","issue_date":"2023/12/06","model_name":"P550HVN06.600","new_name":"P550HVN06.601⇒610","qty":"","remarks":"601=610 ⇒ The same","status":"","target_phase":"2023년 8월 31일"},{"ec_no":"PD-P650HVN05.1","bu":"PDBU","ec_item":"Wide Temperature LC","ec_notice":"P650HVN05.1_EC___20231206.pdf","ec_report":"P650HVN05.1_Comparison_Table.pdf","issue_date":"2023/12/06","model_name":"P650HVN05.141","new_name":"P650HVN05.143","qty":"","remarks":"","status":"","target_phase":"2023년 6월 1일"},{"ec_no":"PD231205839","bu":"PDBU","ec_item":"Light Bar Wire add second source","ec_notice":"PD231205839_2023-12-07-10-24-09-976.pdf","ec_report":"","issue_date":"2023/12/06","model_name":"P320HVN02.0F2","new_name":"P320HVN02.0F2","qty":"","remarks":"","status":"","target_phase":"2024년 1월 8일"},{"ec_no":"PD240105873","bu":"PDBU","ec_item":"Light Board Substrate MCPCB, Middle Frame 2nd Source","ec_notice":"PD240105873-P320HVN04.5_20240125.pdf","ec_report":"","issue_date":"2024/01/24","model_name":"P320HVN04.500","new_name":"P320HVN04.500","qty":"","remarks":"","status":"","target_phase":"2024년 2월 24일"},{"ec_no":"GD240104384","bu":"GDBU","ec_item":"T-CON IC and Driver IC","ec_notice":"GD240104384_G215HVN01_20240206.pdf","ec_report":"G215HVN01.0_and__1.1__ECN_20240110%201.pdf","issue_date":"2024/01/17","model_name":"G215HVN01.002","new_name":"G215HVN01.004","qty":"","remarks":"","status":"","target_phase":"2024년 9월 16일"},{"ec_no":"GD240104384","bu":"GDBU","ec_item":"T-CON IC and Driver IC","ec_notice":"GD240104384_2024-02-06-11-27-02-932_(002).pdf","ec_report":"G215HVN01.0_and__1.1__ECN_20240110.pdf","issue_date":"2024/01/17","model_name":"G215HVN01.102","new_name":"G215HVN01.104","qty":"","remarks":"","status":"","target_phase":"2024년 9월 16일"},{"ec_no":"PD240105882","bu":"PDBU","ec_item":"Remove OC tape","ec_notice":"PD240105882_P320HVN02.0_20240215.pdf","ec_report":"","issue_date":"2024/01/25","model_name":"P320HVN02.0F2","new_name":"P320HVN02.0F3","qty":"","remarks":"25년 2월 MP Start (8월 다시 0F2)","status":"","target_phase":"2024년 2월 29일"},{"ec_no":"GD240204431","bu":"GDBU","ec_item":"LED light bar Connector Change (ENTERY => CviLux)","ec_notice":"GD240204431_G070VTN01.0_2024-03-12-11-03-33-391.pdf","ec_report":"","issue_date":"2024/02/29","model_name":"G070VTN01.000","new_name":"G070VTN01.000","qty":"","remarks":"","status":"","target_phase":"2024년 5월 1일"},{"ec_no":"GD240304432","bu":"GDBU","ec_item":"LED light bar Connector Change (ENTERY => CviLux)","ec_notice":"GD240304432_A070VW08.2_2024-03-12-11-03-39-099.pdf","ec_report":"","issue_date":"2024/03/02","model_name":"A070VW08.201","new_name":"A070VW08.201","qty":"","remarks":"","status":"","target_phase":"2024년 6월 1일"},{"ec_no":"PD240305907","bu":"PDBU","ec_item":"Source IC EC","ec_notice":"PD240305907_2024-03-14-03-18-03-552.pdf","ec_report":"EC_Proposal-_P500QVR01.0_Source_IC_EC_20240311.pdf","issue_date":"2024/03/14","model_name":"P500QVR01.000","new_name":"P500QVR01.000","qty":"","remarks":"","status":"","target_phase":"2024년 4월 30일"},{"ec_no":"GD240704539","bu":"GDBU","ec_item":"PCBA and BLU Change","ec_notice":"GD240704539_2024-07-23-09-48-00-647.pdf","ec_report":"G156HAN02.0_EC_20240718.pdf","issue_date":"2024/07/19","model_name":"G156HAN02.000","new_name":"G156HAN02.001","qty":"","remarks":"","status":"","target_phase":"2024년 12월 25일"},{"ec_no":"GD240704540","bu":"GDBU","ec_item":"PCBA and BLU Change","ec_notice":"GD240704540_2024-07-23-09-48-13-960.pdf","ec_report":"G156HAN02.3_EC_20240716.pdf","issue_date":"2024/07/19","model_name":"G156HAN02.302","new_name":"G156HAN02.303","qty":"","remarks":"","status":"","target_phase":"2024년 12월 25일"},{"ec_no":"GD240604515","bu":"GDBU","ec_item":"LVDS Connector and UV 328 Free POL","ec_notice":"GD240604515_2024-07-09-10-20-43-652%201.pdf","ec_report":"ADP_G170ETN02.110_to_101_202406%201.pdf","issue_date":"2024/06/04","model_name":"G170ETN02.110","new_name":"G170ETN02.101","qty":"","remarks":"","status":"","target_phase":"2025년 3월 31일"},{"ec_no":"GD240404470","bu":"GDBU","ec_item":"T-CON, SIC, UV 328 Free POL","ec_notice":"GD240404470_2024-04-30-11-52-23-659.pdf","ec_report":"G215HVN01.301__EC_Report_20240424.pdf","issue_date":"2024/04/04","model_name":"G215HVN01.300","new_name":"G215HVN01.301","qty":"","remarks":"","status":"","target_phase":"2024년 10월 24일"},{"ec_no":"GD240604526","bu":"GDBU","ec_item":"Reflector and Polarizer Film","ec_notice":"GD240604526_2024-07-09-10-22-15-334.pdf","ec_report":"EC_Notice_G270ZAN01.501_to_503_20240628.pdf","issue_date":"2024/06/04","model_name":"G270ZAN01.501","new_name":"G270ZAN01.503","qty":"","remarks":"","status":"","target_phase":"2024년 9월 30일"},{"ec_no":"GD240604519","bu":"GDBU","ec_item":"OCR=>OCA, / LGP,LED, and Light Bar Change","ec_notice":"GD240604519_2024-07-09-11-01-19-706.pdf","ec_report":"ADP_G150XAB03__EC_Notice__20240624.pdf","issue_date":"2024/06/04","model_name":"G150XAB03.000","new_name":"G150XAB03.001","qty":"","remarks":"","status":"","target_phase":"2024년 11월 1일"},{"ec_no":"GD240704533","bu":"GDBU","ec_item":"Source IC Change","ec_notice":"GD240704533_2024-07-18-09-08-10-486.pdf","ec_report":"G156HAN03.0_source_IC_EC_Report_20240703.pdf","issue_date":"2024/07/05","model_name":"G156HAN03.000","new_name":"G156HAN03.001","qty":"2","remarks":"25년 8월 양산 확정","status":"","target_phase":"2024년 11월 1일"},{"ec_no":"GD240704544","bu":"GDBU","ec_item":"LVDS Connector Change (EOL)","ec_notice":"GD240704544_2024-08-06-10-39-57-539.pdf","ec_report":"ADP_G173HW01.002_to_004____ECN__20247.pdf","issue_date":"2024/07/22","model_name":"G173HW01.002","new_name":"G173HW01.004","qty":"2","remarks":"25년 5월 MP 확정","status":"","target_phase":"2025년 6월 30일"},{"ec_no":"PD240605958","bu":"PDBU","ec_item":"Light Board LED 2nd Source","ec_notice":"PD240605958_2024-07-30-02-48-17-206.pdf","ec_report":"","issue_date":"2024/06/26","model_name":"P320HVN04.500","new_name":"P320HVN04.500","qty":"","remarks":"","status":"","target_phase":"2024년 7월 26일"},{"ec_no":"PD240605959","bu":"PDBU","ec_item":"","ec_notice":"P430HVN05.1_EC___20240902_ME_DB.pdf, P430HVN05.1_EC__20240830_JUNGLIM.pdf","ec_report":"P430HVN0531_EC_Before__After.pdf","issue_date":"2024/08/27","model_name":"P430HVN05.1","new_name":"","qty":"","remarks":"","status":"","target_phase":"2024년 7월 13일"},{"ec_no":"GD240704573","bu":"GDBU","ec_item":"COF Change","ec_notice":"GD240704573_2024-08-09-02-27-31-870.pdf","ec_report":"M240UAN01.0G2_EC_20240729-COF(Junglim).pdf","issue_date":"2024/07/31","model_name":"M240UAN01.0G2","new_name":"M240UAN01.0G2","qty":"2","remarks":"Spec 변경","status":"GD","target_phase":"2024년 12월 9일"},{"ec_no":"GD230103959","bu":"GDBU","ec_item":"LED DRIVER IC & Reflector Change","ec_notice":"GD230103959_2023-02-02-09-22-59-130.pdf","ec_report":"G190EAN01.0_Engineering_Change_Request_003.pdf","issue_date":"2023/10/23","model_name":"G190EAN01.003","new_name":"G190EAN01.003","qty":"4","remarks":"","status":"","target_phase":"2023년 3월 31일"},{"ec_no":"","bu":"PDBU","ec_item":"","ec_notice":"","ec_report":"M270HVN02.0_20240814_JUNGLIM.pdf","issue_date":"2024/08/12","model_name":"M270HVN02.00B","new_name":"M270HVN02.00D","qty":"","remarks":"FAB Change P/N 변경","status":"","target_phase":"2024년 9월 6일"},{"ec_no":"GD240804596","bu":"GDBU","ec_item":"","ec_notice":"GD240804596_2024-09-30-02-15-14-532.pdf","ec_report":"G133HAN01.1_LED_driver_EC_Notice_20240823.pdf","issue_date":"2024/08/23","model_name":"G133HAN01.101","new_name":"G133HAN01.101","qty":"10","remarks":"25년 5월 MP 확정","status":"","target_phase":"2024년 12월 1일"},{"ec_no":"GD240604516","bu":"GDBU","ec_item":"Sponge added between the LGP and U-side.","ec_notice":"GD240604516_2024-10-04-10-05-49-275.pdf","ec_report":"G238HAN02.0__Sponge_added_between_the_LGP_to_LED_gap__ECR_20240830_(Junglim).pdf","issue_date":"2024/06/18","model_name":"G238HAN02.000","new_name":"G238HAN02.000","qty":"","remarks":"","status":"","target_phase":"2025년 3월 3일"},{"ec_no":"SR241000009","bu":"GDBU","ec_item":"Timing Controller IC(Tcon IC) EC  Change","ec_notice":"SR241000009_2024-10-30-02-24-56-826.pdf","ec_report":"G156XTN02.0_Tcon_IC_EC_proposal_241016.pdf","issue_date":"2024/10/17","model_name":"G156XTN02.0","new_name":"G156XTN02.0","qty":"","remarks":"","status":"","target_phase":"2024년 10월 30일"},{"ec_no":"GP241000019","bu":"GDBU","ec_item":"New TP Sensor Change","ec_notice":"GP241000019_2024-11-19-11-01-41-864.pdf","ec_report":"G101EVT05.1_ECN_for_TP_out-sorcuing_proposal_1018.pdf","issue_date":"2024/10/23","model_name":"G101EVT05.1","new_name":"G101EVT05.1","qty":"","remarks":"","status":"","target_phase":"2024년 11월 19일"},{"ec_no":"GP241100024","bu":"GDBU","ec_item":"LDO , BLU CNT","ec_notice":"GP241100024_2024-11-20-08-42-27-701.pdf","ec_report":"G190ETN01.001_ECN_-__LDO_20241105.pdf, G190ETN01_002_Final_spec_rev_1.2.2_-20230113_for__JungLim.pdf","issue_date":"2024/11/11","model_name":"G190ETN01.001","new_name":"G190ETN01.002","qty":"","remarks":"","status":"","target_phase":"2024년 11월 20일"},{"ec_no":"GT241200014","bu":"PDBU","ec_item":"DB connector, DB to LB Wire","ec_notice":"GT241200014_2024-12-09-02-31-54-554.pdf","ec_report":"P370IVN02.2_Connector_EC_report_241203.pdf","issue_date":"2024/07/20","model_name":"P370IVN02.2","new_name":"P370IVN02.2","qty":"","remarks":"","status":"","target_phase":"2024년 12월 9일"},{"ec_no":"GT241100008","bu":"PDBU","ec_item":"Source IC & Control Board","ec_notice":"GT241100008_2024-12-02-01-57-47-610.pdf","ec_report":"ECN_P550QVR01.0_ECN_20241120.pdf","issue_date":"2024/11/28","model_name":"P550QVR01.010","new_name":"P550QVR01.011","qty":"","remarks":"25년 2월 MP Start","status":"","target_phase":"2024년 12월 2일"},{"ec_no":"GD240604515","bu":"GDBU","ec_item":"LVDS CNT, POL  Changes","ec_notice":"GD240604515_2024-07-09-10-20-43-652.pdf","ec_report":"ADP_G170ETN02.110_to_101_202406.pdf","issue_date":"2024/06/17","model_name":"G170ETN02.110","new_name":"G170ETN02.101","qty":"","remarks":"","status":"","target_phase":"2024년 7월 9일"},{"ec_no":"GT250100022","bu":"GDBU","ec_item":"Filter Component EOL, launch the new resistor","ec_notice":"GT250100022_2025-01-16-08-19-29-452.pdf","ec_report":"G050VTN01.0_EC_Notice_20250110.pdf, G050VTN01.0_Filter_EOL_250102.pdf","issue_date":"2025/01/10","model_name":"G050VTN01.0","new_name":"G050VTN01.0","qty":"","remarks":"","status":"","target_phase":"2025년 1월 31일"},{"ec_no":"GT250100032","bu":"PDBU","ec_item":"Tape","ec_notice":"GT250100032_2025-02-07-01-22-13-279.pdf","ec_report":"P280_P286_P294_Tape_EC_V2_250123.pdf","issue_date":"2025/01/31","model_name":"P294IVN01.100","new_name":"P294IVN01.110","qty":"","remarks":"24년 8월 MP Start","status":"","target_phase":"2025년 2월 28일"},{"ec_no":"GT250100031","bu":"PDBU","ec_item":"New tape is implemented","ec_notice":"GT250100031_2025-02-12-11-31-04-649.pdf","ec_report":"P280_P286_P294_Tape_EC_V2_250123%201.pdf","issue_date":"2025/01/23","model_name":"P286IVN03.010","new_name":"P286IVN03.010","qty":"","remarks":"","status":"","target_phase":"2025년 2월 12일"},{"ec_no":"GT250100029","bu":"PDBU","ec_item":"New tape is implemented","ec_notice":"GT250100029_2025-02-12-11-31-07-903.pdf","ec_report":"P280_P286_P294_Tape_EC_V2_250123%202.pdf","issue_date":"2025/01/23","model_name":"P286IVN01.110","new_name":"P286IVN01.110","qty":"","remarks":"","status":"","target_phase":"2025년 2월 12일"},{"ec_no":"GT250100028","bu":"PDBU","ec_item":"New tape is implemented","ec_notice":"GT250100028_2025-02-12-11-31-10-698.pdf","ec_report":"P280_P286_P294_Tape_EC_V2_250123%204.pdf","issue_date":"2025/01/13","model_name":"P280IVN02.010","new_name":"P280IVN02.010","qty":"","remarks":"","status":"","target_phase":"2025년 2월 12일"},{"ec_no":"GT250100026","bu":"PDBU","ec_item":"New tape is implemented","ec_notice":"GT250100026_2025-02-12-11-30-39-708.pdf","ec_report":"P280_P286_P294_Tape_EC_V2_250123%203.pdf","issue_date":"2025/01/23","model_name":"P280IVN01.110","new_name":"P280IVN01.110","qty":"","remarks":"","status":"","target_phase":"2025년 2월 12일"},{"ec_no":"GP250200059","bu":"GDBU","ec_item":"Module Fab EC to AUO S01","ec_notice":"GP250200059_2025-02-27-03-51-33-962.pdf","ec_report":"G215HVN01.4__EC_Notice_20250206.pdf","issue_date":"2025/02/06","model_name":"G215HVN01.400","new_name":"G215HVN01.401","qty":"","remarks":"G215HVN01.3 내용 확인 요망, Sub version 확인","status":"","target_phase":"2025년 2월 27일"},{"ec_no":"GP250200060","bu":"GDBU","ec_item":"Module Fab EC to AUO S01","ec_notice":"GP250200060_2025-02-27-03-51-44-934.pdf","ec_report":"G215HVN01.3_EC_Notice_20250206.pdf","issue_date":"2025/02/06","model_name":"G215HVN01.300","new_name":"G215HVN01.302","qty":"","remarks":"","status":"","target_phase":"2025년 2월 27일"},{"ec_no":"GD-A104SN03.1","bu":"GDBU","ec_item":"LCD Driver IC ⇒ Sitronix IC Change","ec_notice":"A104SN03.1_product_spec_97D10A07.111_20231228_v0.6.pdf","ec_report":"A104SN03_v1_EC_20241125_ver_3.pdf","issue_date":"2023/12/28","model_name":"A104SN03.1","new_name":"A104SN03.1","qty":"","remarks":"","status":"","target_phase":"2024년 11월 25일"},{"ec_no":"SH250600039","bu":"GDBU","ec_item":"1. Modify the Frame structure 2. Cell tape cross-posting 3. Add front bezel punch 4. Red line 5. UV328 change to UV928","ec_notice":"SH250600039_2025-06-27-08-30-54-884.pdf","ec_report":"ECR_G320ZAN02_302_EC_report_20250620(DNT).pdf","issue_date":"2025/06/30","model_name":"G320ZAN02.3","new_name":"G320ZAN02.302","qty":"","remarks":"","status":"","target_phase":"2025년 6월 30일"},{"ec_no":"GD240804603","bu":"GDBU","ec_item":"T-con and Vcom updated due to EOL","ec_notice":"GD240804603_2024-09-03-01-55-17-172.pdf","ec_report":"G230HAN01.1__ECR__20240617_to_ALL.pdf","issue_date":"2024/08/27","model_name":"G230HAN01.1","new_name":"G230HAN01.1","qty":"","remarks":"","status":"","target_phase":"2024년 9월 3일"},{"ec_no":"GP250800153","bu":"GDBU","ec_item":"Packing updated with desiccant and LDPE.","ec_notice":"GP250800153_2025-08-19-01-32-50-377.pdf","ec_report":"G238HAN01_Packing_add_desiccant_and_LDPE_bag_EC_20250813.pdf","issue_date":"2025/08/13","model_name":"G238HAN01.1","new_name":"G238HAN01.1","qty":"","remarks":"","status":"","target_phase":"2025년 8월 19일"},{"ec_no":"GP250800152","bu":"GDBU","ec_item":"Packing updated with desiccant and LDPE.","ec_notice":"GP250800152_2025-08-19-01-28-52-437.pdf","ec_report":"G238HAN01_Packing_add_desiccant_and_LDPE_bag_EC_20250813%201.pdf","issue_date":"2025/08/13","model_name":"G238HAN01.0","new_name":"G238HAN01.0","qty":"","remarks":"","status":"","target_phase":"2025년 8월 19일"},{"ec_no":"GP250800158","bu":"GDBU","ec_item":"Reflector change","ec_notice":"GP250800158_2025-09-01-10-08-17-340.pdf","ec_report":"G213UAN01_ECR_relector(EIZO)_0811Y25.pdf","issue_date":"2025/09/01","model_name":"G213UAN01.001","new_name":"G213UAN01.002","qty":"","remarks":"","status":"","target_phase":"2025년 10월 1일"},{"ec_no":"GD240704574","bu":"GDBU","ec_item":"Color resistance change (T7G → C7G)","ec_notice":"GD240704574_2024-10-07-01-52-47-235.pdf","ec_report":"G213UAN01.0_ECR_20240515_(FAE)(JunglimACMEAVENT).pdf","issue_date":"2024/07/31","model_name":"G213UAN01.000","new_name":"G213UAN01.001","qty":"","remarks":"","status":"","target_phase":"2025년 1월 13일"},{"ec_no":"GP250900202","bu":"GDBU","ec_item":"Touch panel firmware EC","ec_notice":"GP250900202_2025-10-01-07-36-39-134.pdf","ec_report":"G156HAB03.2_CECM_TP_FW.pdf","issue_date":"2025/10/01","model_name":"G156HAB03.200","new_name":"G156HAB03.200","qty":"","remarks":"","status":"","target_phase":"2025년 9월 25일"},{"ec_no":"GP251000219","bu":"GDBU","ec_item":"Reflector EOL / EC ( Toray TCJ 18N → Toray E6DY-188 )","ec_notice":"GP251000219_2025-10-13-04-38-46-087.pdf","ec_report":"G215HAN01.200_Reflector_EC_Notice_20251002.pdf","issue_date":"2025/10/02","model_name":"G215HAN01.200","new_name":"G215HAN01.200","qty":"","remarks":"","status":"","target_phase":"2026년 1월 1일"},{"ec_no":"GP250900201","bu":"GDBU","ec_item":"Reflector EOL / EC ( Toray Txx → Toray Exx )","ec_notice":"GP250900201_2025-10-14-08-00-23-463.pdf","ec_report":"EC_Notice_G270ZAN01.5_20250918_all.pdf","issue_date":"2025/09/18","model_name":"G270ZAN01.503","new_name":"G270ZAN01.504","qty":"","remarks":"","status":"","target_phase":"2025년 12월 1일"},{"ec_no":"GP240504489","bu":"GDBU","ec_item":"Polarizer EOL / EC ( Sumika → Nitto Denko )","ec_notice":"GD240504489_2024-05-14-03-21-48-332.pdf","ec_report":"ADP_G156HAN04.0__EC_Notice__20240507.pdf","issue_date":"2024/05/08","model_name":"G156HAN04.000","new_name":"G156HAN04.001","qty":"","remarks":"","status":"","target_phase":"2025년 6월 20일"},{"ec_no":"GP2510002225","bu":"GDBU","ec_item":"1.PET washer added2.UV328 free3.New FW code","ec_notice":"GP251000222_2025-10-16-07-44-41-859.pdf","ec_report":"","issue_date":"2025/10/14","model_name":"G320ZAN02.500","new_name":"G320ZAN02.500","qty":"","remarks":"","status":"","target_phase":"2025년 10월 31일"},{"ec_no":"PD240205895","bu":"PDBU","ec_item":"MA Factory location and T-con board size change","ec_notice":"PD240205895_2024-03-04-10-38-38-492.pdf","ec_report":"P430QVN01.003_EC_Notice_202401_rev.pdf","issue_date":"2024/01/18","model_name":"P430QVN01.002","new_name":"P430QVN01.003","qty":"","remarks":"","status":"","target_phase":"2024년 5월 31일"},{"ec_no":"GP260200296","bu":"GDBU","ec_item":"Level-shifter EOL / EC(leve shifter, PWM, LED Driver, DVCOM)","ec_notice":"GP260200296_2026-02-24-08-25-28-384.pdf","ec_report":"G150XTN03_v4_EC_Notice_202602.pdf","issue_date":"2026/02/24","model_name":"G150XTN03.404","new_name":"G150XTN03.410","qty":"","remarks":"","status":"","target_phase":"2026년 10월 1일"},{"ec_no":"GP260200307","bu":"GDBU","ec_item":"Level-shifter EOL / EC(leve shifter, PWM, LED Driver, DVCOM)","ec_notice":"GP260200307_2026-03-25-06-30-37-060.pdf","ec_report":"G150XTN03_v5_EC_Notice_202602.pdf","issue_date":"2026/03/25","model_name":"G150XTN03.500","new_name":"G150XTN03.502","qty":"","remarks":"","status":"","target_phase":"2026년 9월 15일"},{"ec_no":"GP260300336","bu":"GDBU","ec_item":"T-con(EOL), PWM, OP, DVCOM, BLU Vender Change","ec_notice":"GP260300336_2026-04-21-04-38-42-907.pdf","ec_report":"G150XTN06_v8_EC_Notice_202602.pdf","issue_date":"2026/02/11","model_name":"G150XTN06.800","new_name":"G150XTN06.802","qty":"","remarks":"260525,26 update spec, RA Report 입수","status":"","target_phase":"2026년 10월 1일"},{"ec_no":"GP260400364","bu":"GDBU","ec_item":"BLU(Light guide plate, LED, Optical films) Change.","ec_notice":"GP260400364_2026-04-29-10-24-58-583.pdf","ec_report":"G150XAN03.0_BLU_EC_20260316_-_CECM.pdf","issue_date":"2026/04/16","model_name":"G150XAN03.001","new_name":"G150XAN03.002","qty":"","remarks":"","status":"","target_phase":"2026년 7월 1일"}];
+
+let data = JSON.parse(JSON.stringify(RAW_DATA));
+let sortKey = 'issue_date';
+let sortDir = -1;
+let activeQuickFilter = null;
+const CURRENT_YEAR = String(new Date().getFullYear());
+
+const years = [...new Set(data.map(d => d.issue_date.substring(0,4)).filter(y=>y))].sort().reverse();
+const yearSel = document.getElementById('filter-year');
+years.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y+'년';yearSel.appendChild(o);});
+
+function getYear(d){return d.issue_date?d.issue_date.substring(0,4):'';}
+
+function updateStats(){
+  document.getElementById('stat-total').textContent=data.length;
+  document.getElementById('stat-gdbu').textContent=data.filter(d=>d.bu==='GDBU').length;
+  document.getElementById('stat-pdbu').textContent=data.filter(d=>d.bu==='PDBU').length;
+  const n=data.filter(d=>d.ec_notice).length;
+  document.getElementById('stat-has-notice').textContent=n;
+  document.getElementById('stat-has-report').textContent=data.filter(d=>d.ec_report).length;
+  const _snn=document.getElementById('stat-no-notice');if(_snn)_snn.textContent=data.length-n;
+  const ce=document.getElementById('stat-2026');
+  const cl=document.getElementById('stat-cur-year-lbl');
+  const cl2=document.getElementById('stat-cur-year-lbl2');
+  if(ce)ce.textContent=data.filter(d=>getYear(d)===CURRENT_YEAR).length;
+  if(cl)cl.textContent='연도별 현황';
+  if(cl2)cl2.textContent=CURRENT_YEAR+'년';
+  const yc={};
+  data.forEach(d=>{const y=getYear(d);if(y)yc[y]=(yc[y]||0)+1;});
+  const sy=Object.keys(yc).sort().reverse();
+  const mx=Math.max(...Object.values(yc));
+  const c=document.getElementById('year-bars');
+  if(c)c.innerHTML=sy.map(y=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="font-size:11px;color:#555;width:26px;flex-shrink:0;">'${y.slice(2)}</span><div style="flex:1;height:7px;background:#e8eaf0;border-radius:4px;overflow:hidden;"><div style="width:${Math.round(yc[y]/mx*100)}%;height:100%;border-radius:4px;background:#378ADD;"></div></div><span style="font-size:12px;font-weight:700;color:#0f3460;width:20px;text-align:right;">${yc[y]}</span></div>`).join('');
+  // 2025 stat
+  const s25=document.getElementById('stat-2025');
+  if(s25)s25.textContent=yc['2025']||0;
+}
+
+function toggleYearDD(){
+  const dd=document.getElementById('year-dropdown');
+  const ch=document.getElementById('year-chevron');
+  const isOpen=dd.style.display!=='none';
+  dd.style.display=isOpen?'none':'block';
+  ch.style.transform=isOpen?'':'rotate(180deg)';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#total-card')&&!e.target.closest('#year-dropdown')){
+    const dd=document.getElementById('year-dropdown');
+    if(dd){dd.style.display='none';document.getElementById('year-chevron').style.transform='';}
+  }
+});
+
+function makeFileLinks(files,cls,label){
+  if(!files)return'';
+  return files.split(',').map(f=>{
+    f=f.trim();if(!f)return'';
+    const decoded=decodeURIComponent(f);
+    return`<a class="file-link ${cls}" href="files/${f}" target="_blank" title="${decoded}">📄 ${label}</a>`;
+  }).join('');
+}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const bu=document.getElementById('filter-bu').value;
+  const yr=document.getElementById('filter-year').value;
+  const file=document.getElementById('filter-has-file').value;
+  let filtered=data.filter(d=>{
+    const txt=(d.ec_no+d.model_name+d.ec_item+d.new_name+d.remarks).toLowerCase();
+    if(q&&!txt.includes(q))return false;
+    if(bu&&d.bu!==bu)return false;
+    if(yr&&getYear(d)!==yr)return false;
+    if(file==='notice'&&!d.ec_notice)return false;
+    if(file==='report'&&!d.ec_report)return false;
+    if(file==='both'&&(!d.ec_notice||!d.ec_report))return false;
+    if(file==='no-notice'&&d.ec_notice)return false;
+    if(activeQuickFilter==='no-notice'&&d.ec_notice)return false;
+    return true;
+  });
+  filtered.sort((a,b)=>{let va=a[sortKey]||'',vb=b[sortKey]||'';return va<vb?sortDir:va>vb?-sortDir:0;});
+  document.getElementById('result-count').textContent=filtered.length+' 건';
+  const tbody=document.getElementById('table-body');
+  if(filtered.length===0){tbody.innerHTML='';document.getElementById('no-results').style.display='block';return;}
+  document.getElementById('no-results').style.display='none';
+  tbody.innerHTML=filtered.map((d,i)=>`<tr>
+    <td style="color:#aaa;font-size:11px">${i+1}</td>
+    <td class="ec-no">${d.ec_no||'-'}</td>
+    <td><span class="bu-badge bu-${d.bu}">${d.bu}</span></td>
+    <td class="date">${d.issue_date||''}</td>
+    <td class="model">${d.model_name}</td>
+    <td class="new-name">${d.new_name||''}</td>
+    <td><div class="ec-item-wrap" data-idx="${i}"><span class="ec-item-text" title="${(d.ec_item||'').replace(/"/g,'&quot;')}">${d.ec_item||''}</span><span class="edit-icon" onclick="startEditItem(this,${i})" title="편집">✏️</span></div></td>
+    <td>${makeFileLinks(d.ec_notice,'link-notice','Notice')}</td>
+    <td>${makeFileLinks(d.ec_report,'link-report','Report')}</td>
+    <td class="date">${d.target_phase||''}</td>
+    <td><div class="remarks-wrap" data-idx="${i}"><span class="remarks-text" title="${(d.remarks||'').replace(/"/g,'&quot;')}">${d.remarks||''}</span><span class="edit-icon" onclick="startEditRemarks(this,${i})" title="편집">✏️</span></div></td>
+    <td>${d.status?`<span class="status-gd">${d.status}</span>`:''}</td>
+  </tr>`).join('');
+}
+
+function sortTable(key){if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=-1;}document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sorted-asc','sorted-desc');if(th.getAttribute('onclick')===`sortTable('${key}')`)th.classList.add(sortDir===1?'sorted-asc':'sorted-desc');});render();}
+function resetAllFilters(){document.getElementById('search').value='';document.getElementById('search-clear').classList.remove('visible');document.getElementById('filter-bu').value='';document.getElementById('filter-year').value='';document.getElementById('filter-has-file').value='';activeQuickFilter=null;render();}
+
+function exportCSV(){
+  const q=document.getElementById('search').value.toLowerCase(),bu=document.getElementById('filter-bu').value,yr=document.getElementById('filter-year').value,file=document.getElementById('filter-has-file').value;
+  let filtered=data.filter(d=>{const txt=(d.ec_no+d.model_name+d.ec_item+d.new_name+d.remarks).toLowerCase();if(q&&!txt.includes(q))return false;if(bu&&d.bu!==bu)return false;if(yr&&getYear(d)!==yr)return false;if(file==='notice'&&!d.ec_notice)return false;if(file==='report'&&!d.ec_report)return false;if(file==='both'&&(!d.ec_notice||!d.ec_report))return false;if(activeQuickFilter==='no-notice'&&d.ec_notice)return false;return true;});
+  const headers=['ADP EC No.','BU','Issue Date','Model Name','New Name','EC ITEM','EC Notice','EC Report','Target Phase-in','Remarks','Status'];
+  const keys=['ec_no','bu','issue_date','model_name','new_name','ec_item','ec_notice','ec_report','target_phase','remarks','status'];
+  const esc=v=>`"${String(v||'').replace(/"/g,'""')}"`;
+  const rows=[headers.map(esc).join(',')];filtered.forEach(d=>rows.push(keys.map(k=>esc(d[k])).join(',')));
+  const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  const now=new Date();const pad=n=>String(n).padStart(2,'0');
+  a.href=url;a.download=`EC_Notice_${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}.csv`;a.click();URL.revokeObjectURL(url);
+}
+
+function onSearchInput(){const val=document.getElementById('search').value;document.getElementById('search-clear').classList.toggle('visible',val.length>0);render();}
+function clearSearch(){document.getElementById('search').value='';document.getElementById('search-clear').classList.remove('visible');render();}
+['filter-bu','filter-year','filter-has-file'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('change',render);}});
+
+// Inline edit
+function startEditItem(iconEl,idx){const wrap=iconEl.closest('.ec-item-wrap');const cv=data[idx].ec_item||'';wrap.innerHTML=`<input class="ec-item-input" id="ec-item-edit" value="${cv.replace(/"/g,'&quot;')}"/><span class="edit-icon" onclick="saveEditItem(${idx})" style="opacity:1">✅</span><span class="edit-icon" onclick="cancelEdit()" style="opacity:1">✖</span>`;const inp=document.getElementById('ec-item-edit');inp.focus();inp.select();inp.addEventListener('keydown',e=>{if(e.key==='Enter')saveEditItem(idx);if(e.key==='Escape')cancelEdit();});}
+function saveEditItem(idx){const inp=document.getElementById('ec-item-edit');if(!inp)return;data[idx].ec_item=inp.value.trim();updateLastUpdated();render();}
+function startEditRemarks(iconEl,idx){const wrap=iconEl.closest('.remarks-wrap');const cv=data[idx].remarks||'';wrap.innerHTML=`<input class="remarks-input" id="remarks-edit" value="${cv.replace(/"/g,'&quot;')}"/><span class="edit-icon" onclick="saveEditRemarks(${idx})" style="opacity:1">✅</span><span class="edit-icon" onclick="cancelEdit()" style="opacity:1">✖</span>`;const inp=document.getElementById('remarks-edit');inp.focus();inp.select();inp.addEventListener('keydown',e=>{if(e.key==='Enter')saveEditRemarks(idx);if(e.key==='Escape')cancelEdit();});}
+function saveEditRemarks(idx){const inp=document.getElementById('remarks-edit');if(!inp)return;data[idx].remarks=inp.value.trim();updateLastUpdated();render();}
+function cancelEdit(){render();}
+function updateLastUpdated(){const now=new Date();const pad=n=>String(n).padStart(2,'0');document.getElementById('last-updated').textContent=`마지막 업데이트: ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;}
+
+// Add modal
+function openModal(){document.getElementById('modal-overlay').classList.add('open');}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+function buildRecordFromForm(){const get=id=>document.getElementById(id).value.trim();const ecNo=get('f-ec_no');if(!ecNo){alert('ADP EC No.를 입력하세요.');return null;}const issueRaw=get('f-issue_date');return{ec_no:ecNo,bu:get('f-bu'),ec_item:get('f-ec_item'),ec_notice:get('f-ec_notice'),ec_report:get('f-ec_report'),issue_date:issueRaw?issueRaw.replace(/-/g,'/'):'',model_name:get('f-model_name'),new_name:get('f-new_name'),qty:get('f-qty'),remarks:get('f-remarks'),status:get('f-status'),target_phase:get('f-target_phase')};}
+function addRecord(){const rec=buildRecordFromForm();if(!rec)return;data.unshift(rec);updateStats();render();closeModal();updateLastUpdated();['f-ec_no','f-ec_item','f-ec_notice','f-ec_report','f-issue_date','f-model_name','f-new_name','f-qty','f-remarks','f-status','f-target_phase'].forEach(id=>document.getElementById(id).value='');}
+function addRecordAndMail(){const rec=buildRecordFromForm();if(!rec)return;data.unshift(rec);updateStats();render();closeModal();updateLastUpdated();openMailModal(rec);}
+
+// Mail modal
+function buildMailHtml(rec){const bu=rec.bu||'',model=rec.model_name||'',newModel=rec.new_name||model,ecItem=rec.ec_item||'',phase=rec.target_phase||'',status=rec.status||'EC Notice';return`안녕하세요.
+
+품질팀 김성민입니다.
+
+${bu} 품목 ${model} 모델의 EC가 발생하여 하기와 같이 안내 드립니다.
+아래의 표와 첨부파일을 확인하시어 샘플 필요 시 회신 부탁드리겠습니다.
+
+<table><tr><th>Model name</th><th>New model name</th><th>EC item</th><th>적용 시점</th><th>Status</th></tr><tr><td>${model}</td><td>${newModel}</td><td>${ecItem}</td><td>${phase}</td><td>${status}</td></tr></table>`;}
+function buildMailPlainText(rec){return`안녕하세요.
+
+품질팀 김성민입니다.
+
+${rec.bu||''} 품목 ${rec.model_name||''} 모델의 EC가 발생하여 하기와 같이 안내 드립니다.
+아래의 표와 첨부파일을 확인하시어 샘플 필요 시 회신 부탁드리겠습니다.
+
+Model name: ${rec.model_name||''}
+New model name: ${rec.new_name||''}
+EC item: ${rec.ec_item||''}
+적용 시점: ${rec.target_phase||''}
+Status: ${rec.status||'EC Notice'}`;}
+let _mailPlain='';
+function openMailModal(rec){_mailPlain=buildMailPlainText(rec);document.getElementById('mail-preview-body').innerHTML=buildMailHtml(rec);document.getElementById('mail-copy-btn').textContent='📋 텍스트 복사';document.getElementById('mail-copy-btn').className='mail-copy-btn';document.getElementById('mail-overlay').classList.add('open');}
+function copyMailText(){navigator.clipboard.writeText(_mailPlain).then(()=>{const btn=document.getElementById('mail-copy-btn');btn.textContent='✅ 복사됨!';btn.className='mail-copy-btn copied';setTimeout(()=>{btn.textContent='📋 텍스트 복사';btn.className='mail-copy-btn';},2000);});}
+const _mo=document.getElementById('mail-overlay');if(_mo)_mo.addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
+
+// Team memo (localStorage)
+const MEMO_KEY='ec_dashboard_memo';let memoTimer=null;
+function saveMemo(){clearTimeout(memoTimer);memoTimer=setTimeout(()=>{const val=document.getElementById('team-memo').value;try{localStorage.setItem(MEMO_KEY,val);}catch(e){}const lbl=document.getElementById('memo-saved-lbl');if(lbl){lbl.textContent='저장됨 ✓';setTimeout(()=>{lbl.textContent='';},2000);}},600);}
+(function loadMemo(){try{const s=localStorage.getItem(MEMO_KEY);if(s){const el=document.getElementById('team-memo');if(el)el.value=s;}}catch(e){}}());
+
+updateStats();
+render();
+</script>
+</body>
+</html>
