@@ -237,62 +237,66 @@
 
 <div id="page-ship" class="page">
 <div class="container">
-  <div class="page-header"><h1>RMA Apply 현황</h1><p>2026년 1월 이후 기준 · 총 0건</p></div>
+  <div class="page-header"><h1>RMA Apply 현황</h1><p>2026년 1월 이후 기준 · 총 2120건</p></div>
   <div class="ship-kpi-row">
-    <div class="kpi"><div class="lbl">전체 발송 시료</div><div class="val">0<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div class="sub">26년 입고 기준</div></div>
+    <div class="kpi"><div class="lbl">전체 발송 시료</div><div class="val">2120<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div class="sub">26년 입고 기준</div></div>
     <div class="kpi c-green"><div class="lbl">처리완료</div>
-      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">0<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--green-t)">0.0%</div></div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">1697<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--green-t)">80.0%</div></div>
       <div class="sub">처리완료일 기준</div></div>
     <div class="kpi c-red"><div class="lbl">RMA 진행중</div>
-      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">0<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--red-t)">0.0%</div></div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">423<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--red-t)">20.0%</div></div>
       <div class="sub">Repair 입고 대기</div></div>
     <div class="kpi c-amber"><div class="lbl">50일+ 주의 건</div>
-      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">0<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--amber-t)">0.0%</div></div>
-      <div class="sub">현재 최장 0일 경과</div></div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">276<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--amber-t)">13.0%</div></div>
+      <div class="sub">현재 최장 507일 경과</div></div>
   </div>
 
+
   <div class="prog-card">
-    <div class="prog-header"><span class="prog-title">전체 처리 완료율</span><span class="prog-pct" style="color:var(--green-t)">0.0%</span></div>
-    <div class="prog-track"><div class="prog-done" style="width:0.0%"></div></div>
+    <div class="prog-header"><span class="prog-title">전체 처리 완료율</span><span class="prog-pct" style="color:var(--green-t)">80.0%</span></div>
+    <div class="prog-track"><div class="prog-done" style="width:80.0%"></div></div>
     <div class="prog-labels">
-      <span><span class="dot" style="background:var(--green)"></span>처리완료 0건</span>
-      <span><span class="dot" style="background:var(--red)"></span>진행중 0건</span>
-      <span>전체 0건</span>
+      <span><span class="dot" style="background:var(--green)"></span>처리완료 1697건</span>
+      <span><span class="dot" style="background:var(--red)"></span>진행중 423건</span>
+      <span>전체 2120건</span>
     </div>
   </div>
+
 
   <div class="long-card">
     <div class="long-header"><div class="long-icon">&#x23F1;</div>
       <div><div class="long-title">장기 미처리 현황</div>
-      <div class="long-sub">RMA 발행일 기준 소요 기간 · 최장 0일</div></div>
+      <div class="long-sub">RMA 발행일 기준 소요 기간 · 최장 507일</div></div>
     </div>
     <div class="long-stat-row">
       <div class="long-stat" onclick="openLongDrill('90일+')">
         <div class="ls-lbl">90일+ 장기미처리</div>
-        <div class="ls-val" style="color:var(--red-t)">0건</div>
+        <div class="ls-val" style="color:var(--red-t)">248건</div>
         <div class="ls-sub">즉시 확인 필요</div>
       </div>
       <div class="long-stat" onclick="openLongDrill('50~89일')">
         <div class="ls-lbl">50~89일 (주의)</div>
-        <div class="ls-val" style="color:var(--orange-t)">0건</div>
+        <div class="ls-val" style="color:var(--orange-t)">28건</div>
         <div class="ls-sub">모니터링 필요</div>
       </div>
       <div class="long-stat" onclick="openLongDrill('30~49일')">
         <div class="ls-lbl">30~49일</div>
-        <div class="ls-val" style="color:var(--amber-t)">0건</div>
+        <div class="ls-val" style="color:var(--amber-t)">99건</div>
         <div class="ls-sub">경과 모니터링 구간</div>
       </div>
       <div class="long-stat" onclick="openLongDrill('30일미만')">
         <div class="ls-lbl">30일 미만</div>
-        <div class="ls-val" style="color:var(--text2)">0건</div>
+        <div class="ls-val" style="color:var(--text2)">48건</div>
         <div class="ls-sub">단기 진행중</div>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">진행중 0건 · 소요일 구간 분포</div>
-    <div class="days-bar-row"><span class="days-label">90일+ <span style="font-size:10px;background:var(--red-l);color:var(--red-t);padding:1px 5px;border-radius:3px;font-weight:600">초과</span></span><div class="days-track"><div class="days-fill" style="width:0%;background:var(--red)"><span class="days-fill-text">0건</span></div></div><span class="days-val" style="color:var(--red-t)">0건</span></div><div class="days-bar-row"><span class="days-label">50~89일 <span style="font-size:10px;background:var(--orange-l);color:var(--orange-t);padding:1px 5px;border-radius:3px;font-weight:600">주의</span></span><div class="days-track"><div class="days-fill" style="width:0%;background:var(--orange)"><span class="days-fill-text">0건</span></div></div><span class="days-val" style="color:var(--orange-t)">0건</span></div><div class="days-bar-row"><span class="days-label">30~49일</span><div class="days-track"><div class="days-fill" style="width:0%;background:var(--amber)"><span class="days-fill-text">0건</span></div></div><span class="days-val" style="color:var(--amber-t)">0건</span></div><div class="days-bar-row"><span class="days-label">30일 미만</span><div class="days-track"><div class="days-fill" style="width:0%;background:#94a3b8"><span class="days-fill-text">0건</span></div></div><span class="days-val" style="color:var(--text2)">0건</span></div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">진행중 423건 · 소요일 구간 분포</div>
+    <div class="days-bar-row"><span class="days-label">90일+ <span style="font-size:10px;background:var(--red-l);color:var(--red-t);padding:1px 5px;border-radius:3px;font-weight:600">초과</span></span><div class="days-track"><div class="days-fill" style="width:59%;background:var(--red)"><span class="days-fill-text">248건</span></div></div><span class="days-val" style="color:var(--red-t)">248건</span></div><div class="days-bar-row"><span class="days-label">50~89일 <span style="font-size:10px;background:var(--orange-l);color:var(--orange-t);padding:1px 5px;border-radius:3px;font-weight:600">주의</span></span><div class="days-track"><div class="days-fill" style="width:7%;background:var(--orange)"><span class="days-fill-text">28건</span></div></div><span class="days-val" style="color:var(--orange-t)">28건</span></div><div class="days-bar-row"><span class="days-label">30~49일</span><div class="days-track"><div class="days-fill" style="width:23%;background:var(--amber)"><span class="days-fill-text">99건</span></div></div><span class="days-val" style="color:var(--amber-t)">99건</span></div><div class="days-bar-row"><span class="days-label">30일 미만</span><div class="days-track"><div class="days-fill" style="width:11%;background:#94a3b8"><span class="days-fill-text">48건</span></div></div><span class="days-val" style="color:var(--text2)">48건</span></div>
     <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 8px">50일+ 주의 거래처 상세</div>
-    
-      </div>
+    <div class="cust-prog-row"><span>정림전자 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P320HVN06.110 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">507일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>KUKJAEDATA SYSTEM &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P320HVN04.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">507일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(코텍) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G154EVN01.001 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">432일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>코텍(베트남)11th &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">M270HVR01.105 OC (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">297일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">6건</span></div></div><div class="cust-prog-row"><span>코텍(베트남)11th &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G070VAN01.001 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">297일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>코텍(베트남)11th &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156HAN05.004 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">297일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">14건</span></div></div><div class="cust-prog-row"><span>코텍 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P215HAN01.100 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">291일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">5건</span></div></div><div class="cust-prog-row"><span>정림전자 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G133HAN01.101 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">288일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">2건</span></div></div><div class="cust-prog-row"><span>노크 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P370IVN02.2 B/L board</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">275일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">6건</span></div></div><div class="cust-prog-row"><span>이노디스플레이 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">M270QAN06.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">274일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>현대디스플레이 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P650HVN05.350 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">274일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G320ZAN02.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">269일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(무한시스템) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G150XTN03.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">260일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(무한시스템) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156XTN01.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">260일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림전자(정림재고RMA) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G215HAN01.501 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">256일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(무한시스템) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G101EAN02.401 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">254일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">5건</span></div></div><div class="cust-prog-row"><span>이안디스플레이 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G104SN03.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">241일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>덴텀 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G150XTN03.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">241일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>무한시스템 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156XTN01.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">234일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">53건</span></div></div><div class="cust-prog-row"><span>신흥정밀 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G150XTN03.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">232일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div>
+    <div class="notice-bar">&#9888; 정림전자 P320HVN06.110 (Z) 3건 — <strong>507일 경과</strong>, 90일 기준 초과. 즉시 확인 필요.</div>
+  </div>
+
 
   <div class="grid2">
     <div class="card"><div class="card-title">월별 수출 건수 (26년)</div><div style="position:relative;height:200px"><canvas id="shipExportChart"></canvas></div></div>
