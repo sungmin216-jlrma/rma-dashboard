@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FMA 분석 현황</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--s2:#F1F5F9;--border:#E2E8F0;--border2:#CBD5E1;
+  --text:#0F172A;--muted:#64748B;
+  --blue:#1D4ED8;--blue-bg:#EFF6FF;--blue-text:#1E40AF;
+  --green:#15803D;--green-bg:#F0FDF4;--green-text:#166534;
+  --orange:#C2410C;--orange-bg:#FFF7ED;--orange-text:#9A3412;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-text:#991B1B;
+  --purple:#6D28D9;--header:#1E3A5F;
+}
+body{background:var(--bg);color:var(--text);font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;font-size:13px;min-height:100vh;}
+
+/* ── Topbar ── */
+.topbar{background:var(--header);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
+.topbar-logo{color:#93C5FD;font-size:17px;font-weight:700;}
+.topbar-sub{color:#93C5FD;font-size:11px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.tb-btn{padding:5px 13px;border-radius:6px;font-size:12px;font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#E0F2FE;transition:.15s;}
+.tb-btn:hover{background:rgba(255,255,255,.2);}
+.tb-btn.primary{background:#2563EB;border-color:#2563EB;}
+#ghStatus{font-size:11px;padding:4px 10px;border-radius:10px;}
+.gh-ok{background:#166534;color:#BBF7D0;}.gh-err{background:#991B1B;color:#FEE2E2;}.gh-load{background:#1E40AF;color:#BFDBFE;}
+
+/* ── Subnav ── */
+.subnav{background:#162D4A;border-bottom:1px solid rgba(255,255,255,.08);padding:0 24px;display:flex;align-items:center;gap:2px;position:sticky;top:52px;z-index:200;}
+.snav{padding:11px 18px;font-size:13px;font-weight:500;color:#94A3B8;cursor:pointer;border-bottom:3px solid transparent;transition:.15s;white-space:nowrap;}
+.snav:hover{color:#E0F2FE;}
+.snav.active{color:#93C5FD;border-bottom-color:#3B82F6;font-weight:700;}
+.subnav-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding:8px 0;}
+#dataInfo{font-size:11px;color:#4B5563;}
+
+/* ── Main ── */
+.main{max-width:1440px;margin:0 auto;padding:20px 24px;}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+
+/* ── KPI ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.kpi-label{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.kpi-value{font-size:28px;font-weight:700;line-height:1;}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.kv-blue{color:var(--blue);}.kv-green{color:var(--green);}.kv-orange{color:var(--orange);}.kv-red{color:var(--red);}.kv-purple{color:var(--purple);}
+
+/* ── Charts ── */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.card-title{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px;}
+.prog-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.prog-label{font-size:12px;width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prog-track{flex:1;height:7px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:var(--blue);}
+.prog-num{font-size:11px;color:var(--muted);width:28px;text-align:right;flex-shrink:0;}
+.legend{display:flex;gap:12px;margin-bottom:10px;}
+.leg-dot{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;}
+
+/* ── Status lists ── */
+.status-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.mini-title{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px;}
+.tl-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.tl-item:last-child{border-bottom:none;}
+.tl-dot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.tl-info{flex:1;min-width:0;}
+.tl-model{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tl-detail{font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tl-dur{font-size:11px;font-weight:600;flex-shrink:0;}
+
+/* ── Table ── */
+.tbl-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.tbl-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.tbl-header h2{font-size:14px;font-weight:600;}
+.tbl-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.search-inp{padding:6px 12px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--s2);color:var(--text);outline:none;width:190px;}
+.search-inp:focus{border-color:var(--blue);}
+.flt-sel{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;background:var(--s2);color:var(--text);outline:none;cursor:pointer;}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:1100px;}
+thead th{background:var(--s2);padding:9px 11px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+thead th:hover{color:var(--blue);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+tbody tr:hover{background:var(--blue-bg);}
+tbody td{padding:9px 11px;vertical-align:middle;font-size:12px;}
+.td-m{color:var(--muted);font-size:11px;}
+.td-clip{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-done{background:var(--green-bg);color:var(--green-text);}
+.b-ing{background:var(--orange-bg);color:var(--orange-text);}
+.b-proc{background:var(--blue-bg);color:var(--blue-text);}
+.dur-fast{color:var(--green);font-weight:600;}.dur-med{color:#D97706;font-weight:600;}.dur-slow{color:var(--red);font-weight:600;}
+.btn-rpt{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;font-size:11px;font-family:inherit;cursor:pointer;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-text);transition:.15s;text-decoration:none;white-space:nowrap;}
+.btn-rpt:hover{background:var(--blue);color:#fff;}
+.btn-icon{padding:4px 8px;border-radius:5px;font-size:11px;font-family:inherit;cursor:pointer;border:1px solid var(--border2);background:var(--s2);color:var(--muted);transition:.15s;}
+.btn-icon:hover{border-color:var(--blue);color:var(--blue);}
+.btn-del{border-color:#FCA5A5;color:var(--red);}
+.btn-del:hover{background:var(--red-bg);border-color:var(--red);}
+.mgr-only{display:inline-flex!important;}
+
+/* ── Form Modal ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.form-modal{background:#fff;border-radius:14px;width:760px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.25);}
+.fm-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.fm-head h3{font-size:15px;font-weight:700;}
+.fm-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1;}
+.fm-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.fm-tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;}
+.fm-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700;}
+.fm-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.fm-pane{display:none;}.fm-pane.active{display:block;}
+.fm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;}
+.fm-grid.full{grid-template-columns:1fr;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;}
+.fg input,.fg select,.fg textarea{padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:.15s;width:100%;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,.08);}
+.fg textarea{resize:vertical;min-height:70px;}
+.fg .hint{font-size:11px;color:var(--muted);}
+.fg-full{grid-column:1/-1;}
+.fg-sep{grid-column:1/-1;border-top:1px solid var(--border);padding-top:14px;margin-top:4px;font-size:12px;font-weight:600;color:var(--muted);}
+.fm-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
+.fm-foot-left{display:flex;align-items:center;gap:10px;}
+.btn-save{padding:8px 20px;border-radius:7px;border:none;background:#1D4ED8;color:#fff;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600;transition:.15s;}
+.btn-save:hover{background:#1e40af;}
+.btn-save:disabled{background:#94A3B8;cursor:not-allowed;}
+.btn-cancel{padding:8px 16px;border-radius:7px;border:1px solid var(--border2);background:var(--s2);font-size:13px;font-family:inherit;cursor:pointer;color:var(--text);}
+.chk-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;cursor:pointer;}
+.chk-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;}
+.chk-label{font-size:12px;color:var(--text);}
+.pdf-upload-box{display:flex;flex-direction:column;gap:8px;padding:12px;border:2px dashed var(--border2);border-radius:8px;}
+.pdf-upload-box.has-file{border-color:var(--blue);background:var(--blue-bg);}
+.pdf-info{font-size:12px;color:var(--blue-text);font-weight:500;}
+.btn-file{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-text);font-size:12px;font-family:inherit;cursor:pointer;transition:.15s;}
+.btn-file:hover{background:var(--blue);color:#fff;}
+.btn-file input{display:none;}
+
+/* ── View Modal ── */
+.view-modal{background:#fff;border-radius:14px;width:680px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.25);}
+.vm-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.vm-head h3{font-size:15px;font-weight:700;}
+.vm-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.vm-section{margin-bottom:18px;}
+.vm-section-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.vm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.vm-item{display:flex;flex-direction:column;gap:3px;}
+.vm-item.full{grid-column:1/-1;}
+.vm-key{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;}
+.vm-val{font-size:12px;color:var(--text);word-break:break-word;white-space:pre-wrap;}
+.vm-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0;}
+
+/* ── Delete Modal ── */
+.del-modal{background:#fff;border-radius:12px;width:400px;max-width:95vw;padding:24px;box-shadow:0 16px 48px rgba(0,0,0,.2);}
+.btn-del-confirm{padding:8px 18px;border-radius:7px;border:none;background:var(--red);color:#fff;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600;}
+
+/* ── Report Modal ── */
+.rpt-modal{background:#fff;border-radius:14px;width:760px;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.25);}
+.rpt-body{flex:1;overflow:hidden;padding:0;}
+.rpt-body iframe{width:100%;height:100%;border:none;min-height:500px;}
+
+/* ── Misc ── */
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:18px;}
+.empty-row td{text-align:center;padding:32px;color:#94A3B8;}
+.save-hint{font-size:11px;color:var(--muted);}
+#uploadProgress{font-size:12px;color:var(--blue);}
+/* ── Add banner ── */
+.add-banner{display:flex;align-items:center;gap:14px;padding:13px 20px;margin-bottom:12px;background:#EFF6FF;border:1.5px dashed #3B82F6;border-radius:10px;cursor:pointer;transition:.15s;user-select:none;}
+.add-banner:hover{background:#DBEAFE;border-color:#1D4ED8;}
+.add-banner-icon{width:36px;height:36px;border-radius:8px;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.add-banner-title{font-size:13px;font-weight:700;color:#1E40AF;}
+.add-banner-sub{font-size:11px;color:#3B82F6;margin-top:2px;}
+/* ── SVG icon buttons ── */
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1.5px solid;cursor:pointer;background:none;transition:.15s;vertical-align:middle;}
+.icon-btn-edit{border-color:#93C5FD;color:#1D4ED8;}
+.icon-btn-edit:hover{background:#EFF6FF;border-color:var(--blue);}
+.icon-btn-del{border-color:#FCA5A5;color:var(--red);margin-left:3px;}
+.icon-btn-del:hover{background:var(--red-bg);border-color:var(--red);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">🔬 FMA 분석 현황</div>
+    <div class="topbar-sub">정림전자 품질팀 · FMA 분석 관리 시스템</div>
+  </div>
+  <div class="topbar-right">
+    <button class="tb-btn" id="tokenBtn" onclick="(function(){var t=prompt('GitHub Personal Access Token 입력 (최초 1회):',localStorage.getItem('fma_gh_token')||'');if(t){GH.token=t.trim();localStorage.setItem('fma_gh_token',GH.token);initGH();}})()">🔑 토큰</button>
+    <span id="ghStatus" class="gh-load">⏳ 연결 중...</span>
+    <button class="tb-btn" id="refreshBtn" onclick="loadData(false)">🔄 새로고침</button>
+  </div>
+</div>
+
+<div class="subnav">
+  <div class="subnav-right" style="margin-left:0;padding-left:4px;">
+    <span id="dataInfo" style="color:#94A3B8;font-size:11px;">-</span>
+  </div>
+</div>
+
+<div class="main">
+  <!-- 단일 페이지: KPI + 차트 + 테이블 -->
+  <div>
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">📋 전체 분석</div><div class="kpi-value kv-blue" id="kTotal">0</div><div class="kpi-sub">누적 접수 건</div></div>
+      <div class="kpi"><div class="kpi-label">⏳ 진행 중</div><div class="kpi-value kv-orange" id="kProg">0</div><div class="kpi-sub">분석 진행 중</div></div>
+      <div class="kpi"><div class="kpi-label">✅ 완료</div><div class="kpi-value kv-green" id="kDone">0</div><div class="kpi-sub" id="kRate">완료율 –%</div></div>
+      <div class="kpi"><div class="kpi-label">⚠️ 총 불량 수량</div><div class="kpi-value kv-red" id="kQty">0</div><div class="kpi-sub">EA 누적</div></div>
+      <div class="kpi"><div class="kpi-label">⏱ 평균 소요기간</div><div class="kpi-value kv-purple" id="kDur">–</div><div class="kpi-sub">주 (완료 기준)</div></div>
+    </div>
+    <!-- 차트 -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-title">발생공정별 현황</div>
+        <div class="legend"><span class="leg-dot" style="background:#15803D;"></span><span style="font-size:11px;color:var(--muted);">완료</span><span class="leg-dot" style="background:#C2410C;margin-left:10px;"></span><span style="font-size:11px;color:var(--muted);">진행중</span></div>
+        <div style="position:relative;height:190px;"><canvas id="procChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">고객사별 현황</div>
+        <div id="custBars"></div>
+      </div>
+    </div>
+    <!-- 진행/완료 요약 -->
+    <div class="status-row">
+      <div class="mini-card"><div class="mini-title">⏳ 진행 중인 분석 건</div><div id="ingList"></div></div>
+      <div class="mini-card"><div class="mini-title">✅ 최근 완료 5건</div><div id="doneList"></div></div>
+    </div>
+    <!-- 새 분석 건 배너 -->
+    <div class="add-banner" onclick="openForm(null)">
+      <div class="add-banner-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <div>
+        <div class="add-banner-title">새 분석 건 등록</div>
+        <div class="add-banner-sub">클릭하면 37개 항목 전체 입력 폼이 열립니다</div>
+      </div>
+      <div style="margin-left:auto;font-size:12px;color:#3B82F6;font-weight:600;">열기 →</div>
+    </div>
+
+    <div class="tbl-section">
+      <div class="tbl-header">
+        <h2>분석 건 전체 현황 <span id="rowCnt" style="font-size:12px;color:var(--muted);font-weight:400;"></span></h2>
+        <div class="tbl-controls">
+          <input class="search-inp" id="srchInp" placeholder="🔍 모델명 · 고객사 · 불량내용" oninput="renderTable()">
+          <select class="flt-sel" id="fltStatus" onchange="renderTable()"><option value="">전체 상태</option><option value="완료">완료</option><option value="진행 中">진행 중</option></select>
+          <select class="flt-sel" id="fltProcess" onchange="renderTable()"><option value="">전체 공정</option></select>
+        </div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th style="width:40px" onclick="srt(0)">No</th>
+          <th onclick="srt(1)">접수일</th>
+          <th onclick="srt(2)">공정</th>
+          <th onclick="srt(3)">고객사</th>
+          <th onclick="srt(4)">모델명</th>
+          <th onclick="srt(5)">불량내용</th>
+          <th onclick="srt(6)" style="width:50px">불량수</th>
+          <th onclick="srt(11)">담당자</th>
+          <th onclick="srt(7)">FMA요청일</th>
+          <th onclick="srt(8)">FAR 현황</th>
+          <th onclick="srt(9)" style="width:60px">소요기간</th>
+          <th onclick="srt(10)">상태</th>
+          <th>리포트</th>
+          <th style="width:72px">관리</th>
+        </tr></thead>
+        <tbody id="tblBody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="footer" id="footerTxt">FMA 분석 현황 · 정림전자 품질팀</div>
+
+<!-- ══ 입력/수정 폼 모달 ══ -->
+<div class="modal-bg" id="formModal">
+  <div class="form-modal">
+    <div class="fm-head">
+      <h3 id="fmTitle">새 분석 건 추가</h3>
+      <button class="fm-close" onclick="closeForm()">×</button>
+    </div>
+    <div class="fm-tabs">
+      <button class="fm-tab active" onclick="fmTab('info')">① 기본정보</button>
+      <button class="fm-tab" onclick="fmTab('progress')">② 진행현황</button>
+      <button class="fm-tab" onclick="fmTab('action')">③ 대책관리</button>
+      <button class="fm-tab" onclick="fmTab('far')">④ FAR현황</button>
+      <button class="fm-tab" onclick="fmTab('done')">⑤ 완료&amp;리포트</button>
+    </div>
+    <div class="fm-body">
+      <!-- ① 기본정보 -->
+      <div class="fm-pane active" id="fp-info">
+        <div class="fm-grid">
+          <div class="fg"><label>접수날짜</label><input type="date" id="f-recvDate"></div>
+          <div class="fg"><label>분석 담당자</label><input type="text" id="f-analyst" placeholder="담당자 이름"></div>
+          <div class="fg"><label>발생공정</label>
+            <select id="f-process">
+              <option value="">선택</option>
+              <option>Medison OQC</option><option>Line</option><option>Field</option>
+              <option>개발</option><option>공정</option><option>IQC</option><option>기타</option>
+            </select>
+          </div>
+          <div class="fg"><label>고객사</label><input type="text" id="f-customer" placeholder="고객사명"></div>
+          <div class="fg"><label>모델명</label><input type="text" id="f-model" placeholder="모델명"></div>
+          <div class="fg"><label>업체명 (Maker)</label><input type="text" id="f-maker" placeholder="제조사"></div>
+          <div class="fg"><label>불량수량</label><input type="number" id="f-qty" placeholder="0" min="0"></div>
+          <div class="fg"><label>불량내용</label><input type="text" id="f-defect" placeholder="불량 증상"></div>
+          <div class="fg fg-full"><label>S/N (여러 개면 줄바꿈)</label><textarea id="f-sn" rows="3" placeholder="S/N 입력&#10;복수 S/N은 줄바꿈으로 구분"></textarea></div>
+        </div>
+      </div>
+      <!-- ② 진행현황 -->
+      <div class="fm-pane" id="fp-progress">
+        <div class="fm-grid">
+          <div class="fg"><label>FMA 요청일</label><input type="date" id="f-fmaDate"></div>
+          <div class="fg"><label>RMA No.</label><input type="text" id="f-rma" placeholder="RMA 번호"></div>
+          <div class="fg"><label>RMA 발행일</label><input type="date" id="f-rmaIssueDate"></div>
+          <div class="fg"><label>DHL TRK.</label><input type="text" id="f-dhlTrk" placeholder="운송장 번호"></div>
+          <div class="fg"><label>발송일</label><input type="date" id="f-shipDate"></div>
+          <div class="fg"><label>배송완료일</label><input type="date" id="f-delivDate"></div>
+          <div class="fg fg-full"><label>정림 진행현황 메모</label><textarea id="f-memo" rows="4" placeholder="진행 상황 입력"></textarea></div>
+        </div>
+      </div>
+      <!-- ③ 대책관리 -->
+      <div class="fm-pane" id="fp-action">
+        <div class="fm-grid">
+          <div class="fg"><label>대책 요구</label>
+            <select id="f-actionRequired"><option value="">선택</option><option>Y</option><option>N</option><option>해당없음</option></select>
+          </div>
+          <div class="fg"><label>QCN No.</label><input type="text" id="f-qcnNo" placeholder="QCN 번호"></div>
+          <div class="fg"><label>QCN 발송일</label><input type="date" id="f-qcnDate"></div>
+          <div class="fg"><label>대책서 요청일</label><input type="date" id="f-actionReqDate"></div>
+          <div class="fg"><label>대책 지연일</label><input type="date" id="f-actionDelayDate"></div>
+          <div class="fg"></div>
+          <div class="fg fg-full"><label>발생 원인</label><textarea id="f-cause" rows="4" placeholder="발생 원인 분석 내용"></textarea></div>
+        </div>
+      </div>
+      <!-- ④ FAR현황 -->
+      <div class="fm-pane" id="fp-far">
+        <div class="fm-grid">
+          <div class="fg"><label>FAR 코텍 제출일</label><input type="date" id="f-farSubmitDate"></div>
+          <div class="fg"><label>최종 FAR 일자</label><input type="date" id="f-farDate"></div>
+          <div class="fg"><label>FAR 1차 입수일</label><input type="date" id="f-far1"></div>
+          <div class="fg"><label>FAR 2차 입수일</label><input type="date" id="f-far2"></div>
+          <div class="fg"><label>FAR 3차 입수일</label><input type="date" id="f-far3"></div>
+        </div>
+      </div>
+      <!-- ⑤ 완료&리포트 -->
+      <div class="fm-pane" id="fp-done">
+        <div class="fm-grid">
+          <div class="fg"><label>완료 여부</label>
+            <select id="f-status"><option value="진행 中">진행 中</option><option value="완료">완료</option></select>
+          </div>
+          <div class="fg"><label>소요기간 [주] <span class="hint">(자동계산 가능)</span></label>
+            <input type="number" id="f-duration" placeholder="자동계산" step="0.1" min="0">
+          </div>
+          <div class="fg"><label>완료 일정</label><input type="date" id="f-completePlan"></div>
+          <div class="fg"><label>대책서 접수일</label><input type="date" id="f-actionRecvDate"></div>
+          <div class="fg fg-full"><label>FMA 결과 요약</label><textarea id="f-fmaResult" rows="4" placeholder="분석 결과 입력"></textarea></div>
+          <div class="fg-sep">관리 체크리스트</div>
+          <div class="fg"><label class="chk-row"><input type="checkbox" id="f-actionAttach"><span class="chk-label">대책서 첨부 완료</span></label></div>
+          <div class="fg"><label class="chk-row"><input type="checkbox" id="f-tripReg"><span class="chk-label">Trip 등록</span></label></div>
+          <div class="fg"><label class="chk-row"><input type="checkbox" id="f-tripComplete"><span class="chk-label">Trip 완료 처리</span></label></div>
+          <div class="fg"><label class="chk-row"><input type="checkbox" id="f-quadrant"><span class="chk-label">4분할 작성 완료</span></label></div>
+          <div class="fg"><label>유검사 전환일자</label><input type="date" id="f-inspDate"></div>
+          <div class="fg-sep">분석 리포트</div>
+          <div class="fg fg-full">
+            <label>리포트 PDF 업로드</label>
+            <div class="pdf-upload-box" id="pdfBox">
+              <div id="pdfInfo" class="pdf-info" style="display:none;"></div>
+              <label class="btn-file">📎 PDF 파일 선택<input type="file" id="f-pdfFile" accept=".pdf,.docx,.xlsx,.png,.jpg" onchange="handlePdfSelect(this)"></label>
+              <div id="uploadProgress"></div>
+              <div class="hint">파일 선택 후 저장 시 GitHub에 자동 업로드됩니다</div>
+            </div>
+            <div style="margin-top:8px;">
+              <label style="font-size:11px;color:var(--muted);">또는 외부 링크 직접 입력</label>
+              <input type="text" id="f-reportLink" placeholder="OneDrive/SharePoint 공유 링크" style="margin-top:5px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fm-foot">
+      <div class="fm-foot-left">
+        <span class="save-hint" id="fmHint"></span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-cancel" onclick="closeForm()">취소</button>
+        <button class="btn-save" id="fmSaveBtn" onclick="submitForm()">💾 저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 상세 보기 모달 ══ -->
+<div class="modal-bg" id="viewModal">
+  <div class="view-modal">
+    <div class="vm-head">
+      <h3 id="vmTitle">분석 건 상세</h3>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn-icon" id="vmEditBtn" onclick="vmEdit()">✏ 수정</button>
+        <button class="fm-close" onclick="closeView()">×</button>
+      </div>
+    </div>
+    <div class="vm-body" id="vmBody"></div>
+    <div class="vm-foot">
+      <button class="btn-cancel" onclick="closeView()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 삭제 확인 모달 ══ -->
+<div class="modal-bg" id="delModal">
+  <div class="del-modal">
+    <h3 style="margin-bottom:10px;">⚠ 분석 건 삭제</h3>
+    <p id="delInfo" style="color:var(--muted);font-size:13px;margin-bottom:20px;"></p>
+    <div style="display:flex;justify-content:flex-end;gap:8px;">
+      <button class="btn-cancel" onclick="closeDel()">취소</button>
+      <button class="btn-del-confirm" id="delConfirmBtn">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 리포트 뷰어 모달 ══ -->
+<div class="modal-bg" id="rptModal" onclick="closeRpt(event)">
+  <div class="rpt-modal">
+    <div class="vm-head" style="flex-shrink:0;">
+      <h3 id="rptTitle">📄 분석 리포트</h3>
+      <button class="fm-close" onclick="document.getElementById('rptModal').classList.remove('open')">×</button>
+    </div>
+    <div class="rpt-body" id="rptBody"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// GitHub 설정
+// ══════════════════════════════════════════
+const GH = {
+  token: localStorage.getItem('fma_gh_token') || '',
+  repo: 'rma-dashboard',
+  dataFile: 'fma_data.json',
+  reportsDir: 'fma-reports',
+  username: null,
+  dataSha: null
+};
+
+// ══════════════════════════════════════════
+// 상태
+// ══════════════════════════════════════════
+let DATA = [];
+let activeTab = 'dash';
+let sortCol = -1, sortDir = 1;
+let editingId = null;
+let viewingId = null;
+let deletingId = null;
+let pendingPdfFile = null;
+let procChart = null;
+
+// ══════════════════════════════════════════
+// 초기화
+// ══════════════════════════════════════════
+window.onload = async () => {
+  setGhStatus('load', '⏳ GitHub 연결 중...');
+  try {
+    const u = await ghFetch('https://api.github.com/user');
+    GH.username = u.login;
+    localStorage.setItem('fma_gh_token', GH.token);
+    setGhStatus('ok', '✅ ' + u.login);
+  } catch(e) {
+    setGhStatus('err', '❌ 연결 실패');
+  }
+  await loadData(true);
+};
+
+function setGhStatus(type, msg) {
+  const el = document.getElementById('ghStatus');
+  el.textContent = msg;
+  el.className = 'gh-load';
+  if(type==='ok') el.className = 'gh-ok';
+  if(type==='err') el.className = 'gh-err';
+}
+
+// ══════════════════════════════════════════
+// GitHub API
+// ══════════════════════════════════════════
+async function ghFetch(url, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: { 'Authorization': 'token '+GH.token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'FMA-Dashboard' }
+  };
+  if(body) { opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(body); }
+  const r = await fetch(url, opts);
+  if(!r.ok) throw new Error('GitHub API '+r.status);
+  return r.json();
+}
+
+async function loadData(silent=false) {
+  if(!GH.username) return;
+  if(!silent) document.getElementById('dataInfo').textContent = '⏳ 로딩 중...';
+  try {
+    const url = `https://raw.githubusercontent.com/${GH.username}/${GH.repo}/main/${GH.dataFile}?t=${Date.now()}`;
+    const r = await fetch(url);
+    if(r.ok) {
+      const json = await r.json();
+      DATA = json.data || [];
+      const meta = await ghFetch(`https://api.github.com/repos/${GH.username}/${GH.repo}/contents/${GH.dataFile}`);
+      GH.dataSha = meta.sha;
+      document.getElementById('dataInfo').textContent = `마지막 갱신: ${json.lastUpdated || '-'} · ${DATA.length}건`;
+      document.getElementById('footerTxt').textContent = `FMA 분석 현황 · 정림전자 품질팀 · ${json.lastUpdated || ''}`;
+    } else {
+      // 파일 없으면 embedded 사용
+      DATA = getEmbedded();
+      document.getElementById('dataInfo').textContent = `로컬 데이터 ${DATA.length}건 (첫 저장 시 GitHub 업로드)`;
+      GH.dataSha = null;
+    }
+  } catch(e) {
+    DATA = DATA.length ? DATA : getEmbedded();
+    document.getElementById('dataInfo').textContent = '오프라인 모드';
+  }
+  refreshAll();
+}
+
+async function saveData() {
+  if(!GH.username) throw new Error('GitHub 미연결');
+  const now = new Date().toISOString().split('T')[0];
+  const payload = { lastUpdated: now, data: DATA };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+  const body = { message: `FMA data update ${now}`, content };
+  if(GH.dataSha) body.sha = GH.dataSha;
+  const res = await ghFetch(`https://api.github.com/repos/${GH.username}/${GH.repo}/contents/${GH.dataFile}`, 'PUT', body);
+  GH.dataSha = res.content.sha;
+  document.getElementById('dataInfo').textContent = `마지막 갱신: ${now} · ${DATA.length}건`;
+}
+
+async function uploadFile(file, recordId) {
+  if(!GH.username) throw new Error('GitHub 미연결');
+  const ext = file.name.split('.').pop();
+  const fname = `${recordId}_${Date.now()}.${ext}`;
+  const buf = await file.arrayBuffer();
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+  const path = `${GH.reportsDir}/${fname}`;
+  // check existing
+  let sha = null;
+  try { const ex = await ghFetch(`https://api.github.com/repos/${GH.username}/${GH.repo}/contents/${path}`); sha=ex.sha; } catch(_){}
+  const body = { message: `Upload report ${fname}`, content: b64 };
+  if(sha) body.sha = sha;
+  await ghFetch(`https://api.github.com/repos/${GH.username}/${GH.repo}/contents/${path}`, 'PUT', body);
+  return `https://raw.githubusercontent.com/${GH.username}/${GH.repo}/main/${path}`;
+}
+
+// ══════════════════════════════════════════
+// UI 공통
+// ══════════════════════════════════════════
+
+
+function refreshAll() {
+  updateKPI();
+  updateCharts();
+  updateStatusLists();
+  populateFilters();
+  renderTable();
+}
+
+// ══════════════════════════════════════════
+// KPI
+// ══════════════════════════════════════════
+function updateKPI() {
+  const total=DATA.length, done=DATA.filter(d=>d.status==='완료').length, prog=total-done;
+  const qty=DATA.reduce((s,d)=>s+(parseInt(d.qty)||0),0);
+  const durs=DATA.filter(d=>d.duration&&d.status==='완료').map(d=>parseFloat(d.duration));
+  const avg=durs.length?(durs.reduce((a,b)=>a+b,0)/durs.length).toFixed(1):'–';
+  const rate=total?'완료율 '+Math.round(done/total*100)+'%':'완료율 –%';
+  // 대시보드 KPI
+  document.getElementById('kTotal').textContent=total;
+  document.getElementById('kDone').textContent=done;
+  document.getElementById('kProg').textContent=prog;
+  document.getElementById('kQty').textContent=qty;
+  document.getElementById('kDur').textContent=avg;
+  document.getElementById('kRate').textContent=rate;
+}
+
+// ══════════════════════════════════════════
+// Charts
+// ══════════════════════════════════════════
+function updateCharts() {
+  const procs=[...new Set(DATA.map(d=>d.process).filter(Boolean))];
+  if(procChart) procChart.destroy();
+  procChart=new Chart(document.getElementById('procChart'),{
+    type:'bar',
+    data:{labels:procs,datasets:[
+      {label:'완료',data:procs.map(p=>DATA.filter(d=>d.process===p&&d.status==='완료').length),backgroundColor:'#15803D',borderRadius:3},
+      {label:'진행중',data:procs.map(p=>DATA.filter(d=>d.process===p&&d.status!=='완료').length),backgroundColor:'#C2410C',borderRadius:3}
+    ]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{font:{size:10},color:'#64748B'},grid:{color:'rgba(0,0,0,.05)'}},y:{stacked:true,ticks:{font:{size:10},color:'#64748B'},grid:{display:false}}}}
+  });
+  const custs=[...new Set(DATA.map(d=>d.customer).filter(Boolean))];
+  const mx=Math.max(...custs.map(c=>DATA.filter(d=>d.customer===c).length),1);
+  document.getElementById('custBars').innerHTML=custs.map(c=>{
+    const n=DATA.filter(d=>d.customer===c).length;
+    return `<div class="prog-row"><div class="prog-label" title="${c}">${c}</div><div class="prog-track"><div class="prog-fill" style="width:${Math.round(n/mx*100)}%"></div></div><div class="prog-num">${n}</div></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// Status Lists
+// ══════════════════════════════════════════
+function updateStatusLists() {
+  const ing=DATA.filter(d=>d.status!=='완료');
+  document.getElementById('ingList').innerHTML = ing.length ? ing.map(d=>{
+    const elapsed=d.fmaDate?Math.round((new Date()-new Date(d.fmaDate))/(7*864e5)*10)/10:null;
+    const ec=elapsed===null?'':elapsed<=5?'color:#15803D':elapsed<=10?'color:#D97706':'color:#DC2626';
+    return `<div class="tl-item"><div class="tl-dot" style="background:#C2410C;"></div><div class="tl-info"><div class="tl-model">${esc(d.model||'')} <span style="font-weight:400;color:var(--muted);">${esc(d.customer||'')}</span></div><div class="tl-detail">${esc(d.defect||'')} · 요청일 ${d.fmaDate||'–'}</div></div>${elapsed!==null?`<div class="tl-dur" style="${ec}">${elapsed}주</div>`:''}</div>`;
+  }).join('') : '<div style="color:var(--muted);padding:12px 0;font-size:12px;">진행 중인 건 없음</div>';
+
+  const done=DATA.filter(d=>d.status==='완료').sort((a,b)=>(b.farDate||'').localeCompare(a.farDate||'')).slice(0,5);
+  document.getElementById('doneList').innerHTML = done.length ? done.map(d=>{
+    const dc=!d.duration?'':d.duration<=5?'color:#15803D':d.duration<=10?'color:#D97706':'color:#DC2626';
+    return `<div class="tl-item"><div class="tl-dot" style="background:#15803D;"></div><div class="tl-info"><div class="tl-model">${esc(d.model||'')} <span style="font-weight:400;color:var(--muted);">${esc(d.customer||'')}</span></div><div class="tl-detail">${esc(d.defect||'')} · FAR ${d.farDate||'–'}</div></div><div class="tl-dur" style="${dc}">${d.duration?d.duration+'주':'–'}</div></div>`;
+  }).join('') : '<div style="color:var(--muted);padding:12px 0;font-size:12px;">완료 건 없음</div>';
+}
+
+// ══════════════════════════════════════════
+// Table
+// ══════════════════════════════════════════
+function populateFilters() {
+  const procs=[...new Set(DATA.map(d=>d.process).filter(Boolean))].sort();
+  const sel=document.getElementById('fltProcess'), cur=sel.value;
+  sel.innerHTML='<option value="">전체 공정</option>'+procs.map(p=>`<option value="${p}">${p}</option>`).join('');
+  sel.value=cur;
+}
+
+const SRT_KEYS=['_i','recvDate','process','customer','model','defect','qty','fmaDate','farDate','duration','status','analyst'];
+function srt(c){if(sortCol===c)sortDir*=-1;else{sortCol=c;sortDir=1;}renderTable();}
+
+function renderTable() {
+  const q=(document.getElementById('srchInp').value||'').toLowerCase();
+  const st=document.getElementById('fltStatus').value;
+  const pr=document.getElementById('fltProcess').value;
+  let rows=DATA.filter(d=>{
+    if(q&&![(d.model||''),(d.defect||''),(d.customer||'')].join('|').toLowerCase().includes(q))return false;
+    if(st&&d.status!==st)return false;
+    if(pr&&d.process!==pr)return false;
+    return true;
+  });
+  if(sortCol>=0&&sortCol<SRT_KEYS.length){
+    rows.sort((a,b)=>{const k=SRT_KEYS[sortCol];const av=a[k]??'',bv=b[k]??'';
+      if(typeof av==='number')return(av-bv)*sortDir;
+      return String(av).localeCompare(String(bv),'ko')*sortDir;});
+  }
+  document.getElementById('rowCnt').textContent='('+rows.length+'건)';
+  const body=document.getElementById('tblBody');
+  if(!rows.length){body.innerHTML=`<tr class="empty-row"><td colspan="13">데이터 없음</td></tr>`;return;}
+  body.innerHTML=rows.map((d,idx)=>{
+    const i=DATA.indexOf(d);
+    const dur=d.duration&&parseFloat(d.duration)>0?parseFloat(d.duration):null;
+    const dc=dur===null?'':dur<=5?'dur-fast':dur<=10?'dur-med':'dur-slow';
+    const sb=d.status==='완료'?`<span class="badge b-done">✓ 완료</span>`:`<span class="badge b-ing">⟳ 진행중</span>`;
+    const pb=d.process?`<span class="badge b-proc">${esc(d.process)}</span>`:'–';
+    // FAR 요약
+    const farSummary=[d.far1?'1차✓':'',d.far2?'2차✓':'',d.far3?'3차✓':''].filter(Boolean).join(' ')||'–';
+    // 리포트
+    let rBtn='';
+    if(d.reportLink) rBtn=`<a class="btn-rpt" href="${esc(d.reportLink)}" target="_blank" rel="noopener">📄 열기</a>`;
+    // 관리 버튼
+    const ICON_EDIT=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+    const ICON_DEL=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+    const mgrBtns=`<td style="white-space:nowrap;"><button class="icon-btn icon-btn-edit" onclick="event.stopPropagation();openForm('${d.id}')" title="수정">${ICON_EDIT}</button><button class="icon-btn icon-btn-del" onclick="event.stopPropagation();confirmDel('${d.id}')" title="삭제">${ICON_DEL}</button></td>`;
+    return `<tr onclick="openView('${d.id}')">
+      <td class="td-m">${idx+1}</td>
+      <td class="td-m">${d.recvDate||'–'}</td>
+      <td>${pb}</td>
+      <td>${esc(d.customer||'–')}</td>
+      <td class="td-clip" title="${esc(d.model||'')}">${esc(d.model||'–')}</td>
+      <td class="td-clip" title="${esc(d.defect||'')}">${esc(d.defect||'–')}</td>
+      <td style="text-align:center;font-weight:700;color:var(--blue);">${d.qty||0}</td>
+      <td class="td-m">${esc(d.analyst||'–')}</td>
+      <td class="td-m">${d.fmaDate||'–'}</td>
+      <td class="td-m">${farSummary}</td>
+      <td class="${dc}" style="text-align:center;">${dur!==null?dur+'주':'–'}</td>
+      <td>${sb}</td>
+      <td>${rBtn}</td>
+      ${mgrBtns}
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// 상세 보기
+// ══════════════════════════════════════════
+function openView(id) {
+  const d=DATA.find(r=>r.id===id); if(!d) return;
+  viewingId=id;
+  document.getElementById('vmTitle').textContent=`${d.model||'?'} · ${d.customer||'?'}`;
+  document.getElementById('vmEditBtn').onclick=()=>{closeView();openForm(id);};
+  const sec=(title,fields)=>`<div class="vm-section"><div class="vm-section-title">${title}</div><div class="vm-grid">${fields}</div></div>`;
+  const row=(label,val,full=false)=>`<div class="vm-item${full?' full':''}"><div class="vm-key">${label}</div><div class="vm-val">${val||'–'}</div></div>`;
+  const chk=(label,val)=>row(label,val?'✅ 완료':'☐ 미완료');
+  document.getElementById('vmBody').innerHTML=
+    sec('기본 정보',row('접수날짜',d.recvDate)+row('분석담당자',d.analyst)+row('발생공정',d.process)+row('고객사',d.customer)+row('모델명',d.model)+row('업체명',d.maker)+row('불량수',d.qty+'EA')+row('불량내용',d.defect)+row('S/N',d.sn,true))+
+    sec('진행 현황',row('FMA요청일',d.fmaDate)+row('RMA No.',d.rma)+row('RMA발행일',d.rmaIssueDate)+row('DHL TRK.',d.dhlTrk)+row('발송일',d.shipDate)+row('배송완료',d.delivDate)+row('진행현황메모',d.memo,true))+
+    sec('대책 관리',row('대책요구',d.actionRequired)+row('QCN No.',d.qcnNo)+row('QCN발송일',d.qcnDate)+row('대책서요청일',d.actionReqDate)+row('대책지연일',d.actionDelayDate)+row('발생원인',d.cause,true))+
+    sec('FAR 현황',row('FAR코텍제출일',d.farSubmitDate)+row('최종FAR',d.farDate)+row('FAR 1차',d.far1)+row('FAR 2차',d.far2)+row('FAR 3차',d.far3))+
+    sec('완료 & 결과',row('완료여부',d.status)+row('소요기간',d.duration?d.duration+'주':'')+row('완료일정',d.completePlan)+row('대책서접수일',d.actionRecvDate)+row('FMA결과',d.fmaResult,true)+chk('대책서첨부',d.actionAttach)+chk('Trip등록',d.tripReg)+chk('Trip완료',d.tripComplete)+chk('4분할작성',d.quadrant)+row('유검사전환일',d.inspDate))+
+    (d.reportLink?`<div class="vm-section"><div class="vm-section-title">분석 리포트</div><a class="btn-rpt" href="${esc(d.reportLink)}" target="_blank" rel="noopener">📄 리포트 열기</a></div>`:'');
+  document.getElementById('viewModal').classList.add('open');
+}
+function closeView(){document.getElementById('viewModal').classList.remove('open');viewingId=null;}
+
+// ══════════════════════════════════════════
+// 폼 모달
+// ══════════════════════════════════════════
+function openForm(id=null) {
+  editingId=id; pendingPdfFile=null;
+  resetForm();
+  document.getElementById('pdfBox').classList.remove('has-file');
+  document.getElementById('pdfInfo').style.display='none';
+  document.getElementById('uploadProgress').textContent='';
+  if(id){
+    const d=DATA.find(r=>r.id===id); if(!d) return;
+    document.getElementById('fmTitle').textContent=`수정: ${d.model||''} · ${d.customer||''}`;
+    fillForm(d);
+  } else {
+    document.getElementById('fmTitle').textContent='새 분석 건 추가';
+  }
+  fmTab('info');
+  document.getElementById('formModal').classList.add('open');
+}
+function closeForm(){document.getElementById('formModal').classList.remove('open');editingId=null;pendingPdfFile=null;}
+
+function fmTab(name){
+  document.querySelectorAll('.fm-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.fm-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('fp-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const FIELDS=['recvDate','analyst','process','customer','model','maker','qty','defect','sn','memo','fmaDate','rma','rmaIssueDate','dhlTrk','shipDate','delivDate','actionRequired','qcnNo','qcnDate','actionReqDate','actionDelayDate','cause','farSubmitDate','farDate','far1','far2','far3','status','duration','completePlan','fmaResult','actionRecvDate','inspDate','reportLink'];
+const CHECKS=['actionAttach','tripReg','tripComplete','quadrant'];
+
+function resetForm(){
+  FIELDS.forEach(f=>{const el=document.getElementById('f-'+f);if(el)el.value='';});
+  CHECKS.forEach(f=>{const el=document.getElementById('f-'+f);if(el)el.checked=false;});
+  document.getElementById('f-status').value='진행 中';
+  document.getElementById('fmHint').textContent='';
+}
+
+function fillForm(d){
+  FIELDS.forEach(f=>{const el=document.getElementById('f-'+f);if(el&&d[f]!==undefined&&d[f]!==null)el.value=d[f];});
+  CHECKS.forEach(f=>{const el=document.getElementById('f-'+f);if(el)el.checked=!!d[f];});
+  if(d.reportLink&&d.reportName){
+    document.getElementById('pdfInfo').textContent='현재 파일: '+d.reportName;
+    document.getElementById('pdfInfo').style.display='block';
+    document.getElementById('pdfBox').classList.add('has-file');
+  }
+}
+
+function handlePdfSelect(input){
+  const file=input.files[0]; if(!file) return;
+  pendingPdfFile=file;
+  document.getElementById('pdfInfo').textContent='선택됨: '+file.name+' ('+Math.round(file.size/1024)+'KB)';
+  document.getElementById('pdfInfo').style.display='block';
+  document.getElementById('pdfBox').classList.add('has-file');
+  document.getElementById('f-reportLink').value='';
+}
+
+async function submitForm(){
+  const btn=document.getElementById('fmSaveBtn');
+  btn.disabled=true; btn.textContent='⏳ 저장 중...';
+  document.getElementById('fmHint').textContent='';
+  try{
+    const d=getFormData();
+    if(!d.customer&&!d.model){throw new Error('고객사 또는 모델명을 입력하세요.');}
+    // 소요기간 자동계산
+    if(!d.duration&&d.fmaDate&&d.farDate){
+      d.duration=Math.round((new Date(d.farDate)-new Date(d.fmaDate))/(7*864e5)*10)/10;
+    }
+    // PDF 업로드
+    if(pendingPdfFile){
+      document.getElementById('uploadProgress').textContent='⏳ PDF 업로드 중...';
+      const url=await uploadFile(pendingPdfFile, d.id);
+      d.reportLink=url;
+      d.reportName=pendingPdfFile.name;
+      document.getElementById('uploadProgress').textContent='✅ 업로드 완료';
+    }
+    // 저장
+    if(editingId){
+      const idx=DATA.findIndex(r=>r.id===editingId);
+      if(idx>=0) DATA[idx]={...DATA[idx],...d};
+    } else {
+      DATA.push(d);
+    }
+    await saveData();
+    closeForm();
+    refreshAll();
+  }catch(e){
+    document.getElementById('fmHint').textContent='⚠ '+e.message;
+  }finally{
+    btn.disabled=false; btn.textContent='💾 저장';
+  }
+}
+
+function getFormData(){
+  const obj={id: editingId||('fma_'+Date.now())};
+  FIELDS.forEach(f=>{const el=document.getElementById('f-'+f);if(el)obj[f]=el.value.trim()||'';});
+  CHECKS.forEach(f=>{const el=document.getElementById('f-'+f);if(el)obj[f]=el.checked;});
+  if(obj.qty) obj.qty=parseInt(obj.qty)||0;
+  if(obj.duration) obj.duration=parseFloat(obj.duration)||null;
+  return obj;
+}
+
+// ══════════════════════════════════════════
+// 삭제
+// ══════════════════════════════════════════
+function confirmDel(id){
+  const d=DATA.find(r=>r.id===id); if(!d) return;
+  deletingId=id;
+  document.getElementById('delInfo').textContent=`"${d.model||''} · ${d.customer||''} · ${d.defect||''}" 건을 삭제합니다. 이 작업은 되돌릴 수 없습니다.`;
+  document.getElementById('delConfirmBtn').onclick=doDelete;
+  document.getElementById('delModal').classList.add('open');
+}
+function closeDel(){document.getElementById('delModal').classList.remove('open');deletingId=null;}
+async function doDelete(){
+  if(!deletingId) return;
+  const btn=document.getElementById('delConfirmBtn');
+  btn.textContent='삭제 중...'; btn.disabled=true;
+  try{
+    DATA=DATA.filter(d=>d.id!==deletingId);
+    await saveData();
+    closeDel(); refreshAll();
+  }catch(e){alert('삭제 실패: '+e.message);}
+  btn.textContent='삭제'; btn.disabled=false;
+}
+
+// ══════════════════════════════════════════
+// 리포트 뷰어
+// ══════════════════════════════════════════
+function closeRpt(e){if(e.target===document.getElementById('rptModal'))document.getElementById('rptModal').classList.remove('open');}
+
+// ══════════════════════════════════════════
+// Embedded 초기 데이터 (첫 사용 fallback)
+// ══════════════════════════════════════════
+function getEmbedded(){
+  return [
+    {id:'fma_001',recvDate:'2025-11-19',analyst:'권혁진',process:'Medison OQC',customer:'Kortek',model:'P215HAN01.1',maker:'Samsung Medison',sn:'Q55A25P5KLZZZZ1900\nQ55A4736QLZZZZ1900\nQ55A40P8XHZZZZ1900',defect:'Flicker',qty:3,memo:'FMA 요청, 정림 Board Kit 동봉\nDHL TRK. : 2862474871  11/21 발송 25일 배송완료예정',fmaDate:'2025-11-19',rma:'702510106891',rmaIssueDate:'2025-11-21',dhlTrk:'2862474871',shipDate:'2025-11-21',delivDate:'2025-11-25',status:'완료',farDate:'2026-04-13',far1:'2025-12-01',far2:'2025-12-10',far3:'2025-12-11',duration:20.8,cause:'',fmaResult:'VCOM 최적화 미흡으로 Flicker 개선 필요',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_002',recvDate:'2026-01-16',analyst:'',process:'Line',customer:'Kortek',model:'G154EVN01.0',maker:'Samsung Medison',sn:'415275E8HFZYZS0101\n415276H4DFZYZS0101',defect:'H/Mura',qty:1,memo:'',fmaDate:'2026-01-19',rma:'702610100413',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-02-02',status:'완료',farDate:'2026-03-05',far1:'2026-02-23',far2:'2026-03-05',far3:'',duration:6.8,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_003',recvDate:'2026-01-21',analyst:'',process:'Line',customer:'Kortek',model:'G156HAB03.2',maker:'Samsung Medison',sn:'6R5B5EG4BTZZZS0100\n6R5B5ET4KJZZZS0100',defect:'Set 기준 하단 Clip mura 형태',qty:2,memo:'',fmaDate:'2026-01-22',rma:'702610100415',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-01-27',status:'완료',farDate:'2026-03-13',far1:'2026-02-06',far2:'2026-02-12',far3:'2026-03-13',duration:7.4,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_004',recvDate:'2026-01-18',analyst:'',process:'Field',customer:'Kortek',model:'G140HAB01.2',maker:'Samsung Medison',sn:'D35534N8DUZZZS0100',defect:'간헐적 터치 안됨',qty:1,memo:'터치 로그 분석 후 FMA 진행 요청 늦어짐.',fmaDate:'2026-02-12',rma:'762612100467',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-02-25',status:'완료',farDate:'2026-03-26',far1:'',far2:'',far3:'',duration:6.2,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_005',recvDate:'2026-01-22',analyst:'',process:'Field',customer:'Kortek',model:'G140HAB01.2',maker:'Samsung Medison',sn:'D345B2K4GSZZZS0100',defect:'터치 입력 동작 무',qty:1,memo:'',fmaDate:'2026-01-23',rma:'762612100246',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-02-02',status:'완료',farDate:'2026-04-30',far1:'2026-03-30',far2:'',far3:'',duration:14.0,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_006',recvDate:'2026-03-17',analyst:'',process:'Field',customer:'Kortek',model:'G140HAB01.2',maker:'Samsung Medison',sn:'DF5580C6TRZZZS0100',defect:'Line Defect',qty:1,memo:'SZ Inventory 기간으로 tw로 변경 중 발송 지연',fmaDate:'2026-03-18',rma:'702610101420',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'',status:'완료',farDate:'2026-05-20',far1:'2026-05-13',far2:'',far3:'',duration:9.2,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_007',recvDate:'2026-03-16',analyst:'',process:'개발',customer:'Kortek',model:'G270QAN01.4',maker:'GE Austria',sn:'ZA5A9R78KJZZZS0101',defect:'HCR_Abnormal Display_Beckett',qty:1,memo:'개발 제품으로 FAE 통해 분석진행',fmaDate:'2026-03-18',rma:'NO없이 진행',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-03-24',status:'완료',farDate:'2026-04-07',far1:'2026-03-30',far2:'',far3:'',duration:3.0,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_008',recvDate:'2026-03-26',analyst:'',process:'공정',customer:'Kortek vina',model:'G133HAN01.1',maker:'innocon',sn:'305B9B07RKZZZS0101\n305B8B944PZZZS0101',defect:'Greenish',qty:2,memo:'',fmaDate:'2026-04-07',rma:'702610101723',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-04-14',status:'완료',farDate:'2026-05-14',far1:'2026-05-14',far2:'',far3:'',duration:5.6,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_009',recvDate:'2026-04-01',analyst:'',process:'IQC',customer:'Kortek',model:'G140HAB01.2',maker:'Samsung Medison',sn:'DF55A7E6WUZZZS0100\nDF5576R5VHZZZS0100\nD355A8K9HQZZZS0100',defect:'TP Glass chipping Issue',qty:6,memo:'',fmaDate:'2026-04-02',rma:'732612100608',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'2026-04-16',status:'완료',farDate:'2026-04-23',far1:'2026-04-23',far2:'',far3:'',duration:3.2,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''},
+    {id:'fma_010',recvDate:'2026-04-23',analyst:'',process:'Field',customer:'Kortek',model:'G156HAB03.2',maker:'Samsung Medison',sn:'5Y5B4VJ9KTZZZS0100',defect:'Ghost touch',qty:1,memo:'재현 안됨으로 정림 분석 리포트 작성 중',fmaDate:'2026-04-23',rma:'FMA 미 진행',rmaIssueDate:'',dhlTrk:'',shipDate:'',delivDate:'',status:'진행 中',farDate:'',far1:'',far2:'',far3:'',duration:null,cause:'',fmaResult:'',reportLink:'',reportName:'',actionRequired:'',qcnNo:'',qcnDate:'',actionReqDate:'',actionDelayDate:'',farSubmitDate:'',completePlan:'',actionRecvDate:'',actionAttach:false,tripReg:false,tripComplete:false,quadrant:false,inspDate:''}
+  ];
+}
+
+// ══════════════════════════════════════════
+// 유틸
+// ══════════════════════════════════════════
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>
