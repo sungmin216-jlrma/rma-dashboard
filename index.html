@@ -299,24 +299,26 @@ const EC_DATE = '2026-06-02';
 const FMA_EDU_DATE = '2026-05-29';
 const FMA_DASH_DATE = '2026-05-23';
 
-function setTabDates(rmaDate, fmaDate, ecDate) {
+function setTabDates(d) {
   const hubDate = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+fmtT(now);
+  // 탭 날짜
   const ids = {
-    'hub':      hubDate,
-    'rma':      (rmaDate || '2026-06-02') + ' 16:49',
-    'fma-edu':  (fmaDate || FMA_EDU_DATE) + ' 09:30',
-    'fma-combined': new Date().toISOString().split('T')[0],
-    'ec':       ecDate || EC_DATE,
+    'hub':       hubDate,
+    'rma':       d.rma       || EC_DATE,
+    'fma-edu':   d.fma_edu   || FMA_EDU_DATE,
+    'fma-input': d.fma_input || d.rma || '-',
+    'ec':        d.ec        || EC_DATE,
   };
   Object.entries(ids).forEach(([k,v]) => {
     const el = document.getElementById('tab-date-'+k);
     if (el) el.textContent = v;
   });
-  // 카드 날짜+시간
+  // 카드 날짜
   const cd = {
-    'card-date-rma':      (rmaDate || '2026-06-02') + ' 16:49',
-    'card-date-edu':      (FMA_EDU_DATE) + ' 09:30',
-    'card-date-ec':       EC_DATE + ' 14:22',
+    'card-date-rma':       d.rma       || EC_DATE,
+    'card-date-edu':       d.fma_edu   || FMA_EDU_DATE,
+    'card-date-ec':        d.ec        || EC_DATE,
+    'card-date-fma-input': d.fma_input || d.rma || '-',
   };
   Object.entries(cd).forEach(([k,v]) => {
     const el = document.getElementById(k);
@@ -324,11 +326,11 @@ function setTabDates(rmaDate, fmaDate, ecDate) {
   });
 }
 
-// dates.json 로드 (같은 폴더에 있을 때)
+// dates.json 로드
 fetch('dates.json?_='+Date.now())
   .then(r=>r.json())
-  .then(d=>setTabDates(d.rma, d.fma, d.ec))
-  .catch(()=>setTabDates(null,null,null));
+  .then(d=>setTabDates(d))
+  .catch(()=>setTabDates({}));
 
 
 // ── 탭 이름 더블클릭 편집 ───────────────────────────────
