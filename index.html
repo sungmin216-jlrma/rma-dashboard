@@ -178,15 +178,13 @@ iframe.sheet.active{visibility:visible;}
     <div class="tab" data-sheet="rma" onclick="showSheet('rma')" draggable="true">
       <div class="tab-inner"><span class="icon">📦</span><span class="name">RMA 현황</span></div><span class="tab-date" id="tab-date-rma">-</span><span class="hint">Dashboard</span>
     </div>
-    <div class="tab" data-sheet="fma-cur" onclick="showSheet('fma-cur')" draggable="true">
-      <div class="tab-inner"><span class="icon">📊</span><span class="tab-name">FMA 현황</span></div>
-      <span class="tab-date" id="tab-date-fma-cur">-</span><span class="hint">Excel</span>
-    </div>
+
     <div class="tab" data-sheet="fma-edu" onclick="showSheet('fma-edu')" draggable="true">
       <div class="tab-inner"><span class="icon">📖</span><span class="name">FMA 교육자료</span></div><span class="tab-date" id="tab-date-fma-edu">-</span><span class="hint">e-Book</span>
     </div>
-    <div class="tab" data-sheet="fma-dash" onclick="showSheet('fma-dash')" draggable="true">
-      <div class="tab-inner"><span class="icon">📊</span><span class="name">FMA 대시보드</span></div><span class="tab-date" id="tab-date-fma-dash">-</span><span class="hint">Dashboard</span>
+
+    <div class="tab" data-sheet="fma-input" onclick="showSheet('fma-input')" draggable="true">
+      <div class="tab-inner"><span class="icon">📝</span><span class="name">FMA 등록</span></div><span class="tab-date" id="tab-date-fma-input">-</span><span class="hint">입력</span>
     </div>
     <div class="tab" data-sheet="ec" onclick="showSheet('ec')" draggable="true">
       <div class="tab-inner"><span class="icon">📋</span><span class="name">EC Notice</span></div><span class="tab-date" id="tab-date-ec">-</span><span class="hint">AUO/ADP</span>
@@ -280,19 +278,16 @@ iframe.sheet.active{visibility:visible;}
   </div>
 
   <!-- ② RMA 현황 -->
-  <iframe class="sheet" id="sheet-rma" src="rma-tab.html"></iframe>
-
-  <!-- ③-1 FMA 현황 -->
-  <iframe class="sheet" id="sheet-fma-cur" src="fma-tab.html"></iframe>
+  <iframe class="sheet" id="sheet-rma" src="RMA현황_대시보드.html"></iframe>
 
   <!-- ③ FMA 교육자료 -->
-  <iframe class="sheet" id="sheet-fma-edu" src="fma-edu-tab.html"></iframe>
+  <iframe class="sheet" id="sheet-fma-edu" src="FMA교육자료.html"></iframe>
 
-  <!-- ④ FMA 대시보드 -->
-  <iframe class="sheet" id="sheet-fma-dash" src="fma-dash-tab.html"></iframe>
+  <!-- ⑤ FMA 등록 -->
+  <iframe class="sheet" id="sheet-fma-input" src="FMA_입력현황.html"></iframe>
 
-  <!-- ⑤ EC Notice -->
-  <iframe class="sheet" id="sheet-ec" src="ec-notice-tab.html"></iframe>
+  <!-- ⑦ EC Notice -->
+  <iframe class="sheet" id="sheet-ec" src="EC_Notice_대시보드.html"></iframe>
 
 </div>
 
@@ -304,15 +299,14 @@ const EC_DATE = '2026-06-02';
 const FMA_EDU_DATE = '2026-05-29';
 const FMA_DASH_DATE = '2026-05-23';
 
-function setTabDates(rmaDate, fmaDate) {
+function setTabDates(rmaDate, fmaDate, ecDate) {
   const hubDate = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+fmtT(now);
   const ids = {
     'hub':      hubDate,
     'rma':      (rmaDate || '2026-06-02') + ' 16:49',
-    'fma-cur':  (fmaDate || '2026-06-02') + ' 16:49',
     'fma-edu':  (fmaDate || FMA_EDU_DATE) + ' 09:30',
-    'fma-dash': fmaDate || FMA_DASH_DATE,
-    'ec':       EC_DATE,
+    'fma-combined': new Date().toISOString().split('T')[0],
+    'ec':       ecDate || EC_DATE,
   };
   Object.entries(ids).forEach(([k,v]) => {
     const el = document.getElementById('tab-date-'+k);
@@ -321,7 +315,6 @@ function setTabDates(rmaDate, fmaDate) {
   // 카드 날짜+시간
   const cd = {
     'card-date-rma':      (rmaDate || '2026-06-02') + ' 16:49',
-    'card-date-fma-cur':  (fmaDate || '2026-06-02') + ' 16:49',
     'card-date-edu':      (FMA_EDU_DATE) + ' 09:30',
     'card-date-ec':       EC_DATE + ' 14:22',
   };
@@ -334,8 +327,8 @@ function setTabDates(rmaDate, fmaDate) {
 // dates.json 로드 (같은 폴더에 있을 때)
 fetch('dates.json?_='+Date.now())
   .then(r=>r.json())
-  .then(d=>setTabDates(d.rma, d.fma))
-  .catch(()=>setTabDates(null,null));
+  .then(d=>setTabDates(d.rma, d.fma, d.ec))
+  .catch(()=>setTabDates(null,null,null));
 
 
 // ── 탭 이름 더블클릭 편집 ───────────────────────────────
@@ -536,7 +529,7 @@ document.getElementById('now').innerHTML = fmt(now)+'<br><span style="font-size:
 document.getElementById('hub-now').innerHTML = fmt(now)+'<br><span style="font-size:14px;font-weight:700;color:#E0F2FE;">'+fmtT(now)+'</span>';
 document.getElementById('hubUpdatedText').textContent = '페이지 접속 시각: '+now.toLocaleString('ko-KR')+'  ·  각 탭에서 최신 현황을 확인하세요.';
 
-const SHEETS = ['hub','rma','fma-cur','fma-edu','fma-dash','ec'];
+const SHEETS = ['hub','rma','fma-edu','fma-input','ec'];
 let cur = 0;
 function showSheet(key) {
   ensureLoaded(key);
