@@ -442,12 +442,13 @@
       "farSubmitDate": "",
       "farDate": "",
       "far1": "",
-      "status": "진행 中",
+      "status": "취소",
       "duration": "",
       "completePlan": "",
       "fmaResult": "",
       "actionRecvDate": "",
-      "reportLink": ""
+      "reportLink": "",
+      "_prevStatus": "진행 中"
     }
   ]
 }
