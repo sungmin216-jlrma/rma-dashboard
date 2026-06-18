@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-12",
+  "lastUpdated": "2026-06-18",
   "data": [
     {
       "id": "fma_001",
@@ -420,6 +420,34 @@
       "tripComplete": false,
       "quadrant": false,
       "inspDate": ""
+    },
+    {
+      "id": "fma_1781765220756",
+      "recvDate": "",
+      "analyst": "김성민",
+      "process": "Field",
+      "customer": "무한시스템",
+      "model": "G150XTN03.5",
+      "maker": "POSBANK",
+      "qty": 1,
+      "defect": "BL DEFECT",
+      "sn": "",
+      "memo": "FMA 요청중",
+      "fmaDate": "",
+      "rma": "",
+      "rmaIssueDate": "",
+      "dhlTrk": "",
+      "shipDate": "",
+      "delivDate": "",
+      "farSubmitDate": "",
+      "farDate": "",
+      "far1": "",
+      "status": "진행 中",
+      "duration": "",
+      "completePlan": "",
+      "fmaResult": "",
+      "actionRecvDate": "",
+      "reportLink": ""
     }
   ]
 }
