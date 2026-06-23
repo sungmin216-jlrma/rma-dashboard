@@ -423,6 +423,38 @@
       "tripComplete": false,
       "quadrant": false,
       "inspDate": ""
+    },
+    {
+      "id": "fma_1782197774738",
+      "recvDate": "2026-06-11",
+      "analyst": "유병렬",
+      "process": "Field",
+      "customer": "OD Hitec",
+      "model": "G240HVN01.0",
+      "maker": "",
+      "qty": 1,
+      "defect": "BL defect",
+      "analysisType": "정림자체분석",
+      "sn": "U15A2C73QBZZZS0100(25/39)",
+      "memo": "검증을 위해 고객의 SYSTEM BOARD 제공 요청 중",
+      "fmaDate": "2026-06-11",
+      "rma": "",
+      "rmaIssueDate": "",
+      "dhlTrk": "",
+      "shipDate": "",
+      "delivDate": "",
+      "farSubmitDate": "2026-06-11",
+      "farDate": "2026-06-11",
+      "far1": "2026-06-11",
+      "status": "진행 中",
+      "duration1": 0,
+      "duration": 0,
+      "completePlan": "2026-06-11",
+      "fmaResult": "INRUSH CURRENT 문제 재기, 검증을 위해 고객의 SYSTEM BOARD 제공 요청 중",
+      "actionRecvDate": "",
+      "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782197774738_1782197774739.pdf",
+      "delPassword": "0507",
+      "reportName": "OD Hitech G240HVN01.0 BL defect 20260611.pdf"
     }
   ]
 }
