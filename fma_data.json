@@ -423,38 +423,6 @@
       "tripComplete": false,
       "quadrant": false,
       "inspDate": ""
-    },
-    {
-      "id": "fma_1782196478145",
-      "recvDate": "2026-06-23",
-      "analyst": "김성민",
-      "process": "Line",
-      "customer": "무한시스템",
-      "model": "G150XTN03.5",
-      "maker": "posbank",
-      "qty": 1,
-      "defect": "bl defect",
-      "analysisType": "정림자체분석",
-      "sn": "",
-      "memo": "asdf",
-      "fmaDate": "2026-06-23",
-      "rma": "",
-      "rmaIssueDate": "",
-      "dhlTrk": "",
-      "shipDate": "",
-      "delivDate": "",
-      "farSubmitDate": "2026-06-25",
-      "farDate": "2026-06-25",
-      "far1": "2026-06-24",
-      "status": "완료",
-      "duration1": 0.1,
-      "duration": 0.3,
-      "completePlan": "2026-06-25",
-      "fmaResult": "ddd",
-      "actionRecvDate": "2026-06-25",
-      "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782196478145_1782196478146.pdf",
-      "delPassword": "1234",
-      "reportName": "A070VW08_화면 이상 표시_762512101089_-_JUNGLIM.pdf"
     }
   ]
 }
