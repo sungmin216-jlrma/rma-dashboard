@@ -470,6 +470,38 @@
       "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782197774738_1782197774739.pdf",
       "delPassword": "0507",
       "reportName": "OD Hitech G240HVN01.0 BL defect 20260611.pdf"
+    },
+    {
+      "id": "fma_1782259098008",
+      "recvDate": "2026-03-17",
+      "analyst": "권혁진",
+      "process": "Field",
+      "customer": "Kortek",
+      "model": "G140HAB01.2",
+      "maker": "Samsung Medison",
+      "qty": 1,
+      "defect": "Abnormal Display",
+      "analysisType": "ADP(AUO)분석",
+      "sn": "D3553792VUZZZS0100",
+      "memo": "SZ Inventory 기간으로 tw로 변경, 발송 지연",
+      "fmaDate": "2026-03-18",
+      "rma": "702610101420",
+      "rmaIssueDate": "2026-03-24",
+      "dhlTrk": "1639575136",
+      "shipDate": "2026-03-26",
+      "delivDate": "2026-03-30",
+      "farSubmitDate": "2026-05-26",
+      "farDate": "2026-05-26",
+      "far1": "2026-05-13",
+      "status": "완료",
+      "duration1": 8,
+      "duration": 9.9,
+      "completePlan": "",
+      "fmaResult": "NDF",
+      "actionRecvDate": "",
+      "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782259098008_1782259098008.pdf",
+      "delPassword": "",
+      "reportName": "JUNGLIM-G140HAB01.2 NDF (RMA 702610101420).pdf"
     }
   ]
 }
