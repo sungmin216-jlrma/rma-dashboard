@@ -26,7 +26,7 @@
       "far3": "2025-12-11",
       "duration": 20.8,
       "cause": "",
-      "fmaResult": "VCOM 최적화 미흡으로 Flicker 개선 필요",
+      "fmaResult": "근본 원인 파악 안됨.VCOM 최적화 미흡으로 Flicker 개선 필요. ADP 기준 49~79, 정림 자체 관리 기준 49~70 적용.",
       "reportLink": "",
       "reportName": "",
       "actionRequired": "",
