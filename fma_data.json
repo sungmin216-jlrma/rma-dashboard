@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-06-18",
+  "lastUpdated": "2026-06-23",
   "data": [
     {
       "id": "fma_001",
-      "recvDate": "2025-11-19",
+      "recvDate": "",
       "analyst": "권혁진",
       "process": "Medison OQC",
       "customer": "Kortek",
@@ -13,15 +13,15 @@
       "defect": "Flicker",
       "qty": 3,
       "memo": "FMA 요청, 정림 Board Kit 동봉\nDHL TRK. : 2862474871  11/21 발송 25일 배송완료예정",
-      "fmaDate": "2025-11-19",
+      "fmaDate": "",
       "rma": "702510106891",
-      "rmaIssueDate": "2025-11-21",
+      "rmaIssueDate": "",
       "dhlTrk": "2862474871",
-      "shipDate": "2025-11-21",
-      "delivDate": "2025-11-25",
+      "shipDate": "",
+      "delivDate": "",
       "status": "완료",
-      "farDate": "2026-04-13",
-      "far1": "2025-12-01",
+      "farDate": "",
+      "far1": "",
       "far2": "2025-12-10",
       "far3": "2025-12-11",
       "duration": 20.8,
@@ -41,7 +41,10 @@
       "tripReg": false,
       "tripComplete": false,
       "quadrant": false,
-      "inspDate": ""
+      "inspDate": "",
+      "analysisType": "ADP(AUO)분석",
+      "duration1": "",
+      "delPassword": ""
     },
     {
       "id": "fma_002",
