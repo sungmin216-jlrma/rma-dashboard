@@ -335,8 +335,8 @@
       "shipDate": "2026-04-10",
       "delivDate": "2026-04-14",
       "status": "완료",
-      "farDate": "2026-05-14",
-      "far1": "",
+      "farDate": "",
+      "far1": "2026-05-14",
       "far2": "",
       "far3": "",
       "duration": 5.6,
@@ -358,7 +358,7 @@
       "quadrant": false,
       "inspDate": "",
       "analysisType": "ADP(AUO)분석",
-      "duration1": "",
+      "duration1": 5.3,
       "delPassword": ""
     },
     {
