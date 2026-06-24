@@ -514,6 +514,37 @@
       "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782259098008_1782259098008.pdf",
       "delPassword": "",
       "reportName": "JUNGLIM-G140HAB01.2 NDF (RMA 702610101420).pdf"
+    },
+    {
+      "id": "fma_1782267012485",
+      "recvDate": "2026-06-05",
+      "analyst": "권혁진",
+      "process": "Line",
+      "customer": "Kortek",
+      "model": "G140HAB01.2",
+      "maker": "Samsung Medison",
+      "qty": 2,
+      "defect": "BL White line",
+      "analysisType": "ADP(AUO)분석",
+      "sn": "DF5582C5QRZZZS0100\nD3552BZ6KHZZZS0100",
+      "memo": "5월 코텍 RMA 입고분 중 ADP에서 분석 필요하다고 판단하여 분석 진행",
+      "fmaDate": "2026-06-02",
+      "rma": "762612101538",
+      "rmaIssueDate": "2026-06-05",
+      "dhlTrk": "해상",
+      "shipDate": "2026-06-17",
+      "delivDate": "",
+      "farSubmitDate": "",
+      "farDate": "",
+      "far1": "",
+      "status": "진행 中",
+      "duration1": "",
+      "duration": "",
+      "completePlan": "",
+      "fmaResult": "",
+      "actionRecvDate": "",
+      "reportLink": "",
+      "delPassword": ""
     }
   ]
 }
