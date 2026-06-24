@@ -545,6 +545,38 @@
       "actionRecvDate": "",
       "reportLink": "",
       "delPassword": ""
+    },
+    {
+      "id": "fma_1782287220800",
+      "recvDate": "2026-01-08",
+      "analyst": "유병렬",
+      "process": "Line",
+      "customer": "알파디스플레이",
+      "model": "P320HVN02.3",
+      "maker": "",
+      "qty": 2,
+      "defect": "No display",
+      "analysisType": "정림자체분석",
+      "sn": "3B5F5FB7SGZZZS1300\n3B5F6FF3KRZZZS1300",
+      "memo": "",
+      "fmaDate": "2026-01-08",
+      "rma": "",
+      "rmaIssueDate": "",
+      "dhlTrk": "",
+      "shipDate": "",
+      "delivDate": "",
+      "farSubmitDate": "2026-01-21",
+      "farDate": "2026-01-21",
+      "far1": "2026-01-21",
+      "status": "완료",
+      "duration1": 1.9,
+      "duration": 1.9,
+      "completePlan": "",
+      "fmaResult": "ESD 로 인한 U701 Level Shift IC damage 흔적 확인",
+      "actionRecvDate": "",
+      "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782287220800_1782287220851.pdf",
+      "delPassword": "0507",
+      "reportName": "Alpha display P320HVN02.3 No display FMA 20260121.pdf"
     }
   ]
 }
