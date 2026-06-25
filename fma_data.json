@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-24",
+  "lastUpdated": "2026-06-25",
   "data": [
     {
       "id": "fma_001",
@@ -527,7 +527,7 @@
       "defect": "BL White line",
       "analysisType": "ADP(AUO)분석",
       "sn": "DF5582C5QRZZZS0100\nD3552BZ6KHZZZS0100",
-      "memo": "5월 코텍 RMA 입고분 중 ADP에서 분석 필요하다고 판단하여 분석 진행",
+      "memo": "5월 코텍 RMA 입고분 중 ADP에서 분석 필요하다고 판단하여 분석 진행\n고객사 요청건이 아니라 다른 RMA 패널과 같이 발송하여 발송 늦어짐.",
       "fmaDate": "2026-06-02",
       "rma": "762612101538",
       "rmaIssueDate": "2026-06-05",
