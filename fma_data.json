@@ -608,6 +608,37 @@
       "actionRecvDate": "",
       "reportLink": "",
       "delPassword": ""
+    },
+    {
+      "id": "fma_1782370587345",
+      "recvDate": "2026-06-16",
+      "analyst": "권혁진",
+      "process": "Line",
+      "customer": "Kortek",
+      "model": "G215HAN01.5",
+      "maker": "Samsung Medison",
+      "qty": 1,
+      "defect": "Mura (aging 시 사라짐)",
+      "analysisType": "ADP(AUO)분석",
+      "sn": "LF6A3KY6TFZZZS0101",
+      "memo": "",
+      "fmaDate": "2026-06-18",
+      "rma": "702610103240",
+      "rmaIssueDate": "2026-06-24",
+      "dhlTrk": "8240519416",
+      "shipDate": "2026-06-24",
+      "delivDate": "",
+      "farSubmitDate": "",
+      "farDate": "",
+      "far1": "",
+      "status": "진행 中",
+      "duration1": "",
+      "duration": "",
+      "completePlan": "",
+      "fmaResult": "",
+      "actionRecvDate": "",
+      "reportLink": "",
+      "delPassword": ""
     }
   ]
 }
