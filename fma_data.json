@@ -577,6 +577,37 @@
       "reportLink": "https://raw.githubusercontent.com/sungmin216-jlrma/rma-dashboard/main/fma-reports/fma_1782287220800_1782287220851.pdf",
       "delPassword": "0507",
       "reportName": "Alpha display P320HVN02.3 No display FMA 20260121.pdf"
+    },
+    {
+      "id": "fma_1782370323901",
+      "recvDate": "2026-06-16",
+      "analyst": "권혁진",
+      "process": "Line",
+      "customer": "Kortek",
+      "model": "G215HAN01.5",
+      "maker": "Samsung Medison",
+      "qty": 3,
+      "defect": "Yellowish Mura",
+      "analysisType": "ADP(AUO)분석",
+      "sn": "LF6A3K34HJZZZS0101\nLF6A3K34HFZZZS0101\nLF6A3K34HRZZZS0101",
+      "memo": "",
+      "fmaDate": "2026-06-18",
+      "rma": "762612101806",
+      "rmaIssueDate": "2026-06-23",
+      "dhlTrk": "6862003105",
+      "shipDate": "2026-06-23",
+      "delivDate": "",
+      "farSubmitDate": "",
+      "farDate": "",
+      "far1": "",
+      "status": "진행 中",
+      "duration1": "",
+      "duration": "",
+      "completePlan": "",
+      "fmaResult": "",
+      "actionRecvDate": "",
+      "reportLink": "",
+      "delPassword": ""
     }
   ]
 }
