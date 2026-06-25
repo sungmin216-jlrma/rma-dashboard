@@ -639,6 +639,37 @@
       "actionRecvDate": "",
       "reportLink": "",
       "delPassword": ""
+    },
+    {
+      "id": "fma_1782370901900",
+      "recvDate": "2026-06-17",
+      "analyst": "권혁진",
+      "process": "Medison OQC",
+      "customer": "Kortek",
+      "model": "G215HAN01.5",
+      "maker": "Samsung Medison",
+      "qty": 1,
+      "defect": "Friction Noise During Tilting",
+      "analysisType": "ADP(AUO)분석",
+      "sn": "LF6A3M32YTZZZS0101",
+      "memo": "",
+      "fmaDate": "2026-06-18",
+      "rma": "762612101807",
+      "rmaIssueDate": "2026-06-23",
+      "dhlTrk": "6862003105",
+      "shipDate": "2026-06-23",
+      "delivDate": "",
+      "farSubmitDate": "",
+      "farDate": "",
+      "far1": "",
+      "status": "진행 中",
+      "duration1": "",
+      "duration": "",
+      "completePlan": "",
+      "fmaResult": "",
+      "actionRecvDate": "",
+      "reportLink": "",
+      "delPassword": ""
     }
   ]
 }
