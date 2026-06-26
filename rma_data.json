@@ -1,1 +1,4949 @@
-{"1":{"total":125,"완료cnt":106,"applyCnt":0,"repairCnt":7,"자체수리cnt":11,"미정cnt":1,"완료drill":[{"cust":"정림재고(코텍)","model":"G154EVN01.001 (Z)","cnt":13},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":13},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":8},{"cust":"정림재고(판타룩스)","model":"G156HAN02.001 (Z)","cnt":5},{"cust":"정림재고(코텍)","model":"P215HAN01.100 (Z)","cnt":5},{"cust":"정림재고(판타룩스)","model":"G156HAN02.000 (P)","cnt":4},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":4},{"cust":"정림재고(코텍)","model":"G140HAB01.200 (Z)","cnt":4},{"cust":"토비스","model":"G215HAN01.200 (Z)","cnt":3},{"cust":"정림재고(알파디스플레이)","model":"P320HVN02.300 (Z)","cnt":2},{"cust":"한솔오리온텍","model":"G240HW01.004 (Z)","cnt":2},{"cust":"정림재고(판타룩스)","model":"G156HAN02.000 (Z)","cnt":2},{"cust":"토비스","model":"G185HAN01.004 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":2},{"cust":"정림재고(코텍)","model":"G238HAN02.005 (Z)","cnt":2},{"cust":"에프디에스","model":"P424KVN01.0A0 (Z)","cnt":1},{"cust":"동경티앤씨","model":"G215HVN01.300 (Z)","cnt":1},{"cust":"정림재고(154솔팅중불량)","model":"G154EVN01.001 (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"정림재고(코텍)","model":"G154EVN01.001 (Z)","cnt":2},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":2},{"cust":"정림재고(오디하이텍)","model":"P320HVN04.500 (Z)","cnt":1},{"cust":"정림재고(엔엑스오)","model":"P430HVN05.101 (Z)","cnt":1},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":1}],"미정drill":[{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":1}],"자체수리drill":[{"cust":"판타룩스","model":"G156HAN02.001 (Z)","cnt":6},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":3},{"cust":"리더원","model":"G150XTN06.A00 (Z)","cnt":1},{"cust":"판타룩스","model":"G156HAN02.000 (P)","cnt":1}],"routes":[{"name":"RMA","cnt":56},{"name":"정림보상대상","cnt":21},{"name":"자체수리완료","cnt":11},{"name":"spec in","cnt":11},{"name":"FMA","cnt":10},{"name":"RMA미대상","cnt":8},{"name":"RMA(IQC)","cnt":5},{"name":"NDF","cnt":2},{"name":"고객과실","cnt":1}],"bu":[{"name":"GDBU","cnt":114},{"name":"PDBU","cnt":10},{"name":"AUO_MNT","cnt":1}],"defects":[{"name":"Bright dot","cnt":11},{"name":"particle 이물제거완료","cnt":6},{"name":"Gravity mura","cnt":6},{"name":"No display","cnt":4},{"name":"Round mura (spec in)","cnt":4},{"name":"Gravity Mura","cnt":4},{"name":"White spot","cnt":4},{"name":"Mura","cnt":4},{"name":"Mura ND 6%","cnt":4},{"name":"small bright dot (spec in)","cnt":4}],"customers":[{"name":"정림재고(코텍)","cnt":28},{"name":"판타룩스","cnt":15},{"name":"정림재고(자연과사람)","cnt":13},{"name":"정림재고(판타룩스)","cnt":12},{"name":"파인더즈","cnt":10},{"name":"정림재고(파인더즈)","cnt":10},{"name":"토비스","cnt":8},{"name":"자연과사람","cnt":8},{"name":"코텍","cnt":5},{"name":"정림재고(알파디스플레이)","cnt":2}],"rmaTop10":[{"name":"G156HAB03.200 (Z)","cnt":3},{"name":"G154EVN01.001 (Z)","cnt":2},{"name":"P320HVN04.500 (Z)","cnt":1},{"name":"P430HVN05.101 (Z)","cnt":1},{"name":"G140HAB01.200 (Z)","cnt":1}],"selfFix":{"total":11,"models":[{"cust":"판타룩스","model":"G156HAN02.001 (Z)","cnt":6},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":3},{"cust":"리더원","model":"G150XTN06.A00 (Z)","cnt":1},{"cust":"판타룩스","model":"G156HAN02.000 (P)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":7,"완료cnt":5,"applyCnt":0,"repairCnt":1,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"정림재고(알파디스플레이)","cnt":2},{"name":"에프디에스","cnt":1},{"name":"리더원","cnt":1},{"name":"동경티앤씨","cnt":1},{"name":"정림재고(오디하이텍)","cnt":1}],"topModels":[{"name":"P320HVN02.300 (Z)","cnt":2},{"name":"P424KVN01.0A0 (Z)","cnt":1},{"name":"G150XTN06.A00 (Z)","cnt":1},{"name":"G215HVN01.300 (Z)","cnt":1},{"name":"P320HVN04.500 (Z)","cnt":1}]},"2":{"total":46,"완료cnt":35,"applyCnt":0,"repairCnt":1,"자체수리cnt":10,"미정cnt":0,"topCusts":[{"name":"판타룩스","cnt":13},{"name":"정림재고(판타룩스)","cnt":11},{"name":"정림재고(파인더즈)","cnt":8},{"name":"토비스","cnt":8},{"name":"파인더즈","cnt":2}],"topModels":[{"name":"G156HAN02.001 (Z)","cnt":12},{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G156HAN02.000 (Z)","cnt":7},{"name":"G156HAN02.000 (P)","cnt":4},{"name":"G215HAN01.200 (Z)","cnt":3}]},"3":{"total":41,"완료cnt":37,"applyCnt":0,"repairCnt":3,"자체수리cnt":0,"미정cnt":1,"topCusts":[{"name":"정림재고(코텍)","cnt":28},{"name":"파인더즈","cnt":8},{"name":"코텍","cnt":2},{"name":"정림재고(파인더즈)","cnt":2},{"name":"피에스플러스","cnt":1}],"topModels":[{"name":"G154EVN01.001 (Z)","cnt":15},{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"P215HAN01.100 (Z)","cnt":5},{"name":"G140HAB01.200 (Z)","cnt":4},{"name":"G238HAN02.005 (Z)","cnt":2}]},"4":{"total":30,"완료cnt":28,"applyCnt":0,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"정림재고(자연과사람)","cnt":13},{"name":"자연과사람","cnt":8},{"name":"코텍","cnt":3},{"name":"판타룩스","cnt":2},{"name":"정림재고(판타룩스)","cnt":1}],"topModels":[{"name":"G190ETN01.204 (Z)","cnt":21},{"name":"G156HAB03.200 (Z)","cnt":2},{"name":"G156HAN02.000 (Z)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":1},{"name":"G156HAN02.000 (P)","cnt":1}]},"5":{"total":1,"완료cnt":1,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"네오아이씨피","cnt":1}],"topModels":[{"name":"G150XTN03.501 (Z)","cnt":1}]}}},"2":{"total":552,"완료cnt":303,"applyCnt":0,"repairCnt":244,"자체수리cnt":4,"미정cnt":1,"완료drill":[{"cust":"브이피랩","model":"M240UAN02.3QY (P)","cnt":98},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":61},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":44},{"cust":"코텍(베트남)12,13th","model":"M315QVN01.000 (Z)","cnt":14},{"cust":"브이피랩","model":"M240UAN02.3QY (N)","cnt":12},{"cust":"코텍(베트남)12,13th","model":"G101EVN01.002 (Z)","cnt":12},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"아이텔코리아","model":"G104XVN01.010 (Z)","cnt":9},{"cust":"무한시스템","model":"G150XTN03.500 (Z)","cnt":6},{"cust":"코텍(베트남)12,13th","model":"M270HVR01.105 O/C (Z)","cnt":5},{"cust":"디앤티","model":"G050VTN01.001 (Z)","cnt":5},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (P)","cnt":4},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":4},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":3},{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":3},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (P)","cnt":2},{"cust":"화영시스템","model":"P430HVN01.400 (Z)","cnt":2},{"cust":"디앤티","model":"G320ZAN02.302 (Z)","cnt":2},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":2},{"cust":"화영시스템","model":"P430HVN01.401 (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"정림재고(코텍)","model":"G156HAB03.200 (Z)","cnt":190},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":11},{"cust":"디앤티","model":"G238HAN02.005 (Z)","cnt":9},{"cust":"코텍","model":"G550ZVN01.000 (Z)","cnt":8},{"cust":"디앤티","model":"G050VTN01.001 (Z)","cnt":8},{"cust":"디앤티","model":"G270ZAN01.100 (Z)","cnt":3},{"cust":"디앤티","model":"G320ZAN02.302 (Z)","cnt":3},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":3},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":2},{"cust":"토비스","model":"G121EAN01.102 (Z)","cnt":2},{"cust":"디앤티","model":"G238HAN02.000 (Z)","cnt":2},{"cust":"코텍","model":"P215HAN01.100 (Z)","cnt":2},{"cust":"무한시스템","model":"G156XTN01.000 (P)","cnt":1}],"미정drill":[{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":1}],"자체수리drill":[{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":1},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":1},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":463},{"name":"spec in","cnt":19},{"name":"보증기간만료","cnt":14},{"name":"정림보상대상","cnt":13},{"name":"고객과실","cnt":12},{"name":"NDF","cnt":11},{"name":"FMA","cnt":7},{"name":"RMA미대상","cnt":7},{"name":"자체수리완료","cnt":4},{"name":"폐기","cnt":1}],"bu":[{"name":"GDBU","cnt":416},{"name":"AUO_MNT","cnt":130},{"name":"PDBU","cnt":6}],"defects":[{"name":"Mura issue","cnt":193},{"name":"V-line","cnt":110},{"name":"greenish screen","cnt":30},{"name":"No display","cnt":12},{"name":"Light leakage  (spec in)","cnt":11},{"name":"B/L defect All off","cnt":10},{"name":"NDF","cnt":10},{"name":"V-line defect","cnt":9},{"name":"Localized light leakage ND 5% check","cnt":8},{"name":"BNU NG","cnt":8}],"customers":[{"name":"정림재고(코텍)","cnt":190},{"name":"코텍(베트남)12,13th","cnt":145},{"name":"브이피랩","cnt":110},{"name":"디앤티","cnt":33},{"name":"무한시스템","cnt":22},{"name":"코텍","cnt":14},{"name":"파인더즈","cnt":10},{"name":"아이텔코리아","cnt":9},{"name":"현대에이치티","cnt":5},{"name":"정림재고(자연과사람)","cnt":5}],"rmaTop10":[{"name":"G156HAB03.200 (Z)","cnt":193},{"name":"G156XTN01.000 (Z)","cnt":11},{"name":"G238HAN02.005 (Z)","cnt":9},{"name":"G550ZVN01.000 (Z)","cnt":8},{"name":"G050VTN01.001 (Z)","cnt":8},{"name":"G270ZAN01.100 (Z)","cnt":3},{"name":"G320ZAN02.302 (Z)","cnt":3},{"name":"G190ETN01.204 (Z)","cnt":3},{"name":"G121EAN01.102 (Z)","cnt":2},{"name":"G238HAN02.000 (Z)","cnt":2}],"selfFix":{"total":4,"models":[{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":1},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":1},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":184,"완료cnt":143,"applyCnt":0,"repairCnt":37,"자체수리cnt":3,"미정cnt":1,"topCusts":[{"name":"코텍(베트남)12,13th","cnt":145},{"name":"정림재고(코텍)","cnt":35},{"name":"코텍","cnt":3},{"name":"싸이몬","cnt":1}],"topModels":[{"name":"G156HAN05.004 (Z)","cnt":62},{"name":"G133HAN01.101 (Z)","cnt":45},{"name":"G156HAB03.200 (Z)","cnt":38},{"name":"M315QVN01.000 (Z)","cnt":14},{"name":"G101EVN01.002 (Z)","cnt":12}]},"2":{"total":332,"완료cnt":132,"applyCnt":0,"repairCnt":200,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"정림재고(코텍)","cnt":155},{"name":"브이피랩","cnt":110},{"name":"디앤티","cnt":33},{"name":"무한시스템","cnt":22},{"name":"코텍","cnt":9}],"topModels":[{"name":"G156HAB03.200 (Z)","cnt":155},{"name":"M240UAN02.3QY (P)","cnt":98},{"name":"G156XTN01.000 (Z)","cnt":14},{"name":"G050VTN01.001 (Z)","cnt":13},{"name":"M240UAN02.3QY (N)","cnt":12}]},"3":{"total":2,"완료cnt":0,"applyCnt":0,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"코텍","cnt":2}],"topModels":[{"name":"P215HAN01.100 (Z)","cnt":2}]},"4":{"total":34,"완료cnt":28,"applyCnt":0,"repairCnt":5,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":10},{"name":"아이텔코리아","cnt":9},{"name":"현대에이치티","cnt":5},{"name":"정림재고(자연과사람)","cnt":5},{"name":"자연과사람","cnt":3}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G104XVN01.010 (Z)","cnt":9},{"name":"G190ETN01.204 (Z)","cnt":8},{"name":"G101STN01.500 (Z)","cnt":5},{"name":"G121EAN01.102 (Z)","cnt":2}]}}},"3":{"total":173,"완료cnt":51,"applyCnt":1,"repairCnt":97,"자체수리cnt":18,"미정cnt":6,"완료drill":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":21},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":11},{"cust":"지에스디","model":"G173HW01.002 (Z)","cnt":6},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":6},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":4},{"cust":"에프게이트","model":"M170ETN01.10D (Z)","cnt":1},{"cust":"정림재고(이젠티에스)","model":"G121XN01.001 (Z)","cnt":1},{"cust":"코텍","model":"G270QAN01.401 (Z)","cnt":1}],"applyDrill":[{"cust":"정림재고(티엘비전)","model":"G156HAN05.004 (Z)","cnt":1}],"repairDrill":[{"cust":"정림재고(코텍)","model":"G156HAB03.200 (Z)","cnt":82},{"cust":"리더원","model":"G170EG01.104 (Z)","cnt":4},{"cust":"코텍","model":"G550ZVN01.000 (Z)","cnt":4},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":2},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":2},{"cust":"현대아이티","model":"P320HVN04.500 (Z)","cnt":1},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":1},{"cust":"정림재고(알파디스플레이)","model":"P320HVN02.300 (Z)","cnt":1}],"미정drill":[{"cust":"토비스","model":"G140HAB01.300 (Z)","cnt":2},{"cust":"글로벌전자","model":"M240UAN02.001 (P)","cnt":2},{"cust":"정림재고(티엘비전)","model":"G156HAN05.004 (Z)","cnt":1},{"cust":"글로벌전자","model":"M240UAN02.0DB (P)","cnt":1}],"자체수리drill":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":17},{"cust":"에프게이트","model":"P370IVN02.201 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":105},{"name":"정림보상대상","cnt":18},{"name":"자체수리완료","cnt":18},{"name":"spec in","cnt":15},{"name":"FMA","cnt":8},{"name":"NDF","cnt":7},{"name":"RMA(IQC)","cnt":1},{"name":"고객과실","cnt":1}],"bu":[{"name":"GDBU","cnt":125},{"name":"PDBU","cnt":45},{"name":"AUO_MNT","cnt":3}],"defects":[{"name":"Mura issue","cnt":85},{"name":"자체수리완료 particle D=0.6mm","cnt":8},{"name":"NDF","cnt":7},{"name":"Abnormal display","cnt":5},{"name":"V-block defect","cnt":4},{"name":"Mura ND 6% spec in","cnt":4},{"name":"시야각 45도 White spot 정면에서 안보임 ND2% spec in","cnt":3},{"name":"자체수리완료 particle D=0.5mm","cnt":3},{"name":"Particle D=0.8mm","cnt":3},{"name":"localized bottom mura ND 5% check","cnt":3}],"customers":[{"name":"정림재고(코텍)","cnt":82},{"name":"에스제이아이","cnt":38},{"name":"파인더즈","cnt":11},{"name":"토비스","cnt":11},{"name":"코텍","cnt":7},{"name":"지에스디","cnt":6},{"name":"싸이몬","cnt":4},{"name":"리더원","cnt":4},{"name":"글로벌전자","cnt":3},{"name":"정림재고(티엘비전)","cnt":2}],"rmaTop10":[{"name":"G156HAB03.200 (Z)","cnt":82},{"name":"G170EG01.104 (Z)","cnt":4},{"name":"G550ZVN01.000 (Z)","cnt":4},{"name":"G140HAB01.300 (Z)","cnt":2},{"name":"G215HAN01.501 (Z)","cnt":2},{"name":"M240UAN02.001 (P)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":2},{"name":"G156HAN05.004 (Z)","cnt":1},{"name":"P320HVN04.500 (Z)","cnt":1},{"name":"G215HAN01.701 (Z)","cnt":1}],"selfFix":{"total":18,"models":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":17},{"cust":"에프게이트","model":"P370IVN02.201 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":135,"완료cnt":29,"applyCnt":1,"repairCnt":87,"자체수리cnt":17,"미정cnt":1,"topCusts":[{"name":"정림재고(코텍)","cnt":82},{"name":"에스제이아이","cnt":38},{"name":"지에스디","cnt":6},{"name":"코텍","cnt":4},{"name":"정림재고(티엘비전)","cnt":2}],"topModels":[{"name":"G156HAB03.200 (Z)","cnt":82},{"name":"P215HAN01.100 (Z)","cnt":38},{"name":"G173HW01.002 (Z)","cnt":6},{"name":"G550ZVN01.000 (Z)","cnt":4},{"name":"G156HAN05.004 (Z)","cnt":2}]},"2":{"total":3,"완료cnt":2,"applyCnt":0,"repairCnt":0,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"싸이몬","cnt":2},{"name":"에프게이트","cnt":1}],"topModels":[{"name":"M190ETN01.00E (Z)","cnt":2},{"name":"P370IVN02.201 (Z)","cnt":1}]},"3":{"total":18,"완료cnt":7,"applyCnt":0,"repairCnt":9,"자체수리cnt":0,"미정cnt":2,"topCusts":[{"name":"토비스","cnt":11},{"name":"리더원","cnt":4},{"name":"코텍","cnt":3}],"topModels":[{"name":"G215HAN01.501 (Z)","cnt":8},{"name":"G170EG01.104 (Z)","cnt":4},{"name":"G140HAB01.300 (Z)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":2},{"name":"G215HAN01.701 (Z)","cnt":1}]},"4":{"total":15,"완료cnt":11,"applyCnt":0,"repairCnt":1,"자체수리cnt":0,"미정cnt":3,"topCusts":[{"name":"파인더즈","cnt":10},{"name":"글로벌전자","cnt":3},{"name":"정림재고(이젠티에스)","cnt":1},{"name":"정림재고(알파디스플레이)","cnt":1}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"M240UAN02.001 (P)","cnt":2},{"name":"G121XN01.001 (Z)","cnt":1},{"name":"P320HVN02.300 (Z)","cnt":1},{"name":"M240UAN02.0DB (P)","cnt":1}]},"5":{"total":2,"완료cnt":2,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"싸이몬","cnt":2}],"topModels":[{"name":"M190ETN01.00E (Z)","cnt":2}]}}},"4":{"total":100,"완료cnt":43,"applyCnt":0,"repairCnt":32,"자체수리cnt":15,"미정cnt":10,"완료drill":[{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":9},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":8},{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":3},{"cust":"중앙첨단소재","model":"P370IVN02.201 (Z)","cnt":3},{"cust":"코텍(베트남)","model":"G133HAN01.101 (Z)","cnt":2},{"cust":"MDS코리아","model":"P320HVN06.500 (Z)","cnt":2},{"cust":"비덴트","model":"G240UAN01.200 (Z)","cnt":2},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":2},{"cust":"폐기완료(에프디에스)","model":"M215HTN01.1HE (P)","cnt":1},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":1},{"cust":"토비스","model":"G121EAN01.102 (Z)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (P)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (Z)","cnt":1},{"cust":"무한시스템","model":"G215HAN01.301 (Z)","cnt":1},{"cust":"정림재고(열방)","model":"G084SAN01.000 (Z)","cnt":1},{"cust":"오디하이텍","model":"G240HVN01.000 (Z)","cnt":1},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":1},{"cust":"정림재고(이미지셀)","model":"G240HVN01.000 (Z)","cnt":1},{"cust":"무한시스템","model":"G156XTN01.000 (P)","cnt":1},{"cust":"무한시스템","model":"M270HVN02.00D (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":11},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":6},{"cust":"정림재고(직방)","model":"G101STN01.500 (Z)","cnt":4},{"cust":"무한시스템","model":"G150XTN03.500 (Z)","cnt":2},{"cust":"정림재고(림피아디스플레이)","model":"G240HW01.104 (Z)","cnt":2},{"cust":"리더원","model":"G170EG01.104 (Z)","cnt":2},{"cust":"정림재고(제이엘디엔티)","model":"G156HAN02.303 (Z)","cnt":1},{"cust":"MDS코리아","model":"P320HVN06.500 (Z)","cnt":1},{"cust":"리더원","model":"M238HVN01.0HE (Z)","cnt":1},{"cust":"정림전자","model":"G320ZAN02.502 (Z)","cnt":1},{"cust":"무한시스템","model":"G215HAN01.301 (Z)","cnt":1}],"미정drill":[{"cust":"코텍HQ","model":"G140HAB01.200 (Z)","cnt":6},{"cust":"정림재고(토비스)","model":"G215HAN01.501 (Z)","cnt":2},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":1},{"cust":"싸이몬","model":"G104STN01.600 (Z)","cnt":1}],"자체수리drill":[{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":8},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":3},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":3},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":35},{"name":"정림보상대상","cnt":21},{"name":"자체수리완료","cnt":15},{"name":"FMA","cnt":13},{"name":"NDF","cnt":4},{"name":"FMA미대상","cnt":4},{"name":"고객과실","cnt":3},{"name":"No junglim","cnt":2},{"name":"RMA미대상","cnt":1},{"name":"spec in","cnt":1}],"bu":[{"name":"GDBU","cnt":92},{"name":"PDBU","cnt":7},{"name":"AUO_MNT","cnt":1}],"defects":[{"name":"Gravity mura","cnt":9},{"name":"이물수리완료","cnt":7},{"name":"Chipping","cnt":6},{"name":"B/L defect (all off)","cnt":5},{"name":"NDF","cnt":5},{"name":"H-line defect","cnt":4},{"name":"No display","cnt":4},{"name":"Abnormal display","cnt":4},{"name":"Particle D=0.6mm","cnt":3},{"name":"Brightness defect 자체 수리완료","cnt":3}],"customers":[{"name":"무한시스템","cnt":28},{"name":"아이텔코리아","cnt":11},{"name":"에스제이아이","cnt":11},{"name":"파인더즈","cnt":9},{"name":"코텍HQ","cnt":6},{"name":"정림재고(직방)","cnt":4},{"name":"직방","cnt":4},{"name":"MDS코리아","cnt":3},{"name":"리더원","cnt":3},{"name":"중앙첨단소재","cnt":3}],"rmaTop10":[{"name":"G156XTN01.000 (Z)","cnt":11},{"name":"G140HAB01.200 (Z)","cnt":6},{"name":"G101EAN02.101 (Z)","cnt":6},{"name":"G101STN01.500 (Z)","cnt":4},{"name":"G215HAN01.501 (Z)","cnt":2},{"name":"G150XTN03.500 (Z)","cnt":2},{"name":"G240HW01.104 (Z)","cnt":2},{"name":"G170EG01.104 (Z)","cnt":2},{"name":"G156HAN02.303 (Z)","cnt":1},{"name":"P320HVN06.500 (Z)","cnt":1}],"selfFix":{"total":15,"models":[{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":8},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":3},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":3},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":33,"완료cnt":14,"applyCnt":0,"repairCnt":8,"자체수리cnt":3,"미정cnt":8,"topCusts":[{"name":"무한시스템","cnt":9},{"name":"코텍HQ","cnt":6},{"name":"정림재고(직방)","cnt":4},{"name":"직방","cnt":4},{"name":"정림재고(토비스)","cnt":2}],"topModels":[{"name":"G101STN01.500 (Z)","cnt":8},{"name":"G140HAB01.200 (Z)","cnt":6},{"name":"G156XTN01.000 (Z)","cnt":5},{"name":"G215HAN01.501 (Z)","cnt":2},{"name":"G133HAN01.101 (Z)","cnt":2}]},"2":{"total":5,"완료cnt":3,"applyCnt":0,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"MDS코리아","cnt":3},{"name":"정림재고(림피아디스플레이)","cnt":1},{"name":"오디하이텍","cnt":1}],"topModels":[{"name":"P320HVN06.500 (Z)","cnt":3},{"name":"G240HW01.104 (Z)","cnt":1},{"name":"G240HVN01.000 (Z)","cnt":1}]},"3":{"total":13,"완료cnt":10,"applyCnt":0,"repairCnt":3,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":9},{"name":"리더원","cnt":3},{"name":"정림재고(파인더즈)","cnt":1}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":11},{"name":"G170EG01.104 (Z)","cnt":2}]},"4":{"total":30,"완료cnt":9,"applyCnt":0,"repairCnt":8,"자체수리cnt":11,"미정cnt":2,"topCusts":[{"name":"아이텔코리아","cnt":11},{"name":"에스제이아이","cnt":11},{"name":"중앙첨단소재","cnt":3},{"name":"정림재고(이미지셀)","cnt":1},{"name":"코텍","cnt":1}],"topModels":[{"name":"G121EAN01.001 (Z)","cnt":11},{"name":"G101EAN02.101 (Z)","cnt":11},{"name":"P370IVN02.201 (Z)","cnt":3},{"name":"G240HVN01.000 (Z)","cnt":1},{"name":"G156HAB03.200 (Z)","cnt":1}]},"5":{"total":19,"완료cnt":7,"applyCnt":0,"repairCnt":11,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"무한시스템","cnt":19}],"topModels":[{"name":"G156XTN01.000 (Z)","cnt":15},{"name":"G150XTN03.500 (Z)","cnt":1},{"name":"G156XTN01.000 (P)","cnt":1},{"name":"G215HAN01.301 (Z)","cnt":1},{"name":"M270HVN02.00D (Z)","cnt":1}]}}},"5":{"total":202,"완료cnt":68,"applyCnt":51,"repairCnt":73,"자체수리cnt":6,"미정cnt":4,"완료drill":[{"cust":"노크","model":"P370IVN02.201 (Z)","cnt":18},{"cust":"코텍(베트남)14th","model":"G156HAN05.004 (Z)","cnt":11},{"cust":"코리스","model":"P320HVN06.110 (Z)","cnt":8},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":5},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":5},{"cust":"판타룩스","model":"M238HVN01.0HE (Z)","cnt":4},{"cust":"픽셀런트","model":"G320ZAN02.502 (Z)","cnt":3},{"cust":"코리스","model":"G101EVN01.002 (P)","cnt":2},{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":2},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":2},{"cust":"코리스","model":"M215HAN01.201 (Z)","cnt":1},{"cust":"코리스","model":"P430QVN01.000 (Z)","cnt":1},{"cust":"코리스","model":"P430HVN01.401 (Z)","cnt":1},{"cust":"코리스","model":"P430QVN01.003 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"리더원","model":"G173HW01.004 (Z)","cnt":1},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":1}],"applyDrill":[{"cust":"판타룩스","model":"M238HVN01.0HE (Z)","cnt":40},{"cust":"코텍","model":"P215HAN01.100 (Z)","cnt":10},{"cust":"코리스","model":"P320HVN06.110 (Z)","cnt":1}],"repairDrill":[{"cust":"코텍(베트남)14th","model":"G156HAN05.004 (Z)","cnt":25},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":18},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":6},{"cust":"코텍","model":"G238HAN02.005 (Z)","cnt":5},{"cust":"정림전자","model":"G140HAB01.200 (Z)","cnt":4},{"cust":"픽셀런트","model":"G320ZAN02.502 (Z)","cnt":3},{"cust":"한솔오리온텍","model":"G101EVN01.002 (Z)","cnt":3},{"cust":"코텍","model":"G101EVN01.002 (Z)","cnt":2},{"cust":"닛시네이처","model":"G185HAN01.104 (Z)","cnt":1},{"cust":"닛시네이처","model":"G150XAN02.100 (Z)","cnt":1},{"cust":"지에스디","model":"G185HAN01.005 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G101EVN01.002 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"정림재고 (에프디에스)","model":"G173HW01.004 (Z)","cnt":1}],"미정drill":[{"cust":"판타룩스","model":"M238HVN01.0HE (Z)","cnt":2},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":2}],"자체수리drill":[{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":3},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"코텍","model":"G154EVN01.001 (Z)","cnt":1},{"cust":"엠트리","model":"P430QVN01.000 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":129},{"name":"RMA미대상","cnt":20},{"name":"정림보상대상","cnt":17},{"name":"NDF","cnt":10},{"name":"자체수리완료","cnt":6},{"name":"고객과실","cnt":6},{"name":"spec in","cnt":6},{"name":"FMA","cnt":5},{"name":"RMA(IQC)","cnt":2},{"name":"FMA미대상","cnt":1}],"bu":[{"name":"GDBU","cnt":158},{"name":"PDBU","cnt":41},{"name":"AUO_MNT","cnt":3}],"defects":[{"name":"Noise","cnt":42},{"name":"Localized light leakage ND 5% check","cnt":16},{"name":"NDF","cnt":13},{"name":"Glass broken","cnt":13},{"name":"Abnormal display","cnt":12},{"name":"Chipping (crack)","cnt":8},{"name":"V-block defect","cnt":6},{"name":"No display","cnt":5},{"name":"Light leakage ND 5% check spec in","cnt":5},{"name":"Localized bottom mura ND 5% check","cnt":4}],"customers":[{"name":"판타룩스","cnt":46},{"name":"코텍","cnt":44},{"name":"코텍(베트남)14th","cnt":42},{"name":"노크","cnt":18},{"name":"코리스","cnt":15},{"name":"지에스디","cnt":6},{"name":"픽셀런트","cnt":6},{"name":"정림재고(파인더즈)","cnt":5},{"name":"파인더즈","cnt":5},{"name":"정림전자","cnt":4}],"rmaTop10":[{"name":"G156HAN05.004 (Z)","cnt":25},{"name":"G140HAB01.200 (Z)","cnt":24},{"name":"G101EVN01.002 (Z)","cnt":6},{"name":"G156HAB03.200 (Z)","cnt":6},{"name":"G238HAN02.005 (Z)","cnt":5},{"name":"G320ZAN02.502 (Z)","cnt":3},{"name":"M238HVN01.0HE (Z)","cnt":2},{"name":"G185HAN01.104 (Z)","cnt":1},{"name":"G150XAN02.100 (Z)","cnt":1},{"name":"G185HAN01.005 (Z)","cnt":1}],"selfFix":{"total":6,"models":[{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":3},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"코텍","model":"G154EVN01.001 (Z)","cnt":1},{"cust":"엠트리","model":"P430QVN01.000 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":10,"완료cnt":10,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"정림재고(파인더즈)","cnt":5},{"name":"파인더즈","cnt":5}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10}]},"2":{"total":119,"완료cnt":38,"applyCnt":41,"repairCnt":34,"자체수리cnt":4,"미정cnt":2,"topCusts":[{"name":"판타룩스","cnt":46},{"name":"코텍(베트남)14th","cnt":42},{"name":"코리스","cnt":15},{"name":"지에스디","cnt":6},{"name":"픽셀런트","cnt":6}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":46},{"name":"G156HAN05.004 (Z)","cnt":36},{"name":"P320HVN06.110 (Z)","cnt":9},{"name":"G320ZAN02.502 (Z)","cnt":6},{"name":"M240UAN01.000 (Z)","cnt":5}]},"3":{"total":71,"완료cnt":18,"applyCnt":10,"repairCnt":39,"자체수리cnt":2,"미정cnt":2,"topCusts":[{"name":"코텍","cnt":44},{"name":"노크","cnt":18},{"name":"정림전자","cnt":4},{"name":"한솔오리온텍","cnt":3},{"name":"정림재고 (에프디에스)","cnt":1}],"topModels":[{"name":"G140HAB01.200 (Z)","cnt":24},{"name":"P370IVN02.201 (Z)","cnt":18},{"name":"P215HAN01.100 (Z)","cnt":10},{"name":"G156HAB03.200 (Z)","cnt":6},{"name":"G101EVN01.002 (Z)","cnt":5}]},"4":{"total":1,"완료cnt":1,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"리더원","cnt":1}],"topModels":[{"name":"G173HW01.004 (Z)","cnt":1}]},"5":{"total":1,"완료cnt":1,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"에스제이아이","cnt":1}],"topModels":[{"name":"G101EAN02.101 (Z)","cnt":1}]}}},"6":{"total":65,"완료cnt":12,"applyCnt":0,"repairCnt":26,"자체수리cnt":2,"미정cnt":25,"완료drill":[{"cust":"코텍","model":"G215HAN01.501 (Z)","cnt":5},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":1},{"cust":"제이엘디엔티","model":"G104XAN01.010 (Z)","cnt":1},{"cust":"이미지셀","model":"G215HAN01.301 (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":5},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":4},{"cust":"무한시스템","model":"G215HAN01.301 (Z)","cnt":4},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":4},{"cust":"토비스","model":"G185HAN01.004 (Z)","cnt":2},{"cust":"덴텀","model":"G150XTN03.500 (Z)","cnt":2},{"cust":"무한시스템","model":"G150XTN03.500 (Z)","cnt":2},{"cust":"제이엘디엔티","model":"G104XAN01.010 (Z)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (Z)","cnt":1},{"cust":"코텍","model":"G215HAN01.501 (Z)","cnt":1}],"미정drill":[{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":5},{"cust":"무한시스템","model":"G150XTN03.404 (Z)","cnt":2},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":2},{"cust":"오디하이텍","model":"G240HVN01.000 (Z)","cnt":1},{"cust":"코텍","model":"G215HAN01.501 (Z)","cnt":1},{"cust":"코텍","model":"G270QAN01.401 (Z)","cnt":1},{"cust":"에프디에스","model":"G173HW01.004 (Z)","cnt":1},{"cust":"토비스","model":"G320ZAN02.105 (Z)","cnt":1},{"cust":"엠트리","model":"P550QVN06.301 (Z)","cnt":1}],"자체수리drill":[{"cust":"동우디아이","model":"T420HVN08.0P1 (Z)","cnt":1},{"cust":"덴텀","model":"G150XTN03.500 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":36},{"name":"FMA","cnt":10},{"name":"정림보상대상","cnt":8},{"name":"spec in","cnt":3},{"name":"고객과실","cnt":3},{"name":"NDF","cnt":2},{"name":"자체수리완료","cnt":2}],"bu":[{"name":"GDBU","cnt":63},{"name":"PDBU","cnt":2}],"defects":[{"name":"Localized mura ND 5%","cnt":8},{"name":"B/L defect","cnt":6},{"name":"No display","cnt":5},{"name":"Mura ND 6% check","cnt":3},{"name":"White screen","cnt":3},{"name":"Localized mura ND 6% Yellowish","cnt":3},{"name":"Pol defect","cnt":2},{"name":"Small bright dot ND 10% check spec in","cnt":2},{"name":"Bright dot 1pc","cnt":2},{"name":"Glass broken","cnt":2}],"customers":[{"name":"토비스","cnt":15},{"name":"무한시스템","cnt":13},{"name":"파인더즈","cnt":10},{"name":"코텍","cnt":10},{"name":"정림재고(자연과사람)","cnt":7},{"name":"덴텀","cnt":3},{"name":"제이엘디엔티","cnt":2},{"name":"동우디아이","cnt":1},{"name":"이미지셀","cnt":1},{"name":"오디하이텍","cnt":1}],"rmaTop10":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G215HAN01.501 (Z)","cnt":7},{"name":"G190ETN01.204 (Z)","cnt":5},{"name":"G215HAN01.701 (Z)","cnt":4},{"name":"G150XTN03.500 (Z)","cnt":4},{"name":"G215HAN01.301 (Z)","cnt":4},{"name":"G156XTN01.000 (Z)","cnt":4},{"name":"G150XTN03.404 (Z)","cnt":3},{"name":"G185HAN01.004 (Z)","cnt":2},{"name":"G156HAB03.200 (Z)","cnt":2}],"selfFix":{"total":2,"models":[{"cust":"동우디아이","model":"T420HVN08.0P1 (Z)","cnt":1},{"cust":"덴텀","model":"G150XTN03.500 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[],"weeks":{"1":{"total":15,"완료cnt":2,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":13,"topCusts":[{"name":"파인더즈","cnt":8},{"name":"정림재고(자연과사람)","cnt":7}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":8},{"name":"G190ETN01.204 (Z)","cnt":7}]},"2":{"total":20,"완료cnt":5,"applyCnt":0,"repairCnt":13,"자체수리cnt":1,"미정cnt":1,"topCusts":[{"name":"토비스","cnt":14},{"name":"제이엘디엔티","cnt":2},{"name":"덴텀","cnt":1},{"name":"동우디아이","cnt":1},{"name":"이미지셀","cnt":1}],"topModels":[{"name":"G215HAN01.501 (Z)","cnt":6},{"name":"G215HAN01.701 (Z)","cnt":6},{"name":"G185HAN01.004 (Z)","cnt":2},{"name":"G104XAN01.010 (Z)","cnt":2},{"name":"G150XTN03.500 (Z)","cnt":1}]},"3":{"total":23,"완료cnt":5,"applyCnt":0,"repairCnt":13,"자체수리cnt":0,"미정cnt":5,"topCusts":[{"name":"무한시스템","cnt":13},{"name":"코텍","cnt":8},{"name":"에프디에스","cnt":1},{"name":"덴텀","cnt":1}],"topModels":[{"name":"G215HAN01.501 (Z)","cnt":7},{"name":"G215HAN01.301 (Z)","cnt":4},{"name":"G156XTN01.000 (Z)","cnt":4},{"name":"G150XTN03.500 (Z)","cnt":3},{"name":"G150XTN03.404 (Z)","cnt":3}]},"4":{"total":7,"완료cnt":0,"applyCnt":0,"repairCnt":0,"자체수리cnt":1,"미정cnt":6,"topCusts":[{"name":"코텍","cnt":2},{"name":"파인더즈","cnt":2},{"name":"덴텀","cnt":1},{"name":"토비스","cnt":1},{"name":"엠트리","cnt":1}],"topModels":[{"name":"G156HAB03.200 (Z)","cnt":2},{"name":"M238HVN01.0HE (Z)","cnt":2},{"name":"G150XTN03.500 (Z)","cnt":1},{"name":"G320ZAN02.105 (Z)","cnt":1},{"name":"P550QVN06.301 (Z)","cnt":1}]}}}}
+{
+  "1": {
+    "total": 125,
+    "완료cnt": 115,
+    "applyCnt": 0,
+    "repairCnt": 10,
+    "자체수리cnt": 11,
+    "미정cnt": 0,
+    "완료drill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 13
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 13
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "자연과사람",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.001 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.000 (P)",
+        "cnt": 4
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.200 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "한솔오리온텍",
+        "model": "G240HW01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G185HAN01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "에프디에스",
+        "model": "P424KVN01.0A0 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "동경티앤씨",
+        "model": "G215HVN01.300 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(154솔팅중불량)",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(테트라다인)",
+        "model": "G185HAN01.104 (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [],
+    "repairDrill": [
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "정림재고(알파디스플레이)",
+        "model": "P320HVN02.300 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(오디하이텍)",
+        "model": "P320HVN04.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(엔엑스오)",
+        "model": "P430HVN05.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.001 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "리더원",
+        "model": "G150XTN06.A00 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (P)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 21,
+    "specOutCnt": 71,
+    "반송cnt": 12,
+    "보상cnt": 21,
+    "폐기cnt": 0,
+    "검토전cnt": 0,
+    "specInDrill": [
+      {
+        "cust": "자연과사람",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "한솔오리온텍",
+        "model": "G240HW01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "에프디에스",
+        "model": "P424KVN01.0A0 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G185HAN01.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "네오아이씨피",
+        "model": "G150XTN03.501 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 15
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.001 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.000 (P)",
+        "cnt": 4
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "정림재고(알파디스플레이)",
+        "model": "P320HVN02.300 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "동경티앤씨",
+        "model": "G215HVN01.300 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(오디하이텍)",
+        "model": "P320HVN04.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(154솔팅중불량)",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(엔엑스오)",
+        "model": "P430HVN05.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(테트라다인)",
+        "model": "G185HAN01.104 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(판타룩스)",
+        "model": "G156HAN02.001 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G185HAN01.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G238HAN02.000 (Z)",
+        "cnt": 1
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.001 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "리더원",
+        "model": "G150XTN06.A00 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "판타룩스",
+        "model": "G156HAN02.000 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.200 (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "피에스플러스",
+        "model": "M215HTN01.1HE (Z)",
+        "cnt": 1
+      }
+    ],
+    "폐기drill": [],
+    "검토전drill": [],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 56
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 21
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 11
+      },
+      {
+        "name": "spec in",
+        "cnt": 11
+      },
+      {
+        "name": "FMA",
+        "cnt": 10
+      },
+      {
+        "name": "RMA미대상",
+        "cnt": 8
+      },
+      {
+        "name": "RMA(IQC)",
+        "cnt": 5
+      },
+      {
+        "name": "NDF",
+        "cnt": 2
+      },
+      {
+        "name": "고객과실",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 114
+      },
+      {
+        "name": "PDBU",
+        "cnt": 10
+      },
+      {
+        "name": "AUO_MNT",
+        "cnt": 1
+      }
+    ],
+    "defects": [
+      {
+        "name": "Bright dot",
+        "cnt": 11
+      },
+      {
+        "name": "particle 이물제거완료",
+        "cnt": 6
+      },
+      {
+        "name": "Gravity mura",
+        "cnt": 6
+      },
+      {
+        "name": "No display",
+        "cnt": 4
+      },
+      {
+        "name": "Round mura (spec in)",
+        "cnt": 4
+      },
+      {
+        "name": "Gravity Mura",
+        "cnt": 4
+      },
+      {
+        "name": "White spot",
+        "cnt": 4
+      },
+      {
+        "name": "Mura",
+        "cnt": 4
+      },
+      {
+        "name": "Mura ND 6%",
+        "cnt": 4
+      },
+      {
+        "name": "small bright dot (spec in)",
+        "cnt": 4
+      }
+    ],
+    "customers": [
+      {
+        "name": "정림재고(코텍)",
+        "cnt": 28
+      },
+      {
+        "name": "판타룩스",
+        "cnt": 15
+      },
+      {
+        "name": "정림재고(자연과사람)",
+        "cnt": 13
+      },
+      {
+        "name": "정림재고(판타룩스)",
+        "cnt": 12
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 10
+      },
+      {
+        "name": "정림재고(파인더즈)",
+        "cnt": 10
+      },
+      {
+        "name": "토비스",
+        "cnt": 8
+      },
+      {
+        "name": "자연과사람",
+        "cnt": 8
+      },
+      {
+        "name": "코텍",
+        "cnt": 5
+      },
+      {
+        "name": "정림재고(알파디스플레이)",
+        "cnt": 2
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "P215HAN01.100 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G154EVN01.001 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G140HAB01.200 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G156HAB03.200 (Z)",
+        "cnt": 3
+      },
+      {
+        "name": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "name": "P320HVN02.300 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "M238HVN01.0HE (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "P320HVN04.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "name": "P430HVN05.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "name": "G101EVN01.002 (Z)",
+        "cnt": 1
+      }
+    ],
+    "selfFix": {
+      "total": 11,
+      "models": [
+        {
+          "cust": "판타룩스",
+          "model": "G156HAN02.001 (Z)",
+          "cnt": 6
+        },
+        {
+          "cust": "판타룩스",
+          "model": "G156HAN02.000 (Z)",
+          "cnt": 3
+        },
+        {
+          "cust": "리더원",
+          "model": "G150XTN06.A00 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "판타룩스",
+          "model": "G156HAN02.000 (P)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "G190ETN01.204 (Z)",
+        "defect": "Bright dot",
+        "cnt": 21,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M238HVN01.0HE (Z)",
+        "defect": "Gravity mura",
+        "cnt": 20,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G154EVN01.001 (Z)",
+        "defect": "Mura ND 6%",
+        "cnt": 16,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G156HAN02.001 (Z)",
+        "defect": "particle 이물제거완료",
+        "cnt": 12,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G156HAN02.000 (Z)",
+        "defect": "Pol scratch",
+        "cnt": 9,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G156HAN02.000 (P)",
+        "defect": "particle 제거불가",
+        "cnt": 5,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "P215HAN01.100 (Z)",
+        "defect": "Abnormal display",
+        "cnt": 5,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G140HAB01.200 (Z)",
+        "defect": "touch glass broken  ZS01002591525407",
+        "cnt": 5,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G156HAB03.200 (Z)",
+        "defect": "Bottom mura",
+        "cnt": 4,
+        "lv": "info",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "2": {
+        "total": 19,
+        "완료cnt": 15,
+        "applyCnt": 0,
+        "repairCnt": 4,
+        "자체수리cnt": 1,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "정림재고(파인더즈)",
+            "cnt": 8
+          },
+          {
+            "name": "정림재고(알파디스플레이)",
+            "cnt": 2
+          },
+          {
+            "name": "파인더즈",
+            "cnt": 2
+          },
+          {
+            "name": "에프디에스",
+            "cnt": 1
+          },
+          {
+            "name": "리더원",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "P320HVN02.300 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "P424KVN01.0A0 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G150XTN06.A00 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G215HVN01.300 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "3": {
+        "total": 64,
+        "완료cnt": 60,
+        "applyCnt": 0,
+        "repairCnt": 4,
+        "자체수리cnt": 10,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "정림재고(코텍)",
+            "cnt": 28
+          },
+          {
+            "name": "판타룩스",
+            "cnt": 13
+          },
+          {
+            "name": "정림재고(판타룩스)",
+            "cnt": 11
+          },
+          {
+            "name": "토비스",
+            "cnt": 8
+          },
+          {
+            "name": "한솔오리온텍",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G154EVN01.001 (Z)",
+            "cnt": 15
+          },
+          {
+            "name": "G156HAN02.001 (Z)",
+            "cnt": 12
+          },
+          {
+            "name": "G156HAN02.000 (Z)",
+            "cnt": 7
+          },
+          {
+            "name": "P215HAN01.100 (Z)",
+            "cnt": 5
+          },
+          {
+            "name": "G156HAN02.000 (P)",
+            "cnt": 4
+          }
+        ]
+      },
+      "4": {
+        "total": 39,
+        "완료cnt": 37,
+        "applyCnt": 0,
+        "repairCnt": 2,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "정림재고(자연과사람)",
+            "cnt": 13
+          },
+          {
+            "name": "파인더즈",
+            "cnt": 8
+          },
+          {
+            "name": "자연과사람",
+            "cnt": 8
+          },
+          {
+            "name": "코텍",
+            "cnt": 3
+          },
+          {
+            "name": "정림재고(파인더즈)",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G190ETN01.204 (Z)",
+            "cnt": 21
+          },
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G156HAN02.000 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "M215HTN01.1HE (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "5": {
+        "total": 3,
+        "완료cnt": 3,
+        "applyCnt": 0,
+        "repairCnt": 0,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "엠트리",
+            "cnt": 1
+          },
+          {
+            "name": "글로벌전자",
+            "cnt": 1
+          },
+          {
+            "name": "네오아이씨피",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G101EVN03.100 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "M215HAN01.201 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G150XTN03.501 (Z)",
+            "cnt": 1
+          }
+        ]
+      }
+    }
+  },
+  "2": {
+    "total": 552,
+    "완료cnt": 307,
+    "applyCnt": 0,
+    "repairCnt": 245,
+    "자체수리cnt": 4,
+    "미정cnt": 0,
+    "완료drill": [
+      {
+        "cust": "브이피랩",
+        "model": "M240UAN02.3QY (P)",
+        "cnt": 98
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 61
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 44
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 14
+      },
+      {
+        "cust": "브이피랩",
+        "model": "M240UAN02.3QY (N)",
+        "cnt": 12
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 12
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "아이텔코리아",
+        "model": "G104XVN01.010 (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M270HVR01.105 O/C (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "디앤티",
+        "model": "G050VTN01.001 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (P)",
+        "cnt": 4
+      },
+      {
+        "cust": "현대에이치티",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "자연과사람",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (P)",
+        "cnt": 2
+      },
+      {
+        "cust": "화영시스템",
+        "model": "P430HVN01.400 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "디앤티",
+        "model": "G320ZAN02.302 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "화영시스템",
+        "model": "P430HVN01.401 (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [],
+    "repairDrill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 190
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "디앤티",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "코텍",
+        "model": "G550ZVN01.000 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "디앤티",
+        "model": "G050VTN01.001 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "디앤티",
+        "model": "G270ZAN01.100 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "디앤티",
+        "model": "G320ZAN02.302 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "토비스",
+        "model": "G121EAN01.102 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "디앤티",
+        "model": "G238HAN02.000 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (P)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "싸이몬",
+        "model": "M190ETN01.00E (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "현대에이치티",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 37,
+    "specOutCnt": 471,
+    "반송cnt": 30,
+    "보상cnt": 13,
+    "폐기cnt": 1,
+    "검토전cnt": 0,
+    "specInDrill": [
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "아이텔코리아",
+        "model": "G104XVN01.010 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "현대에이치티",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "자연과사람",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "디앤티",
+        "model": "G320ZAN02.302 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 190
+      },
+      {
+        "cust": "브이피랩",
+        "model": "M240UAN02.3QY (P)",
+        "cnt": 98
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 42
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 40
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 13
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 12
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "디앤티",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "코텍",
+        "model": "G550ZVN01.000 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "디앤티",
+        "model": "G050VTN01.001 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M270HVR01.105 O/C (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (P)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "디앤티",
+        "model": "G270ZAN01.100 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "디앤티",
+        "model": "G320ZAN02.302 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (P)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G121EAN01.102 (Z)",
+        "cnt": 2
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "브이피랩",
+        "model": "M240UAN02.3QY (N)",
+        "cnt": 12
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "아이텔코리아",
+        "model": "G104XVN01.010 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "현대에이치티",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "싸이몬",
+        "model": "M190ETN01.00E (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "디앤티",
+        "model": "G050VTN01.001 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "화영시스템",
+        "model": "P430HVN01.400 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "M270HVR01.16A O/C (Z)",
+        "cnt": 1
+      }
+    ],
+    "폐기drill": [
+      {
+        "cust": "화영시스템",
+        "model": "P430HVN01.401 (Z)",
+        "cnt": 1
+      }
+    ],
+    "검토전drill": [],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 463
+      },
+      {
+        "name": "spec in",
+        "cnt": 19
+      },
+      {
+        "name": "보증기간만료",
+        "cnt": 14
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 13
+      },
+      {
+        "name": "고객과실",
+        "cnt": 12
+      },
+      {
+        "name": "NDF",
+        "cnt": 11
+      },
+      {
+        "name": "FMA",
+        "cnt": 7
+      },
+      {
+        "name": "RMA미대상",
+        "cnt": 7
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 4
+      },
+      {
+        "name": "폐기",
+        "cnt": 1
+      },
+      {
+        "name": "RMA(IQC)",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 416
+      },
+      {
+        "name": "AUO_MNT",
+        "cnt": 130
+      },
+      {
+        "name": "PDBU",
+        "cnt": 6
+      }
+    ],
+    "defects": [
+      {
+        "name": "Mura issue",
+        "cnt": 193
+      },
+      {
+        "name": "V-line",
+        "cnt": 110
+      },
+      {
+        "name": "greenish screen",
+        "cnt": 30
+      },
+      {
+        "name": "No display",
+        "cnt": 12
+      },
+      {
+        "name": "Light leakage  (spec in)",
+        "cnt": 11
+      },
+      {
+        "name": "B/L defect All off",
+        "cnt": 10
+      },
+      {
+        "name": "NDF",
+        "cnt": 10
+      },
+      {
+        "name": "V-line defect",
+        "cnt": 9
+      },
+      {
+        "name": "Localized light leakage ND 5% check",
+        "cnt": 8
+      },
+      {
+        "name": "BNU NG",
+        "cnt": 8
+      }
+    ],
+    "customers": [
+      {
+        "name": "정림재고(코텍)",
+        "cnt": 190
+      },
+      {
+        "name": "코텍(베트남)12,13th",
+        "cnt": 145
+      },
+      {
+        "name": "브이피랩",
+        "cnt": 110
+      },
+      {
+        "name": "디앤티",
+        "cnt": 33
+      },
+      {
+        "name": "무한시스템",
+        "cnt": 22
+      },
+      {
+        "name": "코텍",
+        "cnt": 14
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 10
+      },
+      {
+        "name": "아이텔코리아",
+        "cnt": 9
+      },
+      {
+        "name": "현대에이치티",
+        "cnt": 5
+      },
+      {
+        "name": "정림재고(자연과사람)",
+        "cnt": 5
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "G156HAB03.200 (Z)",
+        "cnt": 192
+      },
+      {
+        "name": "G156HAN05.004 (Z)",
+        "cnt": 42
+      },
+      {
+        "name": "G133HAN01.101 (Z)",
+        "cnt": 40
+      },
+      {
+        "name": "G156XTN01.000 (Z)",
+        "cnt": 14
+      },
+      {
+        "name": "G101EVN01.002 (Z)",
+        "cnt": 12
+      },
+      {
+        "name": "M238HVN01.0HE (Z)",
+        "cnt": 9
+      },
+      {
+        "name": "G238HAN02.005 (Z)",
+        "cnt": 9
+      },
+      {
+        "name": "G550ZVN01.000 (Z)",
+        "cnt": 8
+      },
+      {
+        "name": "G050VTN01.001 (Z)",
+        "cnt": 8
+      },
+      {
+        "name": "G150XTN03.500 (Z)",
+        "cnt": 6
+      }
+    ],
+    "selfFix": {
+      "total": 4,
+      "models": [
+        {
+          "cust": "코텍(베트남)12,13th",
+          "model": "G133HAN01.101 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "코텍(베트남)12,13th",
+          "model": "G156HAN05.004 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "싸이몬",
+          "model": "M190ETN01.00E (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "현대에이치티",
+          "model": "G101STN01.500 (Z)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "G156HAB03.200 (Z)",
+        "defect": "Mura issue",
+        "cnt": 193,
+        "lv": "crit",
+        "custs": {}
+      },
+      {
+        "model": "M240UAN02.3QY (P)",
+        "defect": "V-line",
+        "cnt": 98,
+        "lv": "crit",
+        "custs": {}
+      },
+      {
+        "model": "G156HAN05.004 (Z)",
+        "defect": "Light leakage  (spec in)",
+        "cnt": 62,
+        "lv": "crit",
+        "custs": {}
+      },
+      {
+        "model": "G133HAN01.101 (Z)",
+        "defect": "greenish screen",
+        "cnt": 45,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G156XTN01.000 (Z)",
+        "defect": "particle L=3mm W=0.3mm",
+        "cnt": 14,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M315QVN01.000 (Z)",
+        "defect": "connector gap (spec in)",
+        "cnt": 14,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G050VTN01.001 (Z)",
+        "defect": "H-line defect",
+        "cnt": 13,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M240UAN02.3QY (N)",
+        "defect": "V-line",
+        "cnt": 12,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G101EVN01.002 (Z)",
+        "defect": "B/L defect All off",
+        "cnt": 12,
+        "lv": "warn",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "2": {
+        "total": 184,
+        "완료cnt": 146,
+        "applyCnt": 0,
+        "repairCnt": 38,
+        "자체수리cnt": 3,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "코텍(베트남)12,13th",
+            "cnt": 145
+          },
+          {
+            "name": "정림재고(코텍)",
+            "cnt": 35
+          },
+          {
+            "name": "코텍",
+            "cnt": 3
+          },
+          {
+            "name": "싸이몬",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156HAN05.004 (Z)",
+            "cnt": 62
+          },
+          {
+            "name": "G133HAN01.101 (Z)",
+            "cnt": 45
+          },
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 38
+          },
+          {
+            "name": "M315QVN01.000 (Z)",
+            "cnt": 14
+          },
+          {
+            "name": "G101EVN01.002 (Z)",
+            "cnt": 12
+          }
+        ]
+      },
+      "3": {
+        "total": 332,
+        "완료cnt": 132,
+        "applyCnt": 0,
+        "repairCnt": 200,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "정림재고(코텍)",
+            "cnt": 155
+          },
+          {
+            "name": "브이피랩",
+            "cnt": 110
+          },
+          {
+            "name": "디앤티",
+            "cnt": 33
+          },
+          {
+            "name": "무한시스템",
+            "cnt": 22
+          },
+          {
+            "name": "코텍",
+            "cnt": 9
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 155
+          },
+          {
+            "name": "M240UAN02.3QY (P)",
+            "cnt": 98
+          },
+          {
+            "name": "G156XTN01.000 (Z)",
+            "cnt": 14
+          },
+          {
+            "name": "G050VTN01.001 (Z)",
+            "cnt": 13
+          },
+          {
+            "name": "M240UAN02.3QY (N)",
+            "cnt": 12
+          }
+        ]
+      },
+      "4": {
+        "total": 2,
+        "완료cnt": 0,
+        "applyCnt": 0,
+        "repairCnt": 2,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "코텍",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "P215HAN01.100 (Z)",
+            "cnt": 2
+          }
+        ]
+      },
+      "5": {
+        "total": 34,
+        "완료cnt": 29,
+        "applyCnt": 0,
+        "repairCnt": 5,
+        "자체수리cnt": 1,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "파인더즈",
+            "cnt": 10
+          },
+          {
+            "name": "아이텔코리아",
+            "cnt": 9
+          },
+          {
+            "name": "현대에이치티",
+            "cnt": 5
+          },
+          {
+            "name": "정림재고(자연과사람)",
+            "cnt": 5
+          },
+          {
+            "name": "자연과사람",
+            "cnt": 3
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "G104XVN01.010 (Z)",
+            "cnt": 9
+          },
+          {
+            "name": "G190ETN01.204 (Z)",
+            "cnt": 8
+          },
+          {
+            "name": "G101STN01.500 (Z)",
+            "cnt": 5
+          },
+          {
+            "name": "G121EAN01.102 (Z)",
+            "cnt": 2
+          }
+        ]
+      }
+    }
+  },
+  "3": {
+    "total": 173,
+    "완료cnt": 65,
+    "applyCnt": 1,
+    "repairCnt": 107,
+    "자체수리cnt": 18,
+    "미정cnt": 0,
+    "완료drill": [
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 18
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "지에스디",
+        "model": "G173HW01.002 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "싸이몬",
+        "model": "M190ETN01.00E (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "에프게이트",
+        "model": "M170ETN01.10D (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(이젠티에스)",
+        "model": "G121XN01.001 (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [
+      {
+        "cust": "정림재고(티엘비전)",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 1
+      }
+    ],
+    "repairDrill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 82
+      },
+      {
+        "cust": "리더원",
+        "model": "G170EG01.104 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍",
+        "model": "G550ZVN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "토비스",
+        "model": "G140HAB01.300 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "글로벌전자",
+        "model": "M240UAN02.001 (P)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(티엘비전)",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "현대아이티",
+        "model": "P320HVN04.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(알파디스플레이)",
+        "model": "P320HVN02.300 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "글로벌전자",
+        "model": "M240UAN02.0DB (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G270QAN01.401 (Z)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 17
+      },
+      {
+        "cust": "에프게이트",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 22,
+    "specOutCnt": 114,
+    "반송cnt": 19,
+    "보상cnt": 18,
+    "폐기cnt": 0,
+    "검토전cnt": 0,
+    "specInDrill": [
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 15
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "글로벌전자",
+        "model": "M240UAN02.0DB (P)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "정림재고(코텍)",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 82
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "싸이몬",
+        "model": "M190ETN01.00E (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "리더원",
+        "model": "G170EG01.104 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍",
+        "model": "G550ZVN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "정림재고(티엘비전)",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "현대아이티",
+        "model": "P320HVN04.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "에프게이트",
+        "model": "M170ETN01.10D (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(이젠티에스)",
+        "model": "G121XN01.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(알파디스플레이)",
+        "model": "P320HVN02.300 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G270QAN01.401 (Z)",
+        "cnt": 1
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 18
+      },
+      {
+        "cust": "에프게이트",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "지에스디",
+        "model": "G173HW01.002 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G140HAB01.300 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "글로벌전자",
+        "model": "M240UAN02.001 (P)",
+        "cnt": 2
+      }
+    ],
+    "폐기drill": [],
+    "검토전drill": [],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 105
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 18
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 18
+      },
+      {
+        "name": "spec in",
+        "cnt": 15
+      },
+      {
+        "name": "FMA",
+        "cnt": 8
+      },
+      {
+        "name": "NDF",
+        "cnt": 7
+      },
+      {
+        "name": "RMA(IQC)",
+        "cnt": 1
+      },
+      {
+        "name": "고객과실",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 125
+      },
+      {
+        "name": "PDBU",
+        "cnt": 45
+      },
+      {
+        "name": "AUO_MNT",
+        "cnt": 3
+      }
+    ],
+    "defects": [
+      {
+        "name": "Mura issue",
+        "cnt": 85
+      },
+      {
+        "name": "자체수리완료 particle D=0.6mm",
+        "cnt": 8
+      },
+      {
+        "name": "NDF",
+        "cnt": 7
+      },
+      {
+        "name": "Abnormal display",
+        "cnt": 5
+      },
+      {
+        "name": "V-block defect",
+        "cnt": 4
+      },
+      {
+        "name": "Mura ND 6% spec in",
+        "cnt": 4
+      },
+      {
+        "name": "시야각 45도 White spot 정면에서 안보임 ND2% spec in",
+        "cnt": 3
+      },
+      {
+        "name": "자체수리완료 particle D=0.5mm",
+        "cnt": 3
+      },
+      {
+        "name": "Particle D=0.8mm",
+        "cnt": 3
+      },
+      {
+        "name": "localized bottom mura ND 5% check",
+        "cnt": 3
+      }
+    ],
+    "customers": [
+      {
+        "name": "정림재고(코텍)",
+        "cnt": 82
+      },
+      {
+        "name": "에스제이아이",
+        "cnt": 38
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 11
+      },
+      {
+        "name": "토비스",
+        "cnt": 11
+      },
+      {
+        "name": "코텍",
+        "cnt": 7
+      },
+      {
+        "name": "지에스디",
+        "cnt": 6
+      },
+      {
+        "name": "싸이몬",
+        "cnt": 4
+      },
+      {
+        "name": "리더원",
+        "cnt": 4
+      },
+      {
+        "name": "글로벌전자",
+        "cnt": 3
+      },
+      {
+        "name": "정림재고(티엘비전)",
+        "cnt": 2
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "G156HAB03.200 (Z)",
+        "cnt": 82
+      },
+      {
+        "name": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G170EG01.104 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G550ZVN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "P215HAN01.100 (Z)",
+        "cnt": 3
+      },
+      {
+        "name": "G156HAN05.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G215HAN01.501 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "M190ETN01.00E (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G140HAB01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "P320HVN04.500 (Z)",
+        "cnt": 1
+      }
+    ],
+    "selfFix": {
+      "total": 18,
+      "models": [
+        {
+          "cust": "에스제이아이",
+          "model": "P215HAN01.100 (Z)",
+          "cnt": 17
+        },
+        {
+          "cust": "에프게이트",
+          "model": "P370IVN02.201 (Z)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "G156HAB03.200 (Z)",
+        "defect": "Mura issue",
+        "cnt": 82,
+        "lv": "crit",
+        "custs": {}
+      },
+      {
+        "model": "P215HAN01.100 (Z)",
+        "defect": "자체수리완료 particle D=0.6mm",
+        "cnt": 38,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M238HVN01.0HE (Z)",
+        "defect": "localized bottom mura ND 5% check",
+        "cnt": 11,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G215HAN01.501 (Z)",
+        "defect": "Mura ND 6% spec in",
+        "cnt": 8,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G173HW01.002 (Z)",
+        "defect": "V-block defect",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "M190ETN01.00E (Z)",
+        "defect": "Pol scratch(Box S/N:ZZ190E-2552001030)",
+        "cnt": 4,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G170EG01.104 (Z)",
+        "defect": "Particle D=0.8mm",
+        "cnt": 4,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G550ZVN01.000 (Z)",
+        "defect": "Mura issue",
+        "cnt": 4,
+        "lv": "info",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "2": {
+        "total": 135,
+        "완료cnt": 43,
+        "applyCnt": 1,
+        "repairCnt": 91,
+        "자체수리cnt": 17,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "정림재고(코텍)",
+            "cnt": 82
+          },
+          {
+            "name": "에스제이아이",
+            "cnt": 38
+          },
+          {
+            "name": "지에스디",
+            "cnt": 6
+          },
+          {
+            "name": "코텍",
+            "cnt": 4
+          },
+          {
+            "name": "정림재고(티엘비전)",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 82
+          },
+          {
+            "name": "P215HAN01.100 (Z)",
+            "cnt": 38
+          },
+          {
+            "name": "G173HW01.002 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "G550ZVN01.000 (Z)",
+            "cnt": 4
+          },
+          {
+            "name": "G156HAN05.004 (Z)",
+            "cnt": 2
+          }
+        ]
+      },
+      "3": {
+        "total": 3,
+        "완료cnt": 3,
+        "applyCnt": 0,
+        "repairCnt": 0,
+        "자체수리cnt": 1,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "싸이몬",
+            "cnt": 2
+          },
+          {
+            "name": "에프게이트",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M190ETN01.00E (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "P370IVN02.201 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "4": {
+        "total": 18,
+        "완료cnt": 6,
+        "applyCnt": 0,
+        "repairCnt": 12,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "토비스",
+            "cnt": 11
+          },
+          {
+            "name": "리더원",
+            "cnt": 4
+          },
+          {
+            "name": "코텍",
+            "cnt": 3
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G215HAN01.501 (Z)",
+            "cnt": 8
+          },
+          {
+            "name": "G170EG01.104 (Z)",
+            "cnt": 4
+          },
+          {
+            "name": "G140HAB01.300 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G140HAB01.200 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G215HAN01.701 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "5": {
+        "total": 15,
+        "완료cnt": 11,
+        "applyCnt": 0,
+        "repairCnt": 4,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "파인더즈",
+            "cnt": 10
+          },
+          {
+            "name": "글로벌전자",
+            "cnt": 3
+          },
+          {
+            "name": "정림재고(이젠티에스)",
+            "cnt": 1
+          },
+          {
+            "name": "정림재고(알파디스플레이)",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "M240UAN02.001 (P)",
+            "cnt": 2
+          },
+          {
+            "name": "G121XN01.001 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "P320HVN02.300 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "M240UAN02.0DB (P)",
+            "cnt": 1
+          }
+        ]
+      },
+      "6": {
+        "total": 2,
+        "완료cnt": 2,
+        "applyCnt": 0,
+        "repairCnt": 0,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "싸이몬",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M190ETN01.00E (Z)",
+            "cnt": 2
+          }
+        ]
+      }
+    }
+  },
+  "4": {
+    "total": 100,
+    "완료cnt": 58,
+    "applyCnt": 0,
+    "repairCnt": 42,
+    "자체수리cnt": 15,
+    "미정cnt": 0,
+    "완료drill": [
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "아이텔코리아",
+        "model": "G121EAN01.001 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "중앙첨단소재",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코텍(베트남)",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "MDS코리아",
+        "model": "P320HVN06.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "비덴트",
+        "model": "G240UAN01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "폐기완료(에프디에스)",
+        "model": "M215HTN01.1HE (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "직방",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G121EAN01.102 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(열방)",
+        "model": "G084SAN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "오디하이텍",
+        "model": "G240HVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(이미지셀)",
+        "model": "G240HVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "M270HVN02.00D (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [],
+    "repairDrill": [
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "코텍HQ",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "정림재고(직방)",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "정림재고(토비스)",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(림피아디스플레이)",
+        "model": "G240HW01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "리더원",
+        "model": "G170EG01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(제이엘디엔티)",
+        "model": "G156HAN02.303 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "MDS코리아",
+        "model": "P320HVN06.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "리더원",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림전자",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "싸이몬",
+        "model": "G104STN01.600 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "아이텔코리아",
+        "model": "G121EAN01.001 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "직방",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 10,
+    "specOutCnt": 49,
+    "반송cnt": 20,
+    "보상cnt": 21,
+    "폐기cnt": 0,
+    "검토전cnt": 0,
+    "specInDrill": [
+      {
+        "cust": "아이텔코리아",
+        "model": "G121EAN01.001 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "중앙첨단소재",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "MDS코리아",
+        "model": "P320HVN06.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "싸이몬",
+        "model": "G104STN01.600 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "코텍HQ",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "정림재고(직방)",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "정림재고(토비스)",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍(베트남)",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(림피아디스플레이)",
+        "model": "G240HW01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "리더원",
+        "model": "G170EG01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "정림재고(제이엘디엔티)",
+        "model": "G156HAN02.303 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G121EAN01.102 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(열방)",
+        "model": "G084SAN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "MDS코리아",
+        "model": "P320HVN06.500 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "오디하이텍",
+        "model": "G240HVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "리더원",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고(이미지셀)",
+        "model": "G240HVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림전자",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 1
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "아이텔코리아",
+        "model": "G121EAN01.001 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "직방",
+        "model": "G101STN01.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "무한시스템",
+        "model": "M270HVN02.00D (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 9
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "비덴트",
+        "model": "G240UAN01.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "폐기완료(에프디에스)",
+        "model": "M215HTN01.1HE (P)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (P)",
+        "cnt": 1
+      }
+    ],
+    "폐기drill": [],
+    "검토전drill": [],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 35
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 21
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 15
+      },
+      {
+        "name": "FMA",
+        "cnt": 13
+      },
+      {
+        "name": "NDF",
+        "cnt": 4
+      },
+      {
+        "name": "FMA미대상",
+        "cnt": 4
+      },
+      {
+        "name": "고객과실",
+        "cnt": 3
+      },
+      {
+        "name": "No junglim",
+        "cnt": 2
+      },
+      {
+        "name": "RMA미대상",
+        "cnt": 1
+      },
+      {
+        "name": "spec in",
+        "cnt": 1
+      },
+      {
+        "name": "RMA(IQC)",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 92
+      },
+      {
+        "name": "PDBU",
+        "cnt": 7
+      },
+      {
+        "name": "AUO_MNT",
+        "cnt": 1
+      }
+    ],
+    "defects": [
+      {
+        "name": "Gravity mura",
+        "cnt": 9
+      },
+      {
+        "name": "이물수리완료",
+        "cnt": 7
+      },
+      {
+        "name": "Chipping",
+        "cnt": 6
+      },
+      {
+        "name": "B/L defect (all off)",
+        "cnt": 5
+      },
+      {
+        "name": "NDF",
+        "cnt": 5
+      },
+      {
+        "name": "H-line defect",
+        "cnt": 4
+      },
+      {
+        "name": "No display",
+        "cnt": 4
+      },
+      {
+        "name": "Abnormal display",
+        "cnt": 4
+      },
+      {
+        "name": "Particle D=0.6mm",
+        "cnt": 3
+      },
+      {
+        "name": "Brightness defect 자체 수리완료",
+        "cnt": 3
+      }
+    ],
+    "customers": [
+      {
+        "name": "무한시스템",
+        "cnt": 28
+      },
+      {
+        "name": "아이텔코리아",
+        "cnt": 11
+      },
+      {
+        "name": "에스제이아이",
+        "cnt": 11
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 9
+      },
+      {
+        "name": "코텍HQ",
+        "cnt": 6
+      },
+      {
+        "name": "정림재고(직방)",
+        "cnt": 4
+      },
+      {
+        "name": "직방",
+        "cnt": 4
+      },
+      {
+        "name": "MDS코리아",
+        "cnt": 3
+      },
+      {
+        "name": "리더원",
+        "cnt": 3
+      },
+      {
+        "name": "중앙첨단소재",
+        "cnt": 3
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "G156XTN01.000 (Z)",
+        "cnt": 11
+      },
+      {
+        "name": "G101EAN02.101 (Z)",
+        "cnt": 6
+      },
+      {
+        "name": "G101STN01.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G215HAN01.301 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G240HW01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G170EG01.104 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "M238HVN01.0HE (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G156HAN02.303 (Z)",
+        "cnt": 1
+      }
+    ],
+    "selfFix": {
+      "total": 15,
+      "models": [
+        {
+          "cust": "아이텔코리아",
+          "model": "G121EAN01.001 (Z)",
+          "cnt": 8
+        },
+        {
+          "cust": "직방",
+          "model": "G101STN01.500 (Z)",
+          "cnt": 3
+        },
+        {
+          "cust": "에스제이아이",
+          "model": "G101EAN02.101 (Z)",
+          "cnt": 3
+        },
+        {
+          "cust": "무한시스템",
+          "model": "G156XTN01.000 (Z)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "G156XTN01.000 (Z)",
+        "defect": "Inner scratch D=1.2mm",
+        "cnt": 20,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M238HVN01.0HE (Z)",
+        "defect": "Gravity mura",
+        "cnt": 11,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G121EAN01.001 (Z)",
+        "defect": "이물수리완료",
+        "cnt": 11,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G101EAN02.101 (Z)",
+        "defect": "Brightness defect 자체 수리완료",
+        "cnt": 11,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G101STN01.500 (Z)",
+        "defect": "Color defect",
+        "cnt": 8,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G140HAB01.200 (Z)",
+        "defect": "Chipping",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "P320HVN06.500 (Z)",
+        "defect": "NDF",
+        "cnt": 3,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "P370IVN02.201 (Z)",
+        "defect": "B/L defect",
+        "cnt": 3,
+        "lv": "info",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "1": {
+        "total": 18,
+        "완료cnt": 5,
+        "applyCnt": 0,
+        "repairCnt": 13,
+        "자체수리cnt": 3,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "코텍HQ",
+            "cnt": 6
+          },
+          {
+            "name": "정림재고(직방)",
+            "cnt": 4
+          },
+          {
+            "name": "직방",
+            "cnt": 4
+          },
+          {
+            "name": "정림재고(토비스)",
+            "cnt": 2
+          },
+          {
+            "name": "정림재고(제이엘디엔티)",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G101STN01.500 (Z)",
+            "cnt": 8
+          },
+          {
+            "name": "G140HAB01.200 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "G215HAN01.501 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G156HAN02.303 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "M215HTN01.1HE (P)",
+            "cnt": 1
+          }
+        ]
+      },
+      "2": {
+        "total": 20,
+        "완료cnt": 15,
+        "applyCnt": 0,
+        "repairCnt": 5,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "무한시스템",
+            "cnt": 9
+          },
+          {
+            "name": "MDS코리아",
+            "cnt": 3
+          },
+          {
+            "name": "코텍(베트남)",
+            "cnt": 2
+          },
+          {
+            "name": "비덴트",
+            "cnt": 2
+          },
+          {
+            "name": "토비스",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156XTN01.000 (Z)",
+            "cnt": 5
+          },
+          {
+            "name": "P320HVN06.500 (Z)",
+            "cnt": 3
+          },
+          {
+            "name": "G133HAN01.101 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G240UAN01.200 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G121EAN01.102 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "3": {
+        "total": 3,
+        "완료cnt": 0,
+        "applyCnt": 0,
+        "repairCnt": 3,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "리더원",
+            "cnt": 3
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G170EG01.104 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "4": {
+        "total": 13,
+        "완료cnt": 11,
+        "applyCnt": 0,
+        "repairCnt": 2,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "파인더즈",
+            "cnt": 9
+          },
+          {
+            "name": "정림재고(파인더즈)",
+            "cnt": 1
+          },
+          {
+            "name": "정림재고(이미지셀)",
+            "cnt": 1
+          },
+          {
+            "name": "코텍",
+            "cnt": 1
+          },
+          {
+            "name": "정림전자",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "G240HVN01.000 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G320ZAN02.502 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "5": {
+        "total": 46,
+        "완료cnt": 27,
+        "applyCnt": 0,
+        "repairCnt": 19,
+        "자체수리cnt": 12,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "무한시스템",
+            "cnt": 19
+          },
+          {
+            "name": "아이텔코리아",
+            "cnt": 11
+          },
+          {
+            "name": "에스제이아이",
+            "cnt": 11
+          },
+          {
+            "name": "중앙첨단소재",
+            "cnt": 3
+          },
+          {
+            "name": "싸이몬",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156XTN01.000 (Z)",
+            "cnt": 15
+          },
+          {
+            "name": "G121EAN01.001 (Z)",
+            "cnt": 11
+          },
+          {
+            "name": "G101EAN02.101 (Z)",
+            "cnt": 11
+          },
+          {
+            "name": "P370IVN02.201 (Z)",
+            "cnt": 3
+          },
+          {
+            "name": "G104STN01.600 (Z)",
+            "cnt": 1
+          }
+        ]
+      }
+    }
+  },
+  "5": {
+    "total": 202,
+    "완료cnt": 71,
+    "applyCnt": 51,
+    "repairCnt": 80,
+    "자체수리cnt": 6,
+    "미정cnt": 0,
+    "완료drill": [
+      {
+        "cust": "노크",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 18
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 11
+      },
+      {
+        "cust": "코리스",
+        "model": "P320HVN06.110 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "한솔오리온텍",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코리스",
+        "model": "G101EVN01.002 (P)",
+        "cnt": 2
+      },
+      {
+        "cust": "지에스디",
+        "model": "M240UAN01.000 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코리스",
+        "model": "M215HAN01.201 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코리스",
+        "model": "P430QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코리스",
+        "model": "P430HVN01.401 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코리스",
+        "model": "P430QVN01.003 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "픽셀런트",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "리더원",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [
+      {
+        "cust": "판타룩스",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 40
+      },
+      {
+        "cust": "코텍",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "코리스",
+        "model": "P320HVN06.110 (Z)",
+        "cnt": 1
+      }
+    ],
+    "repairDrill": [
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 25
+      },
+      {
+        "cust": "코텍",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 20
+      },
+      {
+        "cust": "판타룩스",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "픽셀런트",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "코텍",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림전자",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "닛시네이처",
+        "model": "G185HAN01.104 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "닛시네이처",
+        "model": "G150XAN02.100 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "지에스디",
+        "model": "G185HAN01.005 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고 (에프디에스)",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "지에스디",
+        "model": "M240UAN01.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "엠트리",
+        "model": "P430QVN01.000 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 37,
+    "specOutCnt": 136,
+    "반송cnt": 12,
+    "보상cnt": 17,
+    "폐기cnt": 0,
+    "검토전cnt": 0,
+    "specInDrill": [
+      {
+        "cust": "노크",
+        "model": "P370IVN02.201 (Z)",
+        "cnt": 18
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 7
+      },
+      {
+        "cust": "코리스",
+        "model": "G101EVN01.002 (P)",
+        "cnt": 2
+      },
+      {
+        "cust": "판타룩스",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코리스",
+        "model": "M215HAN01.201 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코리스",
+        "model": "P430QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "픽셀런트",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "한솔오리온텍",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "리더원",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "에스제이아이",
+        "model": "G101EAN02.101 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "판타룩스",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 44
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 25
+      },
+      {
+        "cust": "코텍",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 20
+      },
+      {
+        "cust": "코텍",
+        "model": "P215HAN01.100 (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "정림재고(파인더즈)",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "픽셀런트",
+        "model": "G320ZAN02.502 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "코텍",
+        "model": "G238HAN02.005 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "정림전자",
+        "model": "G140HAB01.200 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "코텍(베트남)12,13th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코리스",
+        "model": "P320HVN06.110 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "닛시네이처",
+        "model": "G185HAN01.104 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "닛시네이처",
+        "model": "G150XAN02.100 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "지에스디",
+        "model": "G185HAN01.005 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G133HAN01.101 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "정림재고 (에프디에스)",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "G156HAN05.004 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "지에스디",
+        "model": "M240UAN01.000 (Z)",
+        "cnt": 3
+      },
+      {
+        "cust": "한솔오리온텍",
+        "model": "G101EVN01.002 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍(베트남)14th",
+        "model": "M315QVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G154EVN01.001 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "엠트리",
+        "model": "P430QVN01.000 (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "코리스",
+        "model": "P320HVN06.110 (Z)",
+        "cnt": 8
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "지에스디",
+        "model": "M240UAN01.000 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코리스",
+        "model": "P430HVN01.401 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코리스",
+        "model": "P430QVN01.003 (Z)",
+        "cnt": 1
+      }
+    ],
+    "폐기drill": [],
+    "검토전drill": [],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 129
+      },
+      {
+        "name": "RMA미대상",
+        "cnt": 20
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 17
+      },
+      {
+        "name": "NDF",
+        "cnt": 10
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 6
+      },
+      {
+        "name": "고객과실",
+        "cnt": 6
+      },
+      {
+        "name": "spec in",
+        "cnt": 6
+      },
+      {
+        "name": "FMA",
+        "cnt": 5
+      },
+      {
+        "name": "RMA(IQC)",
+        "cnt": 2
+      },
+      {
+        "name": "FMA미대상",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 158
+      },
+      {
+        "name": "PDBU",
+        "cnt": 41
+      },
+      {
+        "name": "AUO_MNT",
+        "cnt": 3
+      }
+    ],
+    "defects": [
+      {
+        "name": "Noise",
+        "cnt": 42
+      },
+      {
+        "name": "Localized light leakage ND 5% check",
+        "cnt": 16
+      },
+      {
+        "name": "NDF",
+        "cnt": 13
+      },
+      {
+        "name": "Glass broken",
+        "cnt": 13
+      },
+      {
+        "name": "Abnormal display",
+        "cnt": 12
+      },
+      {
+        "name": "Chipping (crack)",
+        "cnt": 8
+      },
+      {
+        "name": "V-block defect",
+        "cnt": 6
+      },
+      {
+        "name": "No display",
+        "cnt": 5
+      },
+      {
+        "name": "Light leakage ND 5% check spec in",
+        "cnt": 5
+      },
+      {
+        "name": "Localized bottom mura ND 5% check",
+        "cnt": 4
+      }
+    ],
+    "customers": [
+      {
+        "name": "판타룩스",
+        "cnt": 46
+      },
+      {
+        "name": "코텍",
+        "cnt": 44
+      },
+      {
+        "name": "코텍(베트남)14th",
+        "cnt": 42
+      },
+      {
+        "name": "노크",
+        "cnt": 18
+      },
+      {
+        "name": "코리스",
+        "cnt": 15
+      },
+      {
+        "name": "지에스디",
+        "cnt": 6
+      },
+      {
+        "name": "픽셀런트",
+        "cnt": 6
+      },
+      {
+        "name": "정림재고(파인더즈)",
+        "cnt": 5
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 5
+      },
+      {
+        "name": "정림전자",
+        "cnt": 4
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "G156HAN05.004 (Z)",
+        "cnt": 25
+      },
+      {
+        "name": "G140HAB01.200 (Z)",
+        "cnt": 24
+      },
+      {
+        "name": "P215HAN01.100 (Z)",
+        "cnt": 10
+      },
+      {
+        "name": "G156HAB03.200 (Z)",
+        "cnt": 6
+      },
+      {
+        "name": "M238HVN01.0HE (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G320ZAN02.502 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G238HAN02.005 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G133HAN01.101 (Z)",
+        "cnt": 3
+      },
+      {
+        "name": "G101EVN01.002 (Z)",
+        "cnt": 3
+      },
+      {
+        "name": "G185HAN01.104 (Z)",
+        "cnt": 1
+      }
+    ],
+    "selfFix": {
+      "total": 6,
+      "models": [
+        {
+          "cust": "지에스디",
+          "model": "M240UAN01.000 (Z)",
+          "cnt": 3
+        },
+        {
+          "cust": "코텍(베트남)14th",
+          "model": "M315QVN01.000 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "코텍",
+          "model": "G154EVN01.001 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "엠트리",
+          "model": "P430QVN01.000 (Z)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "M238HVN01.0HE (Z)",
+        "defect": "Noise",
+        "cnt": 56,
+        "lv": "crit",
+        "custs": {}
+      },
+      {
+        "model": "G156HAN05.004 (Z)",
+        "defect": "Localized light leakage ND 5% check",
+        "cnt": 36,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G140HAB01.200 (Z)",
+        "defect": "Chipping (crack)",
+        "cnt": 24,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "P370IVN02.201 (Z)",
+        "defect": "Glass broken",
+        "cnt": 18,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "P215HAN01.100 (Z)",
+        "defect": "Bright dot 1pc",
+        "cnt": 10,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "P320HVN06.110 (Z)",
+        "defect": "Abnormal display",
+        "cnt": 9,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G320ZAN02.502 (Z)",
+        "defect": "V-block defect",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G101EVN01.002 (Z)",
+        "defect": "Glass broken",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G156HAB03.200 (Z)",
+        "defect": "No display",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "2": {
+        "total": 27,
+        "완료cnt": 24,
+        "applyCnt": 1,
+        "repairCnt": 2,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "코리스",
+            "cnt": 15
+          },
+          {
+            "name": "정림재고(파인더즈)",
+            "cnt": 5
+          },
+          {
+            "name": "파인더즈",
+            "cnt": 5
+          },
+          {
+            "name": "닛시네이처",
+            "cnt": 2
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "P320HVN06.110 (Z)",
+            "cnt": 9
+          },
+          {
+            "name": "G101EVN01.002 (P)",
+            "cnt": 2
+          },
+          {
+            "name": "M215HAN01.201 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "P430QVN01.000 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "3": {
+        "total": 106,
+        "완료cnt": 25,
+        "applyCnt": 40,
+        "repairCnt": 41,
+        "자체수리cnt": 4,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "판타룩스",
+            "cnt": 46
+          },
+          {
+            "name": "코텍(베트남)14th",
+            "cnt": 42
+          },
+          {
+            "name": "지에스디",
+            "cnt": 6
+          },
+          {
+            "name": "픽셀런트",
+            "cnt": 6
+          },
+          {
+            "name": "한솔오리온텍",
+            "cnt": 3
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 46
+          },
+          {
+            "name": "G156HAN05.004 (Z)",
+            "cnt": 36
+          },
+          {
+            "name": "G320ZAN02.502 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "M240UAN01.000 (Z)",
+            "cnt": 5
+          },
+          {
+            "name": "G101EVN01.002 (Z)",
+            "cnt": 4
+          }
+        ]
+      },
+      "4": {
+        "total": 68,
+        "완료cnt": 21,
+        "applyCnt": 10,
+        "repairCnt": 37,
+        "자체수리cnt": 2,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "코텍",
+            "cnt": 44
+          },
+          {
+            "name": "노크",
+            "cnt": 18
+          },
+          {
+            "name": "정림전자",
+            "cnt": 4
+          },
+          {
+            "name": "엠트리",
+            "cnt": 1
+          },
+          {
+            "name": "리더원",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G140HAB01.200 (Z)",
+            "cnt": 24
+          },
+          {
+            "name": "P370IVN02.201 (Z)",
+            "cnt": 18
+          },
+          {
+            "name": "P215HAN01.100 (Z)",
+            "cnt": 10
+          },
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "G238HAN02.005 (Z)",
+            "cnt": 5
+          }
+        ]
+      },
+      "5": {
+        "total": 1,
+        "완료cnt": 1,
+        "applyCnt": 0,
+        "repairCnt": 0,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "에스제이아이",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G101EAN02.101 (Z)",
+            "cnt": 1
+          }
+        ]
+      }
+    }
+  },
+  "6": {
+    "total": 65,
+    "완료cnt": 10,
+    "applyCnt": 0,
+    "repairCnt": 47,
+    "자체수리cnt": 2,
+    "미정cnt": 8,
+    "완료drill": [
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "제이엘디엔티",
+        "model": "G104XAN01.010 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "이미지셀",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "에프디에스",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      }
+    ],
+    "applyDrill": [],
+    "repairDrill": [
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 10
+      },
+      {
+        "cust": "코텍",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "토비스",
+        "model": "G185HAN01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "덴텀",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "제이엘디엔티",
+        "model": "G104XAN01.010 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "엠트리",
+        "model": "P550QVN06.301 (Z)",
+        "cnt": 1
+      }
+    ],
+    "미정drill": [],
+    "자체수리drill": [
+      {
+        "cust": "동우디아이",
+        "model": "T420HVN08.0P1 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "덴텀",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specInCnt": 5,
+    "specOutCnt": 46,
+    "반송cnt": 5,
+    "보상cnt": 8,
+    "폐기cnt": 0,
+    "검토전cnt": 1,
+    "specInDrill": [
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "제이엘디엔티",
+        "model": "G104XAN01.010 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 1
+      }
+    ],
+    "specOutDrill": [
+      {
+        "cust": "코텍",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "정림재고(자연과사람)",
+        "model": "G190ETN01.204 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.501 (Z)",
+        "cnt": 5
+      },
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G156XTN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "cust": "토비스",
+        "model": "G185HAN01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "덴텀",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "코텍",
+        "model": "G156HAB03.200 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "제이엘디엔티",
+        "model": "G104XAN01.010 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "오디하이텍",
+        "model": "G240HVN01.000 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "코텍",
+        "model": "G270QAN01.401 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "토비스",
+        "model": "G320ZAN02.105 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "엠트리",
+        "model": "P550QVN06.301 (Z)",
+        "cnt": 1
+      }
+    ],
+    "반송drill": [
+      {
+        "cust": "토비스",
+        "model": "G215HAN01.701 (Z)",
+        "cnt": 2
+      },
+      {
+        "cust": "동우디아이",
+        "model": "T420HVN08.0P1 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "이미지셀",
+        "model": "G215HAN01.301 (Z)",
+        "cnt": 1
+      },
+      {
+        "cust": "덴텀",
+        "model": "G150XTN03.500 (Z)",
+        "cnt": 1
+      }
+    ],
+    "보상drill": [
+      {
+        "cust": "파인더즈",
+        "model": "M238HVN01.0HE (Z)",
+        "cnt": 6
+      },
+      {
+        "cust": "무한시스템",
+        "model": "G150XTN03.404 (Z)",
+        "cnt": 2
+      }
+    ],
+    "폐기drill": [],
+    "검토전drill": [
+      {
+        "cust": "에프디에스",
+        "model": "G173HW01.004 (Z)",
+        "cnt": 1
+      }
+    ],
+    "routes": [
+      {
+        "name": "RMA",
+        "cnt": 36
+      },
+      {
+        "name": "FMA",
+        "cnt": 10
+      },
+      {
+        "name": "정림보상대상",
+        "cnt": 8
+      },
+      {
+        "name": "spec in",
+        "cnt": 3
+      },
+      {
+        "name": "고객과실",
+        "cnt": 3
+      },
+      {
+        "name": "NDF",
+        "cnt": 2
+      },
+      {
+        "name": "자체수리완료",
+        "cnt": 2
+      },
+      {
+        "name": "미분류",
+        "cnt": 1
+      }
+    ],
+    "bu": [
+      {
+        "name": "GDBU",
+        "cnt": 63
+      },
+      {
+        "name": "PDBU",
+        "cnt": 2
+      }
+    ],
+    "defects": [
+      {
+        "name": "Localized mura ND 5%",
+        "cnt": 8
+      },
+      {
+        "name": "B/L defect",
+        "cnt": 6
+      },
+      {
+        "name": "No display",
+        "cnt": 5
+      },
+      {
+        "name": "Mura ND 6% check",
+        "cnt": 3
+      },
+      {
+        "name": "White screen",
+        "cnt": 3
+      },
+      {
+        "name": "Localized mura ND 6% Yellowish",
+        "cnt": 3
+      },
+      {
+        "name": "Pol defect",
+        "cnt": 2
+      },
+      {
+        "name": "Small bright dot ND 10% check spec in",
+        "cnt": 2
+      },
+      {
+        "name": "Bright dot 1pc",
+        "cnt": 2
+      },
+      {
+        "name": "Glass broken",
+        "cnt": 2
+      }
+    ],
+    "customers": [
+      {
+        "name": "토비스",
+        "cnt": 15
+      },
+      {
+        "name": "무한시스템",
+        "cnt": 13
+      },
+      {
+        "name": "파인더즈",
+        "cnt": 10
+      },
+      {
+        "name": "코텍",
+        "cnt": 10
+      },
+      {
+        "name": "정림재고(자연과사람)",
+        "cnt": 7
+      },
+      {
+        "name": "덴텀",
+        "cnt": 3
+      },
+      {
+        "name": "제이엘디엔티",
+        "cnt": 2
+      },
+      {
+        "name": "동우디아이",
+        "cnt": 1
+      },
+      {
+        "name": "이미지셀",
+        "cnt": 1
+      },
+      {
+        "name": "오디하이텍",
+        "cnt": 1
+      }
+    ],
+    "rmaTop10": [
+      {
+        "name": "G215HAN01.501 (Z)",
+        "cnt": 10
+      },
+      {
+        "name": "G190ETN01.204 (Z)",
+        "cnt": 5
+      },
+      {
+        "name": "G215HAN01.701 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G150XTN03.500 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G215HAN01.301 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G156XTN01.000 (Z)",
+        "cnt": 4
+      },
+      {
+        "name": "G185HAN01.004 (Z)",
+        "cnt": 2
+      },
+      {
+        "name": "G104XAN01.010 (Z)",
+        "cnt": 1
+      },
+      {
+        "name": "G150XTN03.404 (Z)",
+        "cnt": 1
+      }
+    ],
+    "selfFix": {
+      "total": 2,
+      "models": [
+        {
+          "cust": "동우디아이",
+          "model": "T420HVN08.0P1 (Z)",
+          "cnt": 1
+        },
+        {
+          "cust": "덴텀",
+          "model": "G150XTN03.500 (Z)",
+          "cnt": 1
+        }
+      ],
+      "defects": [],
+      "customers": []
+    },
+    "issues": [
+      {
+        "model": "G215HAN01.501 (Z)",
+        "defect": "Localized mura ND 6% Yellowish",
+        "cnt": 13,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "M238HVN01.0HE (Z)",
+        "defect": "Localized mura ND 5%",
+        "cnt": 10,
+        "lv": "warn",
+        "custs": {}
+      },
+      {
+        "model": "G190ETN01.204 (Z)",
+        "defect": "Mura ND 6% check",
+        "cnt": 7,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G215HAN01.701 (Z)",
+        "defect": "Glass broken",
+        "cnt": 6,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G150XTN03.500 (Z)",
+        "defect": "White screen",
+        "cnt": 5,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G215HAN01.301 (Z)",
+        "defect": "B/L defect",
+        "cnt": 5,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G156XTN01.000 (Z)",
+        "defect": "Particle D=2.0mm",
+        "cnt": 4,
+        "lv": "info",
+        "custs": {}
+      },
+      {
+        "model": "G150XTN03.404 (Z)",
+        "defect": "H-line defect",
+        "cnt": 3,
+        "lv": "info",
+        "custs": {}
+      }
+    ],
+    "weeks": {
+      "1": {
+        "total": 15,
+        "완료cnt": 2,
+        "applyCnt": 0,
+        "repairCnt": 13,
+        "자체수리cnt": 0,
+        "미정cnt": 0,
+        "topCusts": [
+          {
+            "name": "파인더즈",
+            "cnt": 8
+          },
+          {
+            "name": "정림재고(자연과사람)",
+            "cnt": 7
+          }
+        ],
+        "topModels": [
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 8
+          },
+          {
+            "name": "G190ETN01.204 (Z)",
+            "cnt": 7
+          }
+        ]
+      },
+      "2": {
+        "total": 20,
+        "완료cnt": 6,
+        "applyCnt": 0,
+        "repairCnt": 13,
+        "자체수리cnt": 1,
+        "미정cnt": 1,
+        "topCusts": [
+          {
+            "name": "토비스",
+            "cnt": 14
+          },
+          {
+            "name": "제이엘디엔티",
+            "cnt": 2
+          },
+          {
+            "name": "덴텀",
+            "cnt": 1
+          },
+          {
+            "name": "동우디아이",
+            "cnt": 1
+          },
+          {
+            "name": "이미지셀",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G215HAN01.501 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "G215HAN01.701 (Z)",
+            "cnt": 6
+          },
+          {
+            "name": "G185HAN01.004 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G104XAN01.010 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G150XTN03.500 (Z)",
+            "cnt": 1
+          }
+        ]
+      },
+      "3": {
+        "total": 23,
+        "완료cnt": 1,
+        "applyCnt": 0,
+        "repairCnt": 18,
+        "자체수리cnt": 0,
+        "미정cnt": 4,
+        "topCusts": [
+          {
+            "name": "무한시스템",
+            "cnt": 13
+          },
+          {
+            "name": "코텍",
+            "cnt": 8
+          },
+          {
+            "name": "에프디에스",
+            "cnt": 1
+          },
+          {
+            "name": "덴텀",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G215HAN01.501 (Z)",
+            "cnt": 7
+          },
+          {
+            "name": "G215HAN01.301 (Z)",
+            "cnt": 4
+          },
+          {
+            "name": "G156XTN01.000 (Z)",
+            "cnt": 4
+          },
+          {
+            "name": "G150XTN03.500 (Z)",
+            "cnt": 3
+          },
+          {
+            "name": "G150XTN03.404 (Z)",
+            "cnt": 3
+          }
+        ]
+      },
+      "4": {
+        "total": 7,
+        "완료cnt": 1,
+        "applyCnt": 0,
+        "repairCnt": 3,
+        "자체수리cnt": 1,
+        "미정cnt": 3,
+        "topCusts": [
+          {
+            "name": "코텍",
+            "cnt": 2
+          },
+          {
+            "name": "파인더즈",
+            "cnt": 2
+          },
+          {
+            "name": "덴텀",
+            "cnt": 1
+          },
+          {
+            "name": "토비스",
+            "cnt": 1
+          },
+          {
+            "name": "엠트리",
+            "cnt": 1
+          }
+        ],
+        "topModels": [
+          {
+            "name": "G156HAB03.200 (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "M238HVN01.0HE (Z)",
+            "cnt": 2
+          },
+          {
+            "name": "G150XTN03.500 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "G320ZAN02.105 (Z)",
+            "cnt": 1
+          },
+          {
+            "name": "P550QVN06.301 (Z)",
+            "cnt": 1
+          }
+        ]
+      }
+    }
+  }
+}
