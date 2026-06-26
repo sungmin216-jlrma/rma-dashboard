@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>품질팀 RMA 대시보드 — 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{--bg:#f5f4f1;--surface:#fff;--surface2:#f0efe9;--border:#e2e0d8;--border2:#cccac0;--text:#1a1916;--text2:#6b6960;--text3:#9e9c93;--blue:#2563eb;--blue-l:#eff6ff;--blue-t:#1d4ed8;--green:#16a34a;--green-l:#f0fdf4;--green-t:#15803d;--red:#dc2626;--red-l:#fef2f2;--red-t:#b91c1c;--amber:#d97706;--amber-l:#fffbeb;--amber-t:#b45309;--purple:#7c3aed;--purple-l:#f5f3ff;--purple-t:#6d28d9;--orange:#ea580c;--orange-l:#fff7ed;--orange-t:#c2410c;--accent:#0f172a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+  
+  .nav-brand{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.04em}
+  .nav-brand span{color:#60a5fa}
+  .nav-tabs{display:flex;gap:4px}
+  .nav-tab{padding:6px 18px;font-size:13px;font-weight:500;border:none;border-radius:6px;cursor:pointer;transition:all .18s;background:transparent;color:rgba(255,255,255,.5);font-family:'Noto Sans KR',sans-serif}
+  .nav-tab:hover{background:rgba(255,255,255,.1);color:#fff}
+  .nav-tab.active{background:rgba(255,255,255,.15);color:#fff}
+  .nav-badge{display:inline-block;background:rgba(96,165,250,.25);color:#93c5fd;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:5px;font-family:'JetBrains Mono',monospace}
+  .nav-right{margin-left:auto;font-size:11px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace}
+  .page{display:none}.page.active{display:block}
+  .container{max-width:1200px;margin:0 auto;padding:28px 24px}
+  .page-header{margin-bottom:22px}
+  .page-header h1{font-size:20px;font-weight:600;margin-bottom:3px}
+  .page-header p{font-size:13px;color:var(--text2)}
+  .month-tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+  .mtab{padding:7px 20px;font-size:13px;font-weight:500;border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;color:var(--text2);background:var(--surface);transition:all .15s;font-family:'Noto Sans KR',sans-serif}
+  .mtab:hover{border-color:var(--blue);color:var(--blue)}
+  .mtab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .mtab .mcnt{font-family:'JetBrains Mono',monospace;font-size:11px;margin-left:5px;opacity:.65}
+  .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+  .ship-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+  .kpi .lbl{font-size:10px;color:var(--text3);margin-bottom:2px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+  .kpi .val{font-size:20px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace;display:inline-flex;align-items:baseline;gap:2px}
+  .kpi .sub{font-size:10px;color:var(--text3);margin-top:1px}
+  .kpi.c-blue .val{color:var(--blue-t)}.kpi.c-green .val{color:var(--green-t)}.kpi.c-red .val{color:var(--red-t)}.kpi.c-amber .val{color:var(--amber-t)}
+  .prog-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:18px}
+  .prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .prog-title{font-size:13px;font-weight:600}
+  .prog-pct{font-size:22px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .prog-track{height:14px;background:var(--red-l);border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+  .prog-done{height:100%;background:var(--green);border-radius:7px 0 0 7px}
+  .prog-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text3);flex-wrap:wrap;gap:4px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+  .card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--surface2)}
+  .route-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--surface2);font-size:13px}
+  .route-row:last-child{border-bottom:none}
+  .route-left{display:flex;align-items:center;gap:8px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .b-rma{background:var(--blue-l);color:var(--blue-t)}.b-done{background:var(--green-l);color:var(--green-t)}.b-fma{background:var(--purple-l);color:var(--purple-t)}.b-ndf{background:var(--surface2);color:var(--text2)}.b-spec{background:var(--amber-l);color:var(--amber-t)}.b-cust{background:var(--red-l);color:var(--red-t)}
+  .route-cnt{font-family:'JetBrains Mono',monospace;font-weight:600}
+  .sbar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .sbar-label{font-size:12px;color:var(--text2);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .w80{width:80px}.w100{width:100px}
+  .sbar-track{flex:1;height:14px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .sbar-fill{height:100%;border-radius:4px}
+  .sbar-val{font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-weight:600;min-width:36px;text-align:right;flex-shrink:0}
+  .long-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+  .long-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+  .long-icon{width:36px;height:36px;background:var(--amber-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .long-title{font-size:15px;font-weight:600;margin-bottom:2px}
+  .long-sub{font-size:12px;color:var(--text2)}
+  .long-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  .long-stat{background:var(--surface2);border-radius:8px;padding:12px 14px;cursor:pointer}
+  .long-stat .ls-lbl{font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500}
+  .long-stat .ls-val{font-size:22px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .long-stat .ls-sub{font-size:11px;color:var(--text3);margin-top:2px}
+  .days-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .days-label{font-size:12px;color:var(--text2);width:140px;flex-shrink:0}
+  .days-track{flex:1;height:18px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .days-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px}
+  .days-fill-text{font-size:10px;font-weight:600;color:#fff}
+  .days-val{font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:600;min-width:36px;text-align:right;flex-shrink:0}
+  .cust-prog-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--surface2);font-size:13px}
+  .cust-prog-row:last-child{border-bottom:none}
+  .cpill{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+  .notice-bar{margin-top:10px;padding:8px 12px;background:var(--orange-l);border-radius:6px;font-size:12px;color:var(--orange-t);border-left:3px solid var(--orange)}
+  .issue-section{margin-bottom:12px}
+  .issue-section-title{font-size:16px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .issue-count-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+  .issue-count-badge.lv-crit{background:var(--red-l);color:var(--red-t)}.issue-count-badge.lv-warn{background:var(--amber-l);color:var(--amber-t)}.issue-count-badge.lv-info{background:var(--blue-l);color:var(--blue-t)}
+  .issue-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .issue-card{border-radius:6px;padding:5px 8px;border-left:3px solid;display:flex;align-items:center;gap:8px;height:56px;overflow:hidden}
+  .issue-card.lv-crit{background:#fff5f5;border-color:var(--red)}.issue-card.lv-warn{background:#fffbeb;border-color:var(--amber)}.issue-card.lv-info{background:#eff6ff;border-color:var(--blue)}
+  .issue-lv{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .issue-card.lv-crit .issue-lv{color:var(--red-t)}.issue-card.lv-warn .issue-lv{color:var(--amber-t)}.issue-card.lv-info .issue-lv{color:var(--blue-t)}
+  .issue-model{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .issue-defect{font-size:9px;color:var(--text2);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .issue-footer{display:none}
+  .issue-cnt{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;line-height:1;min-width:28px;text-align:right}
+  .issue-card.lv-crit .issue-cnt{color:var(--red-t)}.issue-card.lv-warn .issue-cnt{color:var(--amber-t)}.issue-card.lv-info .issue-cnt{color:var(--blue-t)}
+  .issue-sub{font-size:10px;color:var(--text3);text-align:right}
+  .issue-bg-num{display:none}
+  .no-issue{background:var(--green-l);border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--green-t);font-weight:500}
+  .issue-custs{display:flex;flex-direction:column;gap:1px}
+  .issue-cust{font-size:8px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .issue-cust-dot{display:none}
+  .issue-left{flex:1;min-width:0}
+  .sf-card{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:1px solid #86efac;border-radius:12px;padding:18px 20px;margin-bottom:18px}
+  .sf-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .sf-icon{width:40px;height:40px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .sf-title{font-size:15px;font-weight:700;color:var(--green-t)}
+  .sf-subtitle{font-size:12px;color:#166534;margin-top:2px}
+  .sf-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .sf-kpi{background:rgba(255,255,255,.7);border-radius:8px;padding:10px 14px;border:1px solid #bbf7d0}
+  .sf-kpi .lbl{font-size:11px;color:#166534;margin-bottom:3px;font-weight:500}
+  .sf-kpi .val{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green-t)}
+  .sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sf-inner{background:rgba(255,255,255,.6);border-radius:8px;padding:12px 14px;border:1px solid #bbf7d0}
+  .sf-inner-title{font-size:11px;font-weight:600;color:#166534;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+  .sf-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .sf-bar-label{font-size:11px;color:#166534;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:110px}
+  .sf-bar-track{flex:1;height:12px;background:rgba(255,255,255,.5);border-radius:3px;overflow:hidden}
+  .sf-bar-fill{height:100%;border-radius:3px;background:var(--green)}
+  .sf-bar-val{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--green-t);min-width:24px;text-align:right;flex-shrink:0}
+  .kpi.clickable{cursor:pointer;transition:all .15s}
+  .kpi.clickable:hover{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08);transform:translateY(-1px)}
+  .kpi.clickable .lbl::after{content:' ↗';font-size:10px;opacity:.5}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--surface);border-radius:14px;width:100%;max-width:680px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);flex-shrink:0}
+  .modal-head-title{font-size:16px;font-weight:600;margin-bottom:2px}
+  .modal-head-sub{font-size:12px;color:var(--text2)}
+  .modal-close{width:32px;height:32px;border:none;background:var(--surface2);border-radius:8px;cursor:pointer;font-size:18px;color:var(--text2);display:flex;align-items:center;justify-content:center}
+  .modal-close:hover{background:var(--border);color:var(--text)}
+  .modal-body{overflow-y:auto;padding:18px 22px;flex:1}
+  .drill-table{width:100%;border-collapse:collapse}
+  .drill-table th{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;text-align:left;border-bottom:1.5px solid var(--border)}
+  .drill-table th:last-child{text-align:right}
+  .drill-table td{padding:9px 12px;font-size:13px;border-bottom:1px solid var(--surface2);vertical-align:middle}
+  .drill-table td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600}
+  .drill-table tr:last-child td{border-bottom:none}
+  .drill-table tr:hover td{background:var(--surface2)}
+  .drill-model{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);margin-top:2px}
+  .drill-cnt-bar{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .drill-mini-bar{width:60px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+  .drill-mini-fill{height:100%;background:var(--red);border-radius:3px;opacity:.75}
+  .drill-group-head td{background:var(--blue-l)!important;font-weight:600;color:var(--blue-t);font-size:12px;padding:6px 12px}
+  .drill-total{display:flex;justify-content:space-between;align-items:center;padding:12px 0 0;border-top:1.5px solid var(--border);margin-top:4px;font-size:13px;font-weight:600}
+  .drill-total span:last-child{font-family:'JetBrains Mono',monospace;color:var(--red-t)}
+  .summary-accordion{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:22px;overflow:hidden}
+  .summary-accordion-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;cursor:pointer;user-select:none}
+  .summary-accordion-head:hover{background:var(--surface2)}
+  .summary-head-left{display:flex;align-items:center;gap:12px}
+  .summary-head-title{font-size:14px;font-weight:600;color:var(--text)}
+  .summary-head-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .summary-chip{font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:600;padding:3px 10px;border-radius:6px;background:var(--surface2);color:var(--text2)}
+  .summary-chip.total{background:var(--accent);color:#fff}.summary-chip.green{background:var(--green-l);color:var(--green-t)}.summary-chip.red{background:var(--red-l);color:var(--red-t)}.summary-chip.amber{background:var(--amber-l);color:var(--amber-t)}
+  .summary-toggle{width:28px;height:28px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text2);transition:transform .25s}
+  .summary-accordion.open .summary-toggle{transform:rotate(180deg)}
+  .summary-body{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+  .summary-accordion.open .summary-body{max-height:600px}
+  .summary-body-inner{padding:0 20px 18px}
+  .summary-table{width:100%;border-collapse:collapse;font-size:13px}
+  .summary-table th{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;padding:7px 10px;text-align:left;border-bottom:1.5px solid var(--border);white-space:nowrap}
+  .summary-table th:not(:first-child){text-align:right}
+  .summary-table td{padding:8px 10px;border-bottom:1px solid var(--surface2);vertical-align:middle}
+  .summary-table td:not(:first-child){text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600}
+  .summary-table tr:hover td{background:var(--surface2)}
+  .summary-bar-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .summary-bar{width:80px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;flex-shrink:0}
+  .summary-bar-fill{height:100%;border-radius:3px}
+  .summary-month-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text)}
+  .summary-divider{height:1px;background:var(--border);margin-bottom:14px}
+  @media(max-width:900px){.kpi-row,.ship-kpi-row{grid-template-columns:repeat(2,1fr)}.grid2,.long-stat-row{grid-template-columns:1fr}}
+  .week-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color .2s}
+  .week-card-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .week-toggle{font-size:10px;color:var(--text3)}
+  .issue-grid-large{display:none}
+  .issue-card-large{display:none}
+
+  .upload-btn{padding:5px 13px;font-size:11px;font-weight:600;border:1.5px solid rgba(255,255,255,.25);border-radius:6px;cursor:pointer;color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);transition:all .18s;white-space:nowrap;font-family:'Noto Sans KR',sans-serif}
+  .upload-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5);color:#fff}
+  .upload-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+  .upload-toast.show{opacity:1}
+</style>
+<div class="modal-overlay" id="drillModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><div class="modal-head-title" id="modalTitle"></div><div class="modal-head-sub" id="modalSub"></div></div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+</head>
+<body>
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:14px">
+  <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:#60a5fa;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div style="color:#fff;font-size:13px;font-family:'JetBrains Mono',monospace">GitHub에서 데이터 로드 중…</div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<div style="position:sticky;top:0;z-index:100;height:56px;background:#0f172a;display:flex;align-items:center;padding:0 28px;gap:24px;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.04em">QC<span style="color:#60a5fa">·RMA</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchPage('acc',this)">고객사 RMA 접수 현황<span class="nav-badge" id="badge-rma"></span></button>
+    <button class="nav-tab" onclick="switchPage('ship',this)">RMA Apply 현황<span class="nav-badge" id="badge-apply"></span></button>
+  </div>
+  <label class="upload-btn" title="품질팀 RMA 현황.xlsx 업로드 → 자동 업데이트" onclick="document.getElementById('xlsxInput').click()">&#128196; 엑셀 업데이트</label><input type="file" id="xlsxInput" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(this)"><div style="margin-left:auto;font-size:11px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace" id="nav-year">2026 누적 · 품질팀</div><div class="upload-toast" id="uploadToast"></div>
+</div>
+
+<div id="page-acc" class="page active">
+<div class="container">
+  <div class="page-header"><h1>고객사 RMA 접수 현황</h1><p>2026년 월별 접수 건수 · 처리 완료율 · 모델별 불량 현황</p></div>
+  <div class="summary-accordion" id="summaryAccordion">
+    <div class="summary-accordion-head" onclick="toggleSummary()">
+      <div class="summary-head-left">
+        <span style="font-size:16px">&#x1F4CA;</span>
+        <span class="summary-head-title">2026년 전체 현황</span>
+        <div class="summary-head-chips">
+          <span class="summary-chip total">총 1187건</span>
+          <span class="summary-chip green">처리완료 526건</span>
+          <span class="summary-chip" style="background:#dcfce7;color:#15803d">자체수리 55건</span>
+          <span class="summary-chip" style="background:var(--blue-l);color:var(--blue-t)">Apply 187건</span>
+          <span class="summary-chip red">Repair 대기 473건</span>
+          <span class="summary-chip amber">미정 1건</span>
+        </div>
+      </div>
+      <div class="summary-toggle">&#x25BC;</div>
+    </div>
+    <div class="summary-body"><div class="summary-body-inner">
+      <div class="summary-divider"></div>
+      <table class="summary-table">
+        <thead><tr><th>기간</th><th>총 접수</th><th>처리완료</th><th>자체수리</th><th>Apply</th><th>Repair 대기</th><th>미정</th><th style="text-align:right;min-width:100px">완료율</th></tr></thead>
+        <tbody><tr><td><span class="summary-month-tag">2026-01</span></td><td>127건</td><td style="color:var(--green-t)">98건</td><td style="color:#15803d">11건</td><td style="color:var(--blue-t)">0건</td><td style="color:var(--red-t)">18건</td><td style="color:var(--amber-t)">0건</td><td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:100%;background:var(--green)"></div></div><span style="color:var(--green-t)">85.8%</span></div></td></tr><tr><td><span class="summary-month-tag">2026-02</span></td><td>442건</td><td style="color:var(--green-t)">99건</td><td style="color:#15803d">4건</td><td style="color:var(--blue-t)">3건</td><td style="color:var(--red-t)">336건</td><td style="color:var(--amber-t)">0건</td><td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:27%;background:var(--green)"></div></div><span style="color:var(--red-t)">23.3%</span></div></td></tr><tr><td><span class="summary-month-tag">2026-03</span></td><td>173건</td><td style="color:var(--green-t)">51건</td><td style="color:#15803d">18건</td><td style="color:var(--blue-t)">2건</td><td style="color:var(--red-t)">102건</td><td style="color:var(--amber-t)">0건</td><td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:47%;background:var(--green)"></div></div><span style="color:var(--amber-t)">39.9%</span></div></td></tr><tr><td><span class="summary-month-tag">2026-04</span></td><td>99건</td><td style="color:var(--green-t)">49건</td><td style="color:#15803d">15건</td><td style="color:var(--blue-t)">24건</td><td style="color:var(--red-t)">11건</td><td style="color:var(--amber-t)">0건</td><td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:75%;background:var(--green)"></div></div><span style="color:var(--green-t)">64.6%</span></div></td></tr><tr><td><span class="summary-month-tag">2026-05</span></td><td>203건</td><td style="color:var(--green-t)">70건</td><td style="color:#15803d">6건</td><td style="color:var(--blue-t)">57건</td><td style="color:var(--red-t)">70건</td><td style="color:var(--amber-t)">0건</td><td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:44%;background:var(--green)"></div></div><span style="color:var(--amber-t)">37.4%</span></div></td></tr></tbody>
+        <tfoot><tr style="background:var(--surface2)">
+          <td style="font-weight:600">합계</td>
+          <td style="font-weight:700">1044건</td>
+          <td style="color:var(--green-t);font-weight:700">367건</td>
+          <td style="color:#15803d;font-weight:700">54건</td>
+          <td style="color:var(--blue-t);font-weight:700">86건</td>
+          <td style="color:var(--red-t);font-weight:700">537건</td>
+          <td style="color:var(--amber-t);font-weight:700">0건</td>
+          <td><div class="summary-bar-cell"><div class="summary-bar"><div class="summary-bar-fill" style="width:40.3%;background:var(--green)"></div></div><span style="font-weight:700">40.3%</span></div></td>
+        </tr></tfoot>
+      </table>
+    </div></div>
+  </div>
+  <div class="month-tabs"><button class="mtab active" data-m="1" onclick="switchMonth(1,this)">1월<span class="mcnt">125건</span></button><button class="mtab" data-m="2" onclick="switchMonth(2,this)">2월<span class="mcnt">552건</span></button><button class="mtab" data-m="3" onclick="switchMonth(3,this)">3월<span class="mcnt">173건</span></button><button class="mtab" data-m="4" onclick="switchMonth(4,this)">4월<span class="mcnt">100건</span></button><button class="mtab" data-m="5" onclick="switchMonth(5,this)">5월<span class="mcnt">202건</span></button><button class="mtab" data-m="6" onclick="switchMonth(6,this)">6월<span class="mcnt">35건</span></button></div>
+  <div id="acc-panels"></div>
+</div></div>
+
+<div id="page-ship" class="page">
+<div class="container">
+  <div class="page-header"><h1>RMA Apply 현황</h1><p>2026년 1월 이후 기준 · 총 725건</p></div>
+  <div class="ship-kpi-row">
+    <div class="kpi"><div class="lbl">전체 발송 시료</div><div class="val">725<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div class="sub">26년 입고 기준</div></div>
+    <div class="kpi c-green"><div class="lbl">처리완료</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">505<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--green-t)">69.7%</div></div>
+      <div class="sub">처리완료일 기준</div></div>
+    <div class="kpi c-red"><div class="lbl">RMA 진행중</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">220<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--red-t)">30.3%</div></div>
+      <div class="sub">Repair 입고 대기</div></div>
+    <div class="kpi c-amber"><div class="lbl">50일+ 주의 건</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="val">80<span style="font-size:14px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:15px;font-weight:600;color:var(--amber-t)">11.0%</div></div>
+      <div class="sub">현재 최장 154일 경과</div></div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="prog-card">
+    <div class="prog-header"><span class="prog-title">전체 처리 완료율</span><span class="prog-pct" style="color:var(--green-t)">69.7%</span></div>
+    <div class="prog-track"><div class="prog-done" style="width:69.7%"></div></div>
+    <div class="prog-labels">
+      <span><span class="dot" style="background:var(--green)"></span>처리완료 505건</span>
+      <span><span class="dot" style="background:var(--red)"></span>진행중 220건</span>
+      <span>전체 725건</span>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="long-card">
+    <div class="long-header"><div class="long-icon">&#x23F1;</div>
+      <div><div class="long-title">장기 미처리 현황</div>
+      <div class="long-sub">RMA 발행일 기준 소요 기간 · 최장 154일</div></div>
+    </div>
+    <div class="long-stat-row">
+      <div class="long-stat" onclick="openLongDrill('90일+')">
+        <div class="ls-lbl">90일+ 장기미처리</div>
+        <div class="ls-val" style="color:var(--red-t)">50건</div>
+        <div class="ls-sub">즉시 확인 필요</div>
+      </div>
+      <div class="long-stat" onclick="openLongDrill('50~89일')">
+        <div class="ls-lbl">50~89일 (주의)</div>
+        <div class="ls-val" style="color:var(--orange-t)">30건</div>
+        <div class="ls-sub">모니터링 필요</div>
+      </div>
+      <div class="long-stat" onclick="openLongDrill('30~49일')">
+        <div class="ls-lbl">30~49일</div>
+        <div class="ls-val" style="color:var(--amber-t)">140건</div>
+        <div class="ls-sub">경과 모니터링 구간</div>
+      </div>
+      <div class="long-stat" onclick="openLongDrill('30일미만')">
+        <div class="ls-lbl">30일 미만</div>
+        <div class="ls-val" style="color:var(--text2)">0건</div>
+        <div class="ls-sub">단기 진행중</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">진행중 220건 · 소요일 구간 분포</div>
+    <div class="days-bar-row"><span class="days-label">90일+ <span style="font-size:10px;background:var(--red-l);color:var(--red-t);padding:1px 5px;border-radius:3px;font-weight:600">초과</span></span><div class="days-track"><div class="days-fill" style="width:23%;background:var(--red)"><span class="days-fill-text">50건</span></div></div><span class="days-val" style="color:var(--red-t)">50건</span></div><div class="days-bar-row"><span class="days-label">50~89일 <span style="font-size:10px;background:var(--orange-l);color:var(--orange-t);padding:1px 5px;border-radius:3px;font-weight:600">주의</span></span><div class="days-track"><div class="days-fill" style="width:14%;background:var(--orange)"><span class="days-fill-text">30건</span></div></div><span class="days-val" style="color:var(--orange-t)">30건</span></div><div class="days-bar-row"><span class="days-label">30~49일</span><div class="days-track"><div class="days-fill" style="width:64%;background:var(--amber)"><span class="days-fill-text">140건</span></div></div><span class="days-val" style="color:var(--amber-t)">140건</span></div><div class="days-bar-row"><span class="days-label">30일 미만</span><div class="days-track"><div class="days-fill" style="width:0%;background:#94a3b8"><span class="days-fill-text">0건</span></div></div><span class="days-val" style="color:var(--text2)">0건</span></div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 8px">50일+ 주의 거래처 상세</div>
+    <div class="cust-prog-row"><span>코텍 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156HAB03.200 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">154일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>코텍(베트남)12,13th &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156HAN05.004 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">136일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">7건</span></div></div><div class="cust-prog-row"><span>코텍 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G140HAB01.200 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">127일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G238HAN02.005 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">126일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">9건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G238HAN02.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">126일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">2건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G050VTN01.001 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">126일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">8건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G320ZAN02.302 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">126일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>디앤티 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G270ZAN01.100 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">126일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>코텍 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">P215HAN01.100 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">118일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">2건</span></div></div><div class="cust-prog-row"><span>정림재고(파인더즈) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">M238HVN01.0HE (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">114일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">14건</span></div></div><div class="cust-prog-row"><span>정림재고(TL VISION) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156HAN05.004 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">106일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">2건</span></div></div><div class="cust-prog-row"><span>코텍 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G270QAN01.401 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">92일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>리더원 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G170EG01.104 (Z)</span></span><div><span class="cpill warn" style="background:var(--red-l);color:var(--red-t)">92일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">6건</span></div></div><div class="cust-prog-row"><span>이젠티에스 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G121XN01.001 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">87일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(제이엘디앤티) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156HAN02.303 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">78일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(직방) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G101STN01.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">77일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">4건</span></div></div><div class="cust-prog-row"><span>무한시스템 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G150XTN03.500 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">72일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>무한시스템 &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G156XTN01.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">72일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">3건</span></div></div><div class="cust-prog-row"><span>정림재고(열방) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G084SAN01.000 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">72일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">1건</span></div></div><div class="cust-prog-row"><span>정림재고(림피아디스플레이) &nbsp;—&nbsp; <span style="font-family:'JetBrains Mono',monospace;font-size:12px">G240HW01.104 (Z)</span></span><div><span class="cpill warn" style="background:var(--orange-l);color:var(--orange-t)">69일 경과</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;margin-left:10px">2건</span></div></div>
+    <div class="notice-bar">&#9888; 코텍 G156HAB03.200 (Z) 1건 — <strong>154일 경과</strong>, 90일 기준 초과. 즉시 확인 필요.</div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="grid2">
+    <div class="card"><div class="card-title">월별 수출 건수 (26년)</div><div style="position:relative;height:200px"><canvas id="shipExportChart"></canvas></div></div>
+    <div class="card"><div class="card-title">발송지별 현황</div><div style="position:relative;height:200px"><canvas id="shipDestChart"></canvas></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="card-title">판정결과별</div><div class="sbar-row"><span class="sbar-label w80">RMA</span><div class="sbar-track"><div class="sbar-fill" style="width:100%;background:var(--blue)"></div></div><span class="sbar-val">830건</span></div><div class="sbar-row"><span class="sbar-label w80">FMA</span><div class="sbar-track"><div class="sbar-fill" style="width:5%;background:var(--purple)"></div></div><span class="sbar-val">38건</span></div><div class="sbar-row"><span class="sbar-label w80">RMA(IQC)</span><div class="sbar-track"><div class="sbar-fill" style="width:2%;background:var(--green)"></div></div><span class="sbar-val">19건</span></div></div>
+    <div class="card"><div class="card-title">BU별</div><div class="sbar-row"><span class="sbar-label w80">GDBU</span><div class="sbar-track"><div class="sbar-fill" style="width:100%;background:var(--blue)"></div></div><span class="sbar-val">725건</span></div><div class="sbar-row"><span class="sbar-label w80">AUO_MNT</span><div class="sbar-track"><div class="sbar-fill" style="width:15%;background:var(--green)"></div></div><span class="sbar-val">108건</span></div><div class="sbar-row"><span class="sbar-label w80">PDBU</span><div class="sbar-track"><div class="sbar-fill" style="width:6%;background:var(--purple)"></div></div><span class="sbar-val">40건</span></div></div>
+  </div>
+</div></div>
+
+<script>
+const ACC={"1":{"total":125,"완료cnt":115,"applyCnt":0,"repairCnt":10,"자체수리cnt":11,"미정cnt":0,"완료drill":[{"cust":"정림재고(코텍)","model":"G154EVN01.001 (Z)","cnt":13},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":13},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":8},{"cust":"정림재고(판타룩스)","model":"G156HAN02.001 (Z)","cnt":5},{"cust":"정림재고(코텍)","model":"P215HAN01.100 (Z)","cnt":5},{"cust":"정림재고(판타룩스)","model":"G156HAN02.000 (P)","cnt":4},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":4},{"cust":"정림재고(코텍)","model":"G140HAB01.200 (Z)","cnt":4},{"cust":"토비스","model":"G215HAN01.200 (Z)","cnt":3},{"cust":"한솔오리온텍","model":"G240HW01.004 (Z)","cnt":2},{"cust":"정림재고(판타룩스)","model":"G156HAN02.000 (Z)","cnt":2},{"cust":"토비스","model":"G185HAN01.004 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":2},{"cust":"정림재고(코텍)","model":"G238HAN02.005 (Z)","cnt":2},{"cust":"에프디에스","model":"P424KVN01.0A0 (Z)","cnt":1},{"cust":"동경티앤씨","model":"G215HVN01.300 (Z)","cnt":1},{"cust":"정림재고(154솔팅중불량)","model":"G154EVN01.001 (Z)","cnt":1},{"cust":"정림재고(테트라다인)","model":"G185HAN01.104 (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":3},{"cust":"정림재고(알파디스플레이)","model":"P320HVN02.300 (Z)","cnt":2},{"cust":"정림재고(코텍)","model":"G154EVN01.001 (Z)","cnt":2},{"cust":"정림재고(오디하이텍)","model":"P320HVN04.500 (Z)","cnt":1},{"cust":"정림재고(엔엑스오)","model":"P430HVN05.101 (Z)","cnt":1},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"판타룩스","model":"G156HAN02.001 (Z)","cnt":6},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":3},{"cust":"리더원","model":"G150XTN06.A00 (Z)","cnt":1},{"cust":"판타룩스","model":"G156HAN02.000 (P)","cnt":1}],"routes":[{"name":"RMA","cnt":56},{"name":"정림보상대상","cnt":21},{"name":"자체수리완료","cnt":11},{"name":"spec in","cnt":11},{"name":"FMA","cnt":10},{"name":"RMA미대상","cnt":8},{"name":"RMA(IQC)","cnt":5},{"name":"NDF","cnt":2},{"name":"고객과실","cnt":1}],"bu":[{"name":"GDBU","cnt":114},{"name":"PDBU","cnt":10},{"name":"AUO_MNT","cnt":1}],"defects":[{"name":"Bright dot","cnt":11},{"name":"particle 이물제거완료","cnt":6},{"name":"Gravity mura","cnt":6},{"name":"No display","cnt":4},{"name":"Round mura (spec in)","cnt":4},{"name":"Gravity Mura","cnt":4},{"name":"White spot","cnt":4},{"name":"Mura","cnt":4},{"name":"Mura ND 6%","cnt":4},{"name":"small bright dot (spec in)","cnt":4}],"customers":[{"name":"정림재고(코텍)","cnt":28},{"name":"판타룩스","cnt":15},{"name":"정림재고(자연과사람)","cnt":13},{"name":"정림재고(판타룩스)","cnt":12},{"name":"파인더즈","cnt":10},{"name":"정림재고(파인더즈)","cnt":10},{"name":"토비스","cnt":8},{"name":"자연과사람","cnt":8},{"name":"코텍","cnt":5},{"name":"정림재고(알파디스플레이)","cnt":2}],"rmaTop10":[{"name":"P215HAN01.100 (Z)","cnt":5},{"name":"G154EVN01.001 (Z)","cnt":5},{"name":"G140HAB01.200 (Z)","cnt":5},{"name":"G156HAB03.200 (Z)","cnt":3},{"name":"G190ETN01.204 (Z)","cnt":3},{"name":"P320HVN02.300 (Z)","cnt":2},{"name":"M238HVN01.0HE (Z)","cnt":2},{"name":"P320HVN04.500 (Z)","cnt":1},{"name":"P430HVN05.101 (Z)","cnt":1},{"name":"G101EVN01.002 (Z)","cnt":1}],"selfFix":{"total":11,"models":[{"cust":"판타룩스","model":"G156HAN02.001 (Z)","cnt":6},{"cust":"판타룩스","model":"G156HAN02.000 (Z)","cnt":3},{"cust":"리더원","model":"G150XTN06.A00 (Z)","cnt":1},{"cust":"판타룩스","model":"G156HAN02.000 (P)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"G190ETN01.204 (Z)","defect":"Bright dot","cnt":21,"lv":"warn","custs":{}},{"model":"M238HVN01.0HE (Z)","defect":"Gravity mura","cnt":20,"lv":"warn","custs":{}},{"model":"G154EVN01.001 (Z)","defect":"Mura ND 6%","cnt":16,"lv":"warn","custs":{}},{"model":"G156HAN02.001 (Z)","defect":"particle 이물제거완료","cnt":12,"lv":"warn","custs":{}},{"model":"G156HAN02.000 (Z)","defect":"Pol scratch","cnt":9,"lv":"info","custs":{}},{"model":"G156HAN02.000 (P)","defect":"particle 제거불가","cnt":5,"lv":"info","custs":{}},{"model":"P215HAN01.100 (Z)","defect":"Abnormal display","cnt":5,"lv":"info","custs":{}},{"model":"G140HAB01.200 (Z)","defect":"touch glass broken  ZS01002591525407","cnt":5,"lv":"info","custs":{}},{"model":"G156HAB03.200 (Z)","defect":"Bottom mura","cnt":4,"lv":"info","custs":{}}],"weeks":{"2":{"total":19,"완료cnt":15,"applyCnt":0,"repairCnt":4,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"정림재고(파인더즈)","cnt":8},{"name":"정림재고(알파디스플레이)","cnt":2},{"name":"파인더즈","cnt":2},{"name":"에프디에스","cnt":1},{"name":"리더원","cnt":1}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"P320HVN02.300 (Z)","cnt":2},{"name":"P424KVN01.0A0 (Z)","cnt":1},{"name":"G150XTN06.A00 (Z)","cnt":1},{"name":"G215HVN01.300 (Z)","cnt":1}]},"3":{"total":64,"완료cnt":60,"applyCnt":0,"repairCnt":4,"자체수리cnt":10,"미정cnt":0,"topCusts":[{"name":"정림재고(코텍)","cnt":28},{"name":"판타룩스","cnt":13},{"name":"정림재고(판타룩스)","cnt":11},{"name":"토비스","cnt":8},{"name":"한솔오리온텍","cnt":2}],"topModels":[{"name":"G154EVN01.001 (Z)","cnt":15},{"name":"G156HAN02.001 (Z)","cnt":12},{"name":"G156HAN02.000 (Z)","cnt":7},{"name":"P215HAN01.100 (Z)","cnt":5},{"name":"G156HAN02.000 (P)","cnt":4}]},"4":{"total":39,"완료cnt":37,"applyCnt":0,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"정림재고(자연과사람)","cnt":13},{"name":"파인더즈","cnt":8},{"name":"자연과사람","cnt":8},{"name":"코텍","cnt":3},{"name":"정림재고(파인더즈)","cnt":2}],"topModels":[{"name":"G190ETN01.204 (Z)","cnt":21},{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G156HAB03.200 (Z)","cnt":2},{"name":"G156HAN02.000 (Z)","cnt":2},{"name":"M215HTN01.1HE (Z)","cnt":1}]},"5":{"total":3,"완료cnt":3,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"엠트리","cnt":1},{"name":"글로벌전자","cnt":1},{"name":"네오아이씨피","cnt":1}],"topModels":[{"name":"G101EVN03.100 (Z)","cnt":1},{"name":"M215HAN01.201 (Z)","cnt":1},{"name":"G150XTN03.501 (Z)","cnt":1}]}}},"2":{"total":552,"완료cnt":209,"applyCnt":100,"repairCnt":243,"자체수리cnt":4,"미정cnt":0,"완료drill":[{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":61},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":44},{"cust":"코텍(베트남)12,13th","model":"M315QVN01.000 (Z)","cnt":14},{"cust":"브이피랩","model":"M240UAN02.3QY (N)","cnt":12},{"cust":"코텍(베트남)12,13th","model":"G101EVN01.002 (Z)","cnt":12},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":10},{"cust":"아이텔코리아","model":"G104XVN01.010 (Z)","cnt":9},{"cust":"무한시스템","model":"G150XTN03.500 (Z)","cnt":6},{"cust":"코텍(베트남)12,13th","model":"M270HVR01.105 O/C (Z)","cnt":5},{"cust":"디앤티","model":"G050VTN01.001 (Z)","cnt":5},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (P)","cnt":4},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":4},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":3},{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":3},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (P)","cnt":2},{"cust":"화영시스템","model":"P430HVN01.400 (Z)","cnt":2},{"cust":"디앤티","model":"G320ZAN02.302 (Z)","cnt":2},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":2},{"cust":"화영시스템","model":"P430HVN01.401 (Z)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (P)","cnt":1}],"applyDrill":[{"cust":"브이피랩","model":"M240UAN02.3QY (P)","cnt":98},{"cust":"코텍","model":"P215HAN01.100 (Z)","cnt":2}],"repairDrill":[{"cust":"정림재고(코텍)","model":"G156HAB03.200 (Z)","cnt":190},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":11},{"cust":"디앤티","model":"G238HAN02.005 (Z)","cnt":9},{"cust":"코텍","model":"G550ZVN01.000 (Z)","cnt":8},{"cust":"디앤티","model":"G050VTN01.001 (Z)","cnt":8},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":3},{"cust":"디앤티","model":"G270ZAN01.100 (Z)","cnt":3},{"cust":"디앤티","model":"G320ZAN02.302 (Z)","cnt":3},{"cust":"정림재고(자연과사람)","model":"G190ETN01.204 (Z)","cnt":3},{"cust":"토비스","model":"G121EAN01.102 (Z)","cnt":2},{"cust":"디앤티","model":"G238HAN02.000 (Z)","cnt":2},{"cust":"무한시스템","model":"G156XTN01.000 (P)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":1},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":1},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":463},{"name":"spec in","cnt":19},{"name":"보증기간만료","cnt":14},{"name":"정림보상대상","cnt":13},{"name":"고객과실","cnt":12},{"name":"NDF","cnt":11},{"name":"FMA","cnt":7},{"name":"RMA미대상","cnt":7},{"name":"자체수리완료","cnt":4},{"name":"폐기","cnt":1},{"name":"RMA(IQC)","cnt":1}],"bu":[{"name":"GDBU","cnt":416},{"name":"AUO_MNT","cnt":130},{"name":"PDBU","cnt":6}],"defects":[{"name":"Mura issue","cnt":193},{"name":"V-line","cnt":110},{"name":"greenish screen","cnt":30},{"name":"No display","cnt":12},{"name":"Light leakage  (spec in)","cnt":11},{"name":"B/L defect All off","cnt":10},{"name":"NDF","cnt":10},{"name":"V-line defect","cnt":9},{"name":"Localized light leakage ND 5% check","cnt":8},{"name":"BNU NG","cnt":8}],"customers":[{"name":"정림재고(코텍)","cnt":190},{"name":"코텍(베트남)12,13th","cnt":145},{"name":"브이피랩","cnt":110},{"name":"디앤티","cnt":33},{"name":"무한시스템","cnt":22},{"name":"코텍","cnt":14},{"name":"파인더즈","cnt":10},{"name":"아이텔코리아","cnt":9},{"name":"현대에이치티","cnt":5},{"name":"정림재고(자연과사람)","cnt":5}],"rmaTop10":[{"name":"G156HAB03.200 (Z)","cnt":192},{"name":"G156HAN05.004 (Z)","cnt":42},{"name":"G133HAN01.101 (Z)","cnt":40},{"name":"G156XTN01.000 (Z)","cnt":14},{"name":"G101EVN01.002 (Z)","cnt":12},{"name":"M238HVN01.0HE (Z)","cnt":9},{"name":"G238HAN02.005 (Z)","cnt":9},{"name":"G550ZVN01.000 (Z)","cnt":8},{"name":"G050VTN01.001 (Z)","cnt":8},{"name":"G150XTN03.500 (Z)","cnt":6}],"selfFix":{"total":4,"models":[{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)12,13th","model":"G156HAN05.004 (Z)","cnt":1},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":1},{"cust":"현대에이치티","model":"G101STN01.500 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"G156HAB03.200 (Z)","defect":"Mura issue","cnt":193,"lv":"crit","custs":{}},{"model":"M240UAN02.3QY (P)","defect":"V-line","cnt":98,"lv":"crit","custs":{}},{"model":"G156HAN05.004 (Z)","defect":"Light leakage  (spec in)","cnt":62,"lv":"crit","custs":{}},{"model":"G133HAN01.101 (Z)","defect":"greenish screen","cnt":45,"lv":"warn","custs":{}},{"model":"G156XTN01.000 (Z)","defect":"particle L=3mm W=0.3mm","cnt":14,"lv":"warn","custs":{}},{"model":"M315QVN01.000 (Z)","defect":"connector gap (spec in)","cnt":14,"lv":"warn","custs":{}},{"model":"G050VTN01.001 (Z)","defect":"H-line defect","cnt":13,"lv":"warn","custs":{}},{"model":"M240UAN02.3QY (N)","defect":"V-line","cnt":12,"lv":"warn","custs":{}},{"model":"G101EVN01.002 (Z)","defect":"B/L defect All off","cnt":12,"lv":"warn","custs":{}}],"weeks":{"2":{"total":184,"완료cnt":146,"applyCnt":0,"repairCnt":38,"자체수리cnt":3,"미정cnt":0,"topCusts":[{"name":"코텍(베트남)12,13th","cnt":145},{"name":"정림재고(코텍)","cnt":35},{"name":"코텍","cnt":3},{"name":"싸이몬","cnt":1}],"topModels":[{"name":"G156HAN05.004 (Z)","cnt":62},{"name":"G133HAN01.101 (Z)","cnt":45},{"name":"G156HAB03.200 (Z)","cnt":38},{"name":"M315QVN01.000 (Z)","cnt":14},{"name":"G101EVN01.002 (Z)","cnt":12}]},"3":{"total":332,"완료cnt":34,"applyCnt":98,"repairCnt":200,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"정림재고(코텍)","cnt":155},{"name":"브이피랩","cnt":110},{"name":"디앤티","cnt":33},{"name":"무한시스템","cnt":22},{"name":"코텍","cnt":9}],"topModels":[{"name":"G156HAB03.200 (Z)","cnt":155},{"name":"M240UAN02.3QY (P)","cnt":98},{"name":"G156XTN01.000 (Z)","cnt":14},{"name":"G050VTN01.001 (Z)","cnt":13},{"name":"M240UAN02.3QY (N)","cnt":12}]},"4":{"total":2,"완료cnt":0,"applyCnt":2,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"코텍","cnt":2}],"topModels":[{"name":"P215HAN01.100 (Z)","cnt":2}]},"5":{"total":34,"완료cnt":29,"applyCnt":0,"repairCnt":5,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":10},{"name":"아이텔코리아","cnt":9},{"name":"현대에이치티","cnt":5},{"name":"정림재고(자연과사람)","cnt":5},{"name":"자연과사람","cnt":3}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G104XVN01.010 (Z)","cnt":9},{"name":"G190ETN01.204 (Z)","cnt":8},{"name":"G101STN01.500 (Z)","cnt":5},{"name":"G121EAN01.102 (Z)","cnt":2}]}}},"3":{"total":173,"완료cnt":65,"applyCnt":2,"repairCnt":106,"자체수리cnt":18,"미정cnt":0,"완료drill":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":18},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":11},{"cust":"지에스디","model":"G173HW01.002 (Z)","cnt":6},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":6},{"cust":"싸이몬","model":"M190ETN01.00E (Z)","cnt":4},{"cust":"에프게이트","model":"M170ETN01.10D (Z)","cnt":1},{"cust":"정림재고(이젠티에스)","model":"G121XN01.001 (Z)","cnt":1}],"applyDrill":[{"cust":"정림재고(티엘비전)","model":"G156HAN05.004 (Z)","cnt":2}],"repairDrill":[{"cust":"정림재고(코텍)","model":"G156HAB03.200 (Z)","cnt":82},{"cust":"리더원","model":"G170EG01.104 (Z)","cnt":4},{"cust":"코텍","model":"G550ZVN01.000 (Z)","cnt":4},{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":3},{"cust":"토비스","model":"G140HAB01.300 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":2},{"cust":"글로벌전자","model":"M240UAN02.001 (P)","cnt":2},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":2},{"cust":"현대아이티","model":"P320HVN04.500 (Z)","cnt":1},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":1},{"cust":"정림재고(알파디스플레이)","model":"P320HVN02.300 (Z)","cnt":1},{"cust":"글로벌전자","model":"M240UAN02.0DB (P)","cnt":1},{"cust":"코텍","model":"G270QAN01.401 (Z)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":17},{"cust":"에프게이트","model":"P370IVN02.201 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":105},{"name":"정림보상대상","cnt":18},{"name":"자체수리완료","cnt":18},{"name":"spec in","cnt":15},{"name":"FMA","cnt":8},{"name":"NDF","cnt":7},{"name":"RMA(IQC)","cnt":1},{"name":"고객과실","cnt":1}],"bu":[{"name":"GDBU","cnt":125},{"name":"PDBU","cnt":45},{"name":"AUO_MNT","cnt":3}],"defects":[{"name":"Mura issue","cnt":85},{"name":"자체수리완료 particle D=0.6mm","cnt":8},{"name":"NDF","cnt":7},{"name":"Abnormal display","cnt":5},{"name":"V-block defect","cnt":4},{"name":"Mura ND 6% spec in","cnt":4},{"name":"시야각 45도 White spot 정면에서 안보임 ND2% spec in","cnt":3},{"name":"자체수리완료 particle D=0.5mm","cnt":3},{"name":"Particle D=0.8mm","cnt":3},{"name":"localized bottom mura ND 5% check","cnt":3}],"customers":[{"name":"정림재고(코텍)","cnt":82},{"name":"에스제이아이","cnt":38},{"name":"파인더즈","cnt":11},{"name":"토비스","cnt":11},{"name":"코텍","cnt":7},{"name":"지에스디","cnt":6},{"name":"싸이몬","cnt":4},{"name":"리더원","cnt":4},{"name":"글로벌전자","cnt":3},{"name":"정림재고(티엘비전)","cnt":2}],"rmaTop10":[{"name":"G156HAB03.200 (Z)","cnt":82},{"name":"M238HVN01.0HE (Z)","cnt":5},{"name":"G170EG01.104 (Z)","cnt":4},{"name":"G550ZVN01.000 (Z)","cnt":4},{"name":"P215HAN01.100 (Z)","cnt":3},{"name":"G156HAN05.004 (Z)","cnt":2},{"name":"G215HAN01.501 (Z)","cnt":2},{"name":"M190ETN01.00E (Z)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":2},{"name":"P320HVN04.500 (Z)","cnt":1}],"selfFix":{"total":18,"models":[{"cust":"에스제이아이","model":"P215HAN01.100 (Z)","cnt":17},{"cust":"에프게이트","model":"P370IVN02.201 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"G156HAB03.200 (Z)","defect":"Mura issue","cnt":82,"lv":"crit","custs":{}},{"model":"P215HAN01.100 (Z)","defect":"자체수리완료 particle D=0.6mm","cnt":38,"lv":"warn","custs":{}},{"model":"M238HVN01.0HE (Z)","defect":"localized bottom mura ND 5% check","cnt":11,"lv":"warn","custs":{}},{"model":"G215HAN01.501 (Z)","defect":"Mura ND 6% spec in","cnt":8,"lv":"info","custs":{}},{"model":"G173HW01.002 (Z)","defect":"V-block defect","cnt":6,"lv":"info","custs":{}},{"model":"M190ETN01.00E (Z)","defect":"Pol scratch(Box S/N:ZZ190E-2552001030)","cnt":4,"lv":"info","custs":{}},{"model":"G170EG01.104 (Z)","defect":"Particle D=0.8mm","cnt":4,"lv":"info","custs":{}},{"model":"G550ZVN01.000 (Z)","defect":"Mura issue","cnt":4,"lv":"info","custs":{}}],"weeks":{"2":{"total":135,"완료cnt":43,"applyCnt":2,"repairCnt":90,"자체수리cnt":17,"미정cnt":0,"topCusts":[{"name":"정림재고(코텍)","cnt":82},{"name":"에스제이아이","cnt":38},{"name":"지에스디","cnt":6},{"name":"코텍","cnt":4},{"name":"정림재고(티엘비전)","cnt":2}],"topModels":[{"name":"G156HAB03.200 (Z)","cnt":82},{"name":"P215HAN01.100 (Z)","cnt":38},{"name":"G173HW01.002 (Z)","cnt":6},{"name":"G550ZVN01.000 (Z)","cnt":4},{"name":"G156HAN05.004 (Z)","cnt":2}]},"3":{"total":3,"완료cnt":3,"applyCnt":0,"repairCnt":0,"자체수리cnt":1,"미정cnt":0,"topCusts":[{"name":"싸이몬","cnt":2},{"name":"에프게이트","cnt":1}],"topModels":[{"name":"M190ETN01.00E (Z)","cnt":2},{"name":"P370IVN02.201 (Z)","cnt":1}]},"4":{"total":18,"완료cnt":6,"applyCnt":0,"repairCnt":12,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"토비스","cnt":11},{"name":"리더원","cnt":4},{"name":"코텍","cnt":3}],"topModels":[{"name":"G215HAN01.501 (Z)","cnt":8},{"name":"G170EG01.104 (Z)","cnt":4},{"name":"G140HAB01.300 (Z)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":2},{"name":"G215HAN01.701 (Z)","cnt":1}]},"5":{"total":15,"완료cnt":11,"applyCnt":0,"repairCnt":4,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":10},{"name":"글로벌전자","cnt":3},{"name":"정림재고(이젠티에스)","cnt":1},{"name":"정림재고(알파디스플레이)","cnt":1}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"M240UAN02.001 (P)","cnt":2},{"name":"G121XN01.001 (Z)","cnt":1},{"name":"P320HVN02.300 (Z)","cnt":1},{"name":"M240UAN02.0DB (P)","cnt":1}]},"6":{"total":2,"완료cnt":2,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"싸이몬","cnt":2}],"topModels":[{"name":"M190ETN01.00E (Z)","cnt":2}]}}},"4":{"total":100,"완료cnt":58,"applyCnt":0,"repairCnt":42,"자체수리cnt":15,"미정cnt":0,"완료drill":[{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":9},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":8},{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":3},{"cust":"중앙첨단소재","model":"P370IVN02.201 (Z)","cnt":3},{"cust":"코텍(베트남)","model":"G133HAN01.101 (Z)","cnt":2},{"cust":"MDS코리아","model":"P320HVN06.500 (Z)","cnt":2},{"cust":"비덴트","model":"G240UAN01.200 (Z)","cnt":2},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":2},{"cust":"폐기완료(에프디에스)","model":"M215HTN01.1HE (P)","cnt":1},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":1},{"cust":"토비스","model":"G121EAN01.102 (Z)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (P)","cnt":1},{"cust":"무한시스템","model":"G150XTN03.404 (Z)","cnt":1},{"cust":"무한시스템","model":"G215HAN01.301 (Z)","cnt":1},{"cust":"정림재고(열방)","model":"G084SAN01.000 (Z)","cnt":1},{"cust":"오디하이텍","model":"G240HVN01.000 (Z)","cnt":1},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":1},{"cust":"정림재고(이미지셀)","model":"G240HVN01.000 (Z)","cnt":1},{"cust":"무한시스템","model":"G156XTN01.000 (P)","cnt":1},{"cust":"무한시스템","model":"M270HVN02.00D (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":11},{"cust":"코텍HQ","model":"G140HAB01.200 (Z)","cnt":6},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":6},{"cust":"정림재고(직방)","model":"G101STN01.500 (Z)","cnt":4},{"cust":"정림재고(토비스)","model":"G215HAN01.501 (Z)","cnt":2},{"cust":"무한시스템","model":"G150XTN03.500 (Z)","cnt":2},{"cust":"정림재고(림피아디스플레이)","model":"G240HW01.104 (Z)","cnt":2},{"cust":"리더원","model":"G170EG01.104 (Z)","cnt":2},{"cust":"정림재고(제이엘디엔티)","model":"G156HAN02.303 (Z)","cnt":1},{"cust":"MDS코리아","model":"P320HVN06.500 (Z)","cnt":1},{"cust":"리더원","model":"M238HVN01.0HE (Z)","cnt":1},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":1},{"cust":"정림전자","model":"G320ZAN02.502 (Z)","cnt":1},{"cust":"싸이몬","model":"G104STN01.600 (Z)","cnt":1},{"cust":"무한시스템","model":"G215HAN01.301 (Z)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":8},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":3},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":3},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":35},{"name":"정림보상대상","cnt":21},{"name":"자체수리완료","cnt":15},{"name":"FMA","cnt":13},{"name":"NDF","cnt":4},{"name":"FMA미대상","cnt":4},{"name":"고객과실","cnt":3},{"name":"No junglim","cnt":2},{"name":"RMA미대상","cnt":1},{"name":"spec in","cnt":1},{"name":"RMA(IQC)","cnt":1}],"bu":[{"name":"GDBU","cnt":92},{"name":"PDBU","cnt":7},{"name":"AUO_MNT","cnt":1}],"defects":[{"name":"Gravity mura","cnt":9},{"name":"이물수리완료","cnt":7},{"name":"Chipping","cnt":6},{"name":"B/L defect (all off)","cnt":5},{"name":"NDF","cnt":5},{"name":"H-line defect","cnt":4},{"name":"No display","cnt":4},{"name":"Abnormal display","cnt":4},{"name":"Particle D=0.6mm","cnt":3},{"name":"Brightness defect 자체 수리완료","cnt":3}],"customers":[{"name":"무한시스템","cnt":28},{"name":"아이텔코리아","cnt":11},{"name":"에스제이아이","cnt":11},{"name":"파인더즈","cnt":9},{"name":"코텍HQ","cnt":6},{"name":"정림재고(직방)","cnt":4},{"name":"직방","cnt":4},{"name":"MDS코리아","cnt":3},{"name":"리더원","cnt":3},{"name":"중앙첨단소재","cnt":3}],"rmaTop10":[{"name":"G156XTN01.000 (Z)","cnt":11},{"name":"G101EAN02.101 (Z)","cnt":6},{"name":"G101STN01.500 (Z)","cnt":4},{"name":"G133HAN01.101 (Z)","cnt":2},{"name":"G150XTN03.500 (Z)","cnt":2},{"name":"G215HAN01.301 (Z)","cnt":2},{"name":"G240HW01.104 (Z)","cnt":2},{"name":"G170EG01.104 (Z)","cnt":2},{"name":"M238HVN01.0HE (Z)","cnt":2},{"name":"G156HAN02.303 (Z)","cnt":1}],"selfFix":{"total":15,"models":[{"cust":"아이텔코리아","model":"G121EAN01.001 (Z)","cnt":8},{"cust":"직방","model":"G101STN01.500 (Z)","cnt":3},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":3},{"cust":"무한시스템","model":"G156XTN01.000 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"G156XTN01.000 (Z)","defect":"Inner scratch D=1.2mm","cnt":20,"lv":"warn","custs":{}},{"model":"M238HVN01.0HE (Z)","defect":"Gravity mura","cnt":11,"lv":"warn","custs":{}},{"model":"G121EAN01.001 (Z)","defect":"이물수리완료","cnt":11,"lv":"warn","custs":{}},{"model":"G101EAN02.101 (Z)","defect":"Brightness defect 자체 수리완료","cnt":11,"lv":"warn","custs":{}},{"model":"G101STN01.500 (Z)","defect":"Color defect","cnt":8,"lv":"info","custs":{}},{"model":"G140HAB01.200 (Z)","defect":"Chipping","cnt":6,"lv":"info","custs":{}},{"model":"P320HVN06.500 (Z)","defect":"NDF","cnt":3,"lv":"info","custs":{}},{"model":"P370IVN02.201 (Z)","defect":"B/L defect","cnt":3,"lv":"info","custs":{}}],"weeks":{"1":{"total":18,"완료cnt":5,"applyCnt":0,"repairCnt":13,"자체수리cnt":3,"미정cnt":0,"topCusts":[{"name":"코텍HQ","cnt":6},{"name":"정림재고(직방)","cnt":4},{"name":"직방","cnt":4},{"name":"정림재고(토비스)","cnt":2},{"name":"정림재고(제이엘디엔티)","cnt":1}],"topModels":[{"name":"G101STN01.500 (Z)","cnt":8},{"name":"G140HAB01.200 (Z)","cnt":6},{"name":"G215HAN01.501 (Z)","cnt":2},{"name":"G156HAN02.303 (Z)","cnt":1},{"name":"M215HTN01.1HE (P)","cnt":1}]},"2":{"total":20,"완료cnt":15,"applyCnt":0,"repairCnt":5,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"무한시스템","cnt":9},{"name":"MDS코리아","cnt":3},{"name":"코텍(베트남)","cnt":2},{"name":"비덴트","cnt":2},{"name":"토비스","cnt":1}],"topModels":[{"name":"G156XTN01.000 (Z)","cnt":5},{"name":"P320HVN06.500 (Z)","cnt":3},{"name":"G133HAN01.101 (Z)","cnt":2},{"name":"G240UAN01.200 (Z)","cnt":2},{"name":"G121EAN01.102 (Z)","cnt":1}]},"3":{"total":3,"완료cnt":0,"applyCnt":0,"repairCnt":3,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"리더원","cnt":3}],"topModels":[{"name":"G170EG01.104 (Z)","cnt":2},{"name":"M238HVN01.0HE (Z)","cnt":1}]},"4":{"total":13,"완료cnt":11,"applyCnt":0,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":9},{"name":"정림재고(파인더즈)","cnt":1},{"name":"정림재고(이미지셀)","cnt":1},{"name":"코텍","cnt":1},{"name":"정림전자","cnt":1}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"G240HVN01.000 (Z)","cnt":1},{"name":"G156HAB03.200 (Z)","cnt":1},{"name":"G320ZAN02.502 (Z)","cnt":1}]},"5":{"total":46,"완료cnt":27,"applyCnt":0,"repairCnt":19,"자체수리cnt":12,"미정cnt":0,"topCusts":[{"name":"무한시스템","cnt":19},{"name":"아이텔코리아","cnt":11},{"name":"에스제이아이","cnt":11},{"name":"중앙첨단소재","cnt":3},{"name":"싸이몬","cnt":1}],"topModels":[{"name":"G156XTN01.000 (Z)","cnt":15},{"name":"G121EAN01.001 (Z)","cnt":11},{"name":"G101EAN02.101 (Z)","cnt":11},{"name":"P370IVN02.201 (Z)","cnt":3},{"name":"G104STN01.600 (Z)","cnt":1}]}}},"5":{"total":202,"완료cnt":71,"applyCnt":85,"repairCnt":46,"자체수리cnt":6,"미정cnt":0,"완료drill":[{"cust":"노크","model":"P370IVN02.201 (Z)","cnt":18},{"cust":"코텍(베트남)14th","model":"G156HAN05.004 (Z)","cnt":11},{"cust":"코리스","model":"P320HVN06.110 (Z)","cnt":8},{"cust":"정림재고(파인더즈)","model":"M238HVN01.0HE (Z)","cnt":5},{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":5},{"cust":"한솔오리온텍","model":"G101EVN01.002 (Z)","cnt":3},{"cust":"코리스","model":"G101EVN01.002 (P)","cnt":2},{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":2},{"cust":"코텍(베트남)12,13th","model":"G133HAN01.101 (Z)","cnt":2},{"cust":"코리스","model":"M215HAN01.201 (Z)","cnt":1},{"cust":"코리스","model":"P430QVN01.000 (Z)","cnt":1},{"cust":"코리스","model":"P430HVN01.401 (Z)","cnt":1},{"cust":"코리스","model":"P430QVN01.003 (Z)","cnt":1},{"cust":"픽셀런트","model":"G320ZAN02.502 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"리더원","model":"G173HW01.004 (Z)","cnt":1},{"cust":"에스제이아이","model":"G101EAN02.101 (Z)","cnt":1}],"applyDrill":[{"cust":"판타룩스","model":"M238HVN01.0HE (Z)","cnt":40},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":18},{"cust":"코텍","model":"P215HAN01.100 (Z)","cnt":10},{"cust":"코텍","model":"G156HAB03.200 (Z)","cnt":6},{"cust":"코텍","model":"G238HAN02.005 (Z)","cnt":5},{"cust":"정림전자","model":"G140HAB01.200 (Z)","cnt":4},{"cust":"코리스","model":"P320HVN06.110 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1}],"repairDrill":[{"cust":"코텍(베트남)14th","model":"G156HAN05.004 (Z)","cnt":25},{"cust":"판타룩스","model":"M238HVN01.0HE (Z)","cnt":6},{"cust":"픽셀런트","model":"G320ZAN02.502 (Z)","cnt":5},{"cust":"코텍","model":"G101EVN01.002 (Z)","cnt":2},{"cust":"코텍","model":"G140HAB01.200 (Z)","cnt":2},{"cust":"닛시네이처","model":"G185HAN01.104 (Z)","cnt":1},{"cust":"닛시네이처","model":"G150XAN02.100 (Z)","cnt":1},{"cust":"지에스디","model":"G185HAN01.005 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G133HAN01.101 (Z)","cnt":1},{"cust":"코텍(베트남)14th","model":"G101EVN01.002 (Z)","cnt":1},{"cust":"정림재고 (에프디에스)","model":"G173HW01.004 (Z)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":3},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"코텍","model":"G154EVN01.001 (Z)","cnt":1},{"cust":"엠트리","model":"P430QVN01.000 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":126},{"name":"RMA미대상","cnt":20},{"name":"정림보상대상","cnt":17},{"name":"NDF","cnt":11},{"name":"FMA","cnt":7},{"name":"자체수리완료","cnt":6},{"name":"고객과실","cnt":6},{"name":"spec in","cnt":6},{"name":"RMA(IQC)","cnt":2},{"name":"FMA미대상","cnt":1}],"bu":[{"name":"GDBU","cnt":158},{"name":"PDBU","cnt":41},{"name":"AUO_MNT","cnt":3}],"defects":[{"name":"Noise","cnt":42},{"name":"Localized light leakage ND 5% check","cnt":16},{"name":"NDF","cnt":13},{"name":"Glass broken","cnt":13},{"name":"Abnormal display","cnt":12},{"name":"Chipping (crack)","cnt":8},{"name":"V-block defect","cnt":6},{"name":"No display","cnt":5},{"name":"Light leakage ND 5% check spec in","cnt":5},{"name":"Localized bottom mura ND 5% check","cnt":4}],"customers":[{"name":"판타룩스","cnt":46},{"name":"코텍","cnt":44},{"name":"코텍(베트남)14th","cnt":42},{"name":"노크","cnt":18},{"name":"코리스","cnt":15},{"name":"지에스디","cnt":6},{"name":"픽셀런트","cnt":6},{"name":"정림재고(파인더즈)","cnt":5},{"name":"파인더즈","cnt":5},{"name":"정림전자","cnt":4}],"rmaTop10":[{"name":"M238HVN01.0HE (Z)","cnt":5},{"name":"G320ZAN02.502 (Z)","cnt":2},{"name":"G140HAB01.200 (Z)","cnt":2}],"selfFix":{"total":6,"models":[{"cust":"지에스디","model":"M240UAN01.000 (Z)","cnt":3},{"cust":"코텍(베트남)14th","model":"M315QVN01.000 (Z)","cnt":1},{"cust":"코텍","model":"G154EVN01.001 (Z)","cnt":1},{"cust":"엠트리","model":"P430QVN01.000 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"M238HVN01.0HE (Z)","defect":"Noise","cnt":56,"lv":"crit","custs":{}},{"model":"G156HAN05.004 (Z)","defect":"Localized light leakage ND 5% check","cnt":36,"lv":"warn","custs":{}},{"model":"G140HAB01.200 (Z)","defect":"Chipping (crack)","cnt":24,"lv":"warn","custs":{}},{"model":"P370IVN02.201 (Z)","defect":"Glass broken","cnt":18,"lv":"warn","custs":{}},{"model":"P215HAN01.100 (Z)","defect":"Bright dot 1pc","cnt":10,"lv":"warn","custs":{}},{"model":"P320HVN06.110 (Z)","defect":"Abnormal display","cnt":9,"lv":"info","custs":{}},{"model":"G320ZAN02.502 (Z)","defect":"V-block defect","cnt":6,"lv":"info","custs":{}},{"model":"G101EVN01.002 (Z)","defect":"Glass broken","cnt":6,"lv":"info","custs":{}},{"model":"G156HAB03.200 (Z)","defect":"No display","cnt":6,"lv":"info","custs":{}}],"weeks":{"2":{"total":27,"완료cnt":24,"applyCnt":1,"repairCnt":2,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"코리스","cnt":15},{"name":"정림재고(파인더즈)","cnt":5},{"name":"파인더즈","cnt":5},{"name":"닛시네이처","cnt":2}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":10},{"name":"P320HVN06.110 (Z)","cnt":9},{"name":"G101EVN01.002 (P)","cnt":2},{"name":"M215HAN01.201 (Z)","cnt":1},{"name":"P430QVN01.000 (Z)","cnt":1}]},"3":{"total":106,"완료cnt":25,"applyCnt":41,"repairCnt":40,"자체수리cnt":4,"미정cnt":0,"topCusts":[{"name":"판타룩스","cnt":46},{"name":"코텍(베트남)14th","cnt":42},{"name":"지에스디","cnt":6},{"name":"픽셀런트","cnt":6},{"name":"한솔오리온텍","cnt":3}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":46},{"name":"G156HAN05.004 (Z)","cnt":36},{"name":"G320ZAN02.502 (Z)","cnt":6},{"name":"M240UAN01.000 (Z)","cnt":5},{"name":"G101EVN01.002 (Z)","cnt":4}]},"4":{"total":68,"완료cnt":21,"applyCnt":43,"repairCnt":4,"자체수리cnt":2,"미정cnt":0,"topCusts":[{"name":"코텍","cnt":44},{"name":"노크","cnt":18},{"name":"정림전자","cnt":4},{"name":"엠트리","cnt":1},{"name":"리더원","cnt":1}],"topModels":[{"name":"G140HAB01.200 (Z)","cnt":24},{"name":"P370IVN02.201 (Z)","cnt":18},{"name":"P215HAN01.100 (Z)","cnt":10},{"name":"G156HAB03.200 (Z)","cnt":6},{"name":"G238HAN02.005 (Z)","cnt":5}]},"5":{"total":1,"완료cnt":1,"applyCnt":0,"repairCnt":0,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"에스제이아이","cnt":1}],"topModels":[{"name":"G101EAN02.101 (Z)","cnt":1}]}}},"6":{"total":35,"완료cnt":8,"applyCnt":0,"repairCnt":26,"자체수리cnt":1,"미정cnt":1,"완료drill":[{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":2},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":1},{"cust":"제이엘디엔티","model":"G104XAN01.010 (Z)","cnt":1},{"cust":"이미지셀","model":"G215HAN01.301 (Z)","cnt":1}],"applyDrill":[],"repairDrill":[{"cust":"파인더즈","model":"M238HVN01.0HE (Z)","cnt":8},{"cust":"자연과사람","model":"G190ETN01.204 (Z)","cnt":5},{"cust":"토비스","model":"G215HAN01.501 (Z)","cnt":5},{"cust":"토비스","model":"G215HAN01.701 (Z)","cnt":4},{"cust":"토비스","model":"G185HAN01.004 (Z)","cnt":2},{"cust":"제이엘디엔티","model":"G104XAN01.010 (Z)","cnt":1},{"cust":"덴텀","model":"G150XTN03.500 (Z)","cnt":1}],"미정drill":[],"자체수리drill":[{"cust":"동우디아이","model":"T420HVN08.0P1 (Z)","cnt":1}],"routes":[{"name":"RMA","cnt":21},{"name":"정림보상대상","cnt":5},{"name":"spec in","cnt":3},{"name":"고객과실","cnt":3},{"name":"NDF","cnt":1},{"name":"자체수리완료","cnt":1},{"name":"FMA","cnt":1}],"bu":[{"name":"GDBU","cnt":34},{"name":"PDBU","cnt":1}],"defects":[{"name":"Localized mura ND 5%","cnt":8},{"name":"Mura ND 6% check","cnt":3},{"name":"No display","cnt":3},{"name":"Small bright dot ND 10% check spec in","cnt":2},{"name":"Bright dot 1pc","cnt":2},{"name":"Glass broken","cnt":2},{"name":"B/L defect","cnt":2},{"name":"Pol defect","cnt":1},{"name":"small bright dot 5pcs","cnt":1},{"name":"V,H-line defect","cnt":1}],"customers":[{"name":"토비스","cnt":14},{"name":"파인더즈","cnt":8},{"name":"자연과사람","cnt":7},{"name":"제이엘디엔티","cnt":2},{"name":"덴텀","cnt":1},{"name":"동우디아이","cnt":1},{"name":"이미지셀","cnt":1},{"name":"오디하이텍","cnt":1}],"rmaTop10":[],"selfFix":{"total":1,"models":[{"cust":"동우디아이","model":"T420HVN08.0P1 (Z)","cnt":1}],"defects":[],"customers":[]},"issues":[{"model":"M238HVN01.0HE (Z)","defect":"Localized mura ND 5%","cnt":8,"lv":"info","custs":{}},{"model":"G190ETN01.204 (Z)","defect":"Mura ND 6% check","cnt":7,"lv":"info","custs":{}},{"model":"G215HAN01.501 (Z)","defect":"No display","cnt":6,"lv":"info","custs":{}},{"model":"G215HAN01.701 (Z)","defect":"Glass broken","cnt":6,"lv":"info","custs":{}}],"weeks":{"1":{"total":15,"완료cnt":2,"applyCnt":0,"repairCnt":13,"자체수리cnt":0,"미정cnt":0,"topCusts":[{"name":"파인더즈","cnt":8},{"name":"자연과사람","cnt":7}],"topModels":[{"name":"M238HVN01.0HE (Z)","cnt":8},{"name":"G190ETN01.204 (Z)","cnt":7}]},"2":{"total":20,"완료cnt":6,"applyCnt":0,"repairCnt":13,"자체수리cnt":1,"미정cnt":1,"topCusts":[{"name":"토비스","cnt":14},{"name":"제이엘디엔티","cnt":2},{"name":"덴텀","cnt":1},{"name":"동우디아이","cnt":1},{"name":"이미지셀","cnt":1}],"topModels":[{"name":"G215HAN01.501 (Z)","cnt":6},{"name":"G215HAN01.701 (Z)","cnt":6},{"name":"G185HAN01.004 (Z)","cnt":2},{"name":"G104XAN01.010 (Z)","cnt":2},{"name":"G150XTN03.500 (Z)","cnt":1}]}}}}
+const ML={1:'1월',2:'2월',3:'3월',4:'4월',5:'5월',6:'6월',7:'7월',8:'8월',9:'9월',10:'10월',11:'11월',12:'12월'};
+const RB={'RMA':'b-rma','FMA':'b-fma','NDF':'b-ndf','spec in':'b-spec','고객과실':'b-cust','자체수리완료':'b-done','정림보상대상':'b-spec','RMA미대상':'b-ndf','RMA(IQC)':'b-rma'};
+const BC={'GDBU':'var(--blue)','PDBU':'var(--purple)','AUO_MNT':'var(--green)'};
+const LONG_DATA={"90일+": [{"cust": "오디하이텍", "model": "P320HVN04.500 (Z)", "days": 139, "cnt": 1}, {"cust": "에프게이트", "model": "M170ETN01.100 (Z)", "days": 134, "cnt": 1}, {"cust": "무한시스템", "model": "G215HAN01.301 (Z)", "days": 134, "cnt": 1}, {"cust": "코텍", "model": "G156HAB03.200 (Z)", "days": 130, "cnt": 3}, {"cust": "정림전자(정림재고RMA)", "model": "G215HAN01.501 (Z)", "days": 129, "cnt": 1}, {"cust": "이안디스플레이", "model": "G104SN03.500 (Z)", "days": 129, "cnt": 3}, {"cust": "신흥정밀", "model": "G150XTN03.500 (Z)", "days": 129, "cnt": 3}, {"cust": "리더원", "model": "G170EG01.104 (Z)", "days": 129, "cnt": 2}, {"cust": "디사인코리아", "model": "G170EG01.104 (Z)", "days": 129, "cnt": 1}, {"cust": "비티씨씨큐", "model": "G133HAN02.000 (Z)", "days": 129, "cnt": 2}, {"cust": "무한시스템", "model": "G156XTN01.000 (Z)", "days": 129, "cnt": 43}, {"cust": "덴텀", "model": "G150XTN03.500 (Z)", "days": 129, "cnt": 3}, {"cust": "토비스", "model": "G215HAN01.701 (Z)", "days": 129, "cnt": 8}, {"cust": "비덴트", "model": "G185HAN01.104 (Z)", "days": 129, "cnt": 1}, {"cust": "무한시스템", "model": "G150XTN03.404 (Z)", "days": 129, "cnt": 4}, {"cust": "무한시스템", "model": "G150XTN03.500 (Z)", "days": 129, "cnt": 11}, {"cust": "판타룩스", "model": "G156HAN02.001 (Z)", "days": 129, "cnt": 9}, {"cust": "무한시스템", "model": "G150XTN03.404 (P)", "days": 129, "cnt": 3}, {"cust": "무한시스템", "model": "G101EAN02.401 (Z)", "days": 129, "cnt": 5}, {"cust": "무한시스템", "model": "G156HAN03.000 (Z)", "days": 129, "cnt": 2}, {"cust": "정림재고(피에스플러스)", "model": "G156HAN02.303 (Z)", "days": 129, "cnt": 1}, {"cust": "토비스", "model": "G215HAN01.501 (Z)", "days": 129, "cnt": 1}, {"cust": "코텍", "model": "G140HAB01.200 (Z)", "days": 127, "cnt": 3}, {"cust": "엔엑스오 (정림재고)", "model": "P430HVN05.101 (Z)", "days": 97, "cnt": 1}, {"cust": "토비스", "model": "G215HAN01.200 (Z)", "days": 90, "cnt": 2}, {"cust": "토비스", "model": "G185HAN01.004 (Z)", "days": 90, "cnt": 1}, {"cust": "엠트리", "model": "G101EVN03.100 (Z)", "days": 90, "cnt": 1}, {"cust": "지에스디", "model": "G133HAN01.101 (Z)", "days": 90, "cnt": 1}, {"cust": "코텍(베트남)12,13th", "model": "G133HAN01.101 (Z)", "days": 90, "cnt": 40}, {"cust": "코텍(베트남)12,13th", "model": "G101EVN01.002 (Z)", "days": 90, "cnt": 12}, {"cust": "코텍(베트남)12,13th", "model": "G133HAN01.101 (P)", "days": 90, "cnt": 4}, {"cust": "코텍(베트남)12,13th", "model": "M315QVN01.000 (Z)", "days": 90, "cnt": 6}, {"cust": "코텍", "model": "G550ZVN01.000 (Z)", "days": 90, "cnt": 4}, {"cust": "토비스", "model": "G121EAN01.102 (Z)", "days": 90, "cnt": 1}], "50~89일": [{"cust": "브이피랩", "model": "M240UAN02.3QY (P)", "days": 89, "cnt": 97}, {"cust": "동경티앤씨", "model": "G215HVN01.300 (Z)", "days": 89, "cnt": 1}, {"cust": "글로벌전자", "model": "M215HAN01.201 (Z)", "days": 89, "cnt": 1}, {"cust": "토비스", "model": "G121EAN01.102 (Z)", "days": 89, "cnt": 2}, {"cust": "코텍(베트남)12,13th", "model": "M270HVR01.105 O/C (Z)", "days": 83, "cnt": 5}, {"cust": "코텍", "model": "G156HAB03.200 (Z)", "days": 82, "cnt": 274}, {"cust": "코텍", "model": "G270QAN01.401 (Z)", "days": 74, "cnt": 1}, {"cust": "싸이몬", "model": "M190ETN01.00E (Z)", "days": 70, "cnt": 1}, {"cust": "코텍(필드)", "model": "G140HAB01.200 (Z)", "days": 68, "cnt": 2}, {"cust": "디앤티", "model": "G320ZAN02.500 (Z)", "days": 56, "cnt": 1}, {"cust": "코텍HQ", "model": "G140HAB01.200 (Z)", "days": 56, "cnt": 6}, {"cust": "에스제이아이", "model": "P215HAN01.100 (Z)", "days": 55, "cnt": 3}, {"cust": "코텍(베트남)", "model": "G133HAN01.101 (Z)", "days": 53, "cnt": 2}], "30~49일": [{"cust": "정림재고(코텍)", "model": "G154EVN01.001 (Z)", "days": 49, "cnt": 2}, {"cust": "코텍", "model": "G156HAB03.200 (Z)", "days": 49, "cnt": 1}, {"cust": "코텍(베트남)12,13th", "model": "G156HAN05.004 (Z)", "days": 49, "cnt": 35}, {"cust": "코텍(베트남)12,13th", "model": "G156HAN05.004 (P)", "days": 49, "cnt": 2}, {"cust": "무한시스템", "model": "G156XTN01.000 (P)", "days": 49, "cnt": 1}, {"cust": "무한시스템", "model": "G156XTN01.000 (Z)", "days": 49, "cnt": 11}, {"cust": "디앤티", "model": "G270ZAN01.100 (Z)", "days": 49, "cnt": 2}, {"cust": "디앤티", "model": "G050VTN01.001 (Z)", "days": 49, "cnt": 8}, {"cust": "토비스", "model": "G215HAN01.501 (Z)", "days": 49, "cnt": 2}, {"cust": "토비스", "model": "G215HAN01.701 (Z)", "days": 49, "cnt": 1}, {"cust": "현대아이티", "model": "P320HVN04.500 (Z)", "days": 47, "cnt": 1}, {"cust": "MDS코리아", "model": "P320HVN06.500 (Z)", "days": 47, "cnt": 1}, {"cust": "정림재고(코텍)", "model": "G550ZVN01.000 (Z)", "days": 47, "cnt": 8}, {"cust": "싸이몬", "model": "M190ETN01.00E (Z)", "days": 42, "cnt": 2}], "30일미만": [{"cust": "에프게이트", "model": "M170ETN01.100 (Z)", "days": 11, "cnt": 1}, {"cust": "무한시스템", "model": "G215HAN01.301 (Z)", "days": 11, "cnt": 2}, {"cust": "픽셀런트", "model": "G320ZAN02.500 (Z)", "days": 11, "cnt": 2}, {"cust": "코텍", "model": "G156HAB03.200 (Z)", "days": 0, "cnt": 1}, {"cust": "코텍(베트남)12,13th", "model": "G156HAN05.004 (Z)", "days": 0, "cnt": 7}, {"cust": "디앤티", "model": "G238HAN02.005 (Z)", "days": 0, "cnt": 9}, {"cust": "디앤티", "model": "G238HAN02.000 (Z)", "days": 0, "cnt": 2}, {"cust": "리더원", "model": "G170EG01.104 (Z)", "days": 0, "cnt": 6}, {"cust": "이젠티에스", "model": "G121XN01.001 (Z)", "days": 0, "cnt": 1}, {"cust": "디앤티", "model": "G320ZAN02.302 (Z)", "days": 0, "cnt": 3}, {"cust": "무한시스템", "model": "G150XTN03.500 (Z)", "days": 0, "cnt": 2}, {"cust": "무한시스템", "model": "G156XTN01.000 (Z)", "days": 0, "cnt": 12}, {"cust": "디앤티", "model": "G270ZAN01.100 (Z)", "days": 0, "cnt": 1}, {"cust": "이미지셀", "model": "G240HVN01.000 (Z)", "days": 0, "cnt": 1}, {"cust": "정림전자", "model": "G320ZAN02.502 (Z)", "days": 0, "cnt": 1}, {"cust": "에스제이아이", "model": "G101EAN02.101 (Z)", "days": 0, "cnt": 6}, {"cust": "리더원", "model": "M238HVN01.0HE (Z)", "days": 0, "cnt": 1}, {"cust": "정림재고(파인더즈)", "model": "M238HVN01.0HE (Z)", "days": 0, "cnt": 1}, {"cust": "판타룩스", "model": "M238HVN01.0HE (Z)", "days": 0, "cnt": 40}, {"cust": "코텍", "model": "P215HAN01.100 (Z)", "days": 0, "cnt": 12}]};
+function p(n,d){return d?Math.round(n/d*1000)/10:0;}
+function sortRoutes(r){const o=['RMA','RMA(IQC)','RMA미대상','FMA','정림보상대상','자체수리완료','spec in','NDF','고객과실'];return[...r].sort((a,b)=>{const ia=o.indexOf(a.name),ib=o.indexOf(b.name);return(ia<0?99:ia)-(ib<0?99:ib);});}
+function renderIssues(issues){
+  if(!issues||!issues.length)return'<div class="no-issue">&#x2713; 이슈 감지 항목 없음</div>';
+  const crit=issues.filter(x=>x.lv==='crit'),warn=issues.filter(x=>x.lv==='warn'),info=issues.filter(x=>x.lv==='info');
+  let h='<div class="issue-section"><div class="issue-section-title">&#x1F6A8; 이슈 감지 (동일 모델 3건+) ';
+  if(crit.length)h+=`<span class="issue-count-badge lv-crit">&#x1F534; 위험 ${crit.length}</span>`;
+  if(warn.length)h+=`<span class="issue-count-badge lv-warn">&#x26A0;&#xFE0F; 주의 ${warn.length}</span>`;
+  if(info.length)h+=`<span class="issue-count-badge lv-info">INFO ${info.length}</span>`;
+  h+='</div><div class="issue-grid">';
+  [...crit,...warn,...info].forEach(i=>{
+    const cs=Object.entries(i.custs||{});
+    const lbl=i.lv==='crit'?'&#x1F534; 위험':i.lv==='warn'?'&#x26A0; 주의':'INFO';
+    h+=`<div class="issue-card lv-${i.lv}">
+      <div class="issue-left">
+        <div class="issue-lv">${lbl}</div>
+        <div class="issue-model" title="${i.model}">${i.model}</div>
+        <div class="issue-defect">${normalizeDefect(i.defect)}</div>
+        <div class="issue-cust">${cs[0]?cs[0][0].trim():''}</div>
+      </div>
+      <div class="issue-cnt">${i.cnt}</div>
+    </div>`;
+  });
+  return h+'</div></div>';
+}
+function renderSelfFix(sf,ml){
+  if(!sf||!sf.total)return'';
+  const mm=sf.models[0]?.cnt||1,mc=sf.customers[0]?.cnt||1;
+  return`<div class="sf-card"><div class="sf-header"><div class="sf-icon">&#x267B;</div><div><div class="sf-title">자체수리완료 성과</div><div class="sf-subtitle">${ml} 품질팀 자체 처리</div></div></div>
+  <div class="sf-kpi-row"><div class="sf-kpi"><div class="lbl">총 자체수리</div><div class="val">${sf.total}</div><div class="sub">건</div></div><div class="sf-kpi"><div class="lbl">모델 수</div><div class="val">${sf.models.length}</div><div class="sub">개</div></div><div class="sf-kpi"><div class="lbl">거래처</div><div class="val">${sf.customers.length}</div><div class="sub">곳</div></div></div>
+  <div class="sf-grid"><div class="sf-inner"><div class="sf-inner-title">모델별</div>${sf.models.map(r=>`<div class="sf-bar-row"><span class="sf-bar-label" title="${r.model}">${r.model.length>14?r.model.slice(0,14)+'…':r.model}</span><div class="sf-bar-track"><div class="sf-bar-fill" style="width:${p(r.cnt,mm)}%"></div></div><span class="sf-bar-val">${r.cnt}</span></div>`).join('')}</div>
+  <div class="sf-inner"><div class="sf-inner-title">거래처별</div>${sf.customers.map(r=>`<div class="sf-bar-row"><span class="sf-bar-label" title="${r.name}">${r.name.length>10?r.name.slice(0,10)+'…':r.name}</span><div class="sf-bar-track"><div class="sf-bar-fill" style="width:${p(r.cnt,mc)}%"></div></div><span class="sf-bar-val">${r.cnt}</span></div>`).join('')}</div></div></div>`;
+}
+function normalizeDefect(name){
+  if(!name)return'기타';
+  const n=name.toLowerCase();
+  if((/mura|uniformity|white\s*spot|whitening|localized|ND\s*\d+%|ND\s*filter|light\s*leakage/i.test(name))&&!(/no\s*display|b\/l|backlight|glass\s*broken/i.test(name)))return'Mura';
+  if(/bright\s*dot|bright\s*spot/i.test(name))return'Bright dot';
+  if(/dark\s*dot/i.test(name))return'Dark dot';
+  if(/v[\s\-]?(line|block)|h[\s\-]?line|vline|line\s*defect/i.test(name))return'Line defect';
+  if(/bubble/i.test(name))return'Bubble';
+  if(/particle|이물/i.test(name))return'Particle';
+  if(/pol.*scratch|inner\s*scratch|scratch/i.test(name))return'Scratch';
+  if(/pol.*defect/i.test(name))return'POL defect';
+  if(/no\s*display/i.test(name))return'No display';
+  if(/noise/i.test(name))return'Noise';
+  if(/abnormal/i.test(name))return'Abnormal display';
+  if(/chipping|crack|glass\s*broken/i.test(name))return'Crack/Chipping';
+  if(/b\/l\s*defect|backlight/i.test(name))return'B/L defect';
+  if(/greenish|color\s*defect/i.test(name))return'Color defect';
+  if(/brightness\s*defect/i.test(name))return'Brightness defect';
+  if(/connector/i.test(name))return'Connector defect';
+  if(/NDF|no\s*defect\s*found/i.test(name))return'NDF';
+  return name.replace(/\s*[\(（][^）\)]*[\)）]/g,'').replace(/\s*(spec\s*(in|out)|ND\s*\d+%.*|D=[\d.]+mm.*|L=[\d.]+mm.*|\d+\s*pc.*|\d+\s*pair.*|check.*)/gi,'').trim()||name;
+}
+function mergeDefects(defects){
+  const map={};
+  defects.forEach(d=>{
+    const key=normalizeDefect(d.name);
+    map[key]=(map[key]||0)+d.cnt;
+  });
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([name,cnt])=>({name,cnt}));
+}
+function renderAcc(m){
+  const d=ACC[m];
+  if(!d)return'<div style="padding:40px;text-align:center;color:var(--text3)">데이터 로드 중…</div>';
+  const doneTot=d['완료cnt']+d['자체수리cnt'];
+  const dp=p(doneTot,d.total),ap=p(d.applyCnt,d.total),rp=p(d.repairCnt,d.total),gp=p(d['미정cnt'],d.total),sp=p(d['자체수리cnt'],d.total);
+  const mxD=d.defects[0]?.cnt||1,mxC=d.customers[0]?.cnt||1,mxB=d.bu[0]?.cnt||1;
+  return`<div class="kpi-row" style="grid-template-columns:repeat(6,1fr)">
+    <div class="kpi"><div class="lbl">총 접수</div><div class="val">${d.total}<span style="font-size:13px;font-weight:500;color:var(--text3)">건</span></div><div class="sub">${ML[m]}</div></div>
+    <div class="kpi c-green clickable" onclick="openDrill(${m},'완료')"><div class="lbl">처리완료</div><div style="display:flex;align-items:baseline;gap:6px"><div class="val">${doneTot}<span style="font-size:13px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:13px;font-weight:600;color:var(--green-t)">${dp}%</div></div><div class="sub" style="font-size:10px;color:#166534">자체수리 ${d['자체수리cnt']}건 포함 · 클릭 상세</div></div>
+    <div class="kpi clickable" style="border-color:#86efac;background:#f0fdf4" onclick="openDrill(${m},'자체수리')"><div class="lbl" style="color:#166534">자체수리</div><div style="display:flex;align-items:baseline;gap:6px"><div class="val" style="color:#15803d">${d['자체수리cnt']}<span style="font-size:13px;font-weight:500;color:#15803d">건</span></div><div style="font-size:13px;font-weight:600;color:#15803d">${sp}%</div></div><div class="sub" style="font-size:10px;color:#166534">처리완료에 포함 · 클릭 상세</div></div>
+    <div class="kpi clickable" style="border-color:#93c5fd;background:#eff6ff" onclick="openDrill(${m},'apply')"><div class="lbl" style="color:#1d4ed8">Apply 발행완료</div><div style="display:flex;align-items:baseline;gap:6px"><div class="val" style="color:#1d4ed8">${d.applyCnt}<span style="font-size:13px;font-weight:500;color:#1d4ed8">건</span></div><div style="font-size:13px;font-weight:600;color:#1d4ed8">${ap}%</div></div><div class="sub" style="font-size:10px;color:#1e40af">클릭 상세</div></div>
+    <div class="kpi c-red clickable" onclick="openDrill(${m},'repair')"><div class="lbl">Repair 입고 대기</div><div style="display:flex;align-items:baseline;gap:6px"><div class="val">${d.repairCnt}<span style="font-size:13px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:13px;font-weight:600;color:var(--red-t)">${rp}%</div></div><div class="sub" style="font-size:10px">클릭 상세</div></div>
+    <div class="kpi c-amber clickable" onclick="openDrill(${m},'미정')"><div class="lbl">처리방안 미정</div><div style="display:flex;align-items:baseline;gap:6px"><div class="val">${d['미정cnt']}<span style="font-size:13px;font-weight:500;color:var(--text3)">건</span></div><div style="font-size:13px;font-weight:600;color:var(--amber-t)">${gp}%</div></div><div class="sub" style="font-size:10px">클릭 상세</div></div>
+      </div>
+  ${renderIssues(d.issues)}
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+    <div class="card"><div class="card-title">처리경로별</div>
+      ${sortRoutes(d.routes).map(r=>`<div class="route-row"><div class="route-left"><span class="badge ${RB[r.name]||'b-ndf'}">${r.name}</span></div><span class="route-cnt">${r.cnt}</span></div>`).join('')}
+      <div class="card-title" style="margin-top:14px">BU별</div>
+      ${d.bu.map(b=>`<div class="sbar-row"><span class="sbar-label w80">${b.name}</span><div class="sbar-track"><div class="sbar-fill" style="width:${p(b.cnt,mxB)}%;background:${BC[b.name]||'#9ca3af'}"></div></div><span class="sbar-val">${b.cnt}</span></div>`).join('')}
+    </div>
+    <div class="card"><div class="card-title">RMA 품목 상위 10</div>
+      ${(()=>{const mx=d.rmaTop10[0]?.cnt||1;return d.rmaTop10.map((r,i)=>`<div class="sbar-row"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);width:14px;flex-shrink:0;text-align:right">${i+1}</span><span class="sbar-label w100" style="margin-left:5px;font-size:11px" title="${r.name}">${r.name.length>16?r.name.slice(0,16)+'…':r.name}</span><div class="sbar-track"><div class="sbar-fill" style="width:${p(r.cnt,mx)}%;background:var(--red)"></div></div><span class="sbar-val">${r.cnt}</span></div>`).join('');
+      })()}
+    </div>
+    <div class="card"><div class="card-title">상위 불량 유형</div>
+      ${(()=>{const md=mergeDefects(d.defects);const mx2=md[0]?.cnt||1;return md.map(df=>`<div class="sbar-row"><span class="sbar-label w100" style="font-size:11px" title="${df.name}">${df.name.length>13?df.name.slice(0,13)+'…':df.name}</span><div class="sbar-track"><div class="sbar-fill" style="width:${p(df.cnt,mx2)}%;background:var(--red)"></div></div><span class="sbar-val">${df.cnt}</span></div>`).join('');})()}
+    </div>
+    <div class="card"><div class="card-title">거래처별 접수 수량</div>
+      ${d.customers.map(c=>`<div class="sbar-row"><span class="sbar-label w100" style="font-size:11px" title="${c.name}">${c.name.length>10?c.name.slice(0,10)+'…':c.name}</span><div class="sbar-track"><div class="sbar-fill" style="width:${p(c.cnt,mxC)}%;background:var(--blue)"></div></div><span class="sbar-val">${c.cnt}</span></div>`).join('')}
+    </div>
+  </div>
+  ${renderSelfFix(d.selfFix,ML[m])}
+  ${renderWeeks(d.weeks,m)}`;
+}
+function renderWeeks(weeks,m){
+  if(!weeks)return'';
+  const wnames=['1주차','2주차','3주차','4주차'];
+  const wcolors=['var(--blue)','var(--green)','var(--purple)','var(--amber)'];
+  let h='<div style="margin-bottom:18px"><div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">&#128197; 주차별 현황</div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">';
+  [1,2,3,4].forEach(wk=>{
+    const wd=weeks[wk]||{};
+    const tot=wd.total||0;
+    const comp=(wd['완료cnt']||0)+(wd['자체수리cnt']||0);
+    const rate=tot?Math.round(comp/tot*100):0;
+    const uid='wk_'+m+'_'+wk;
+    h+=`<div class="week-card" id="${uid}_card">
+      <div class="week-card-head" onclick="toggleWeek('${uid}')">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;font-weight:700;color:${wcolors[wk-1]}">${wnames[wk-1]}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--text)">${tot}<span style="font-size:11px;font-weight:500;color:var(--text3)">건</span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:11px;font-weight:600;color:var(--green-t)">${rate}%</span>
+          <span class="week-toggle" id="${uid}_tog">▼</span>
+        </div>
+      </div>
+      <div style="height:4px;background:var(--surface2);border-radius:2px;margin:6px 0 4px">
+        <div style="height:100%;width:${rate}%;background:${wcolors[wk-1]};border-radius:2px"></div>
+      </div>
+      <div class="week-body" id="${uid}_body" style="display:none;padding-top:8px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:8px;font-size:11px">
+          <span style="color:var(--green-t)">완료 ${wd['완료cnt']||0}</span>
+          <span style="color:#15803d">자체수리 ${wd['자체수리cnt']||0}</span>
+          <span style="color:var(--blue-t)">Apply ${wd.applyCnt||0}</span>
+          <span style="color:var(--red-t)">Repair ${wd.repairCnt||0}</span>
+          <span style="color:var(--amber-t)">미정 ${wd['미정cnt']||0}</span>
+        </div>
+        ${(wd.topCusts&&wd.topCusts.length)?`<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-bottom:4px">TOP 거래처</div>${wd.topCusts.map(c=>`<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid var(--surface2)"><span style="color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px" title="${c.name}">${c.name}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600">${c.cnt}</span></div>`).join('')}`:''}
+      </div>
+    </div>`;
+  });
+  h+='</div></div>';
+  return h;
+}
+function toggleWeek(uid){
+  const body=document.getElementById(uid+'_body');
+  const tog=document.getElementById(uid+'_tog');
+  const card=document.getElementById(uid+'_card');
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  tog.textContent=open?'▲':'▼';
+  card.style.borderColor=open?'var(--blue)':'';
+}
+function toggleSummary(){document.getElementById('summaryAccordion').classList.toggle('open');}
+document.getElementById("acc-panels").innerHTML=renderAcc(1);
+loadRmaData();
+function switchMonth(m,btn){document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.getElementById('acc-panels').innerHTML=renderAcc(m);}
+function switchPage(page,btn){document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');}
+function openDrill(m,cat){
+  const d=ACC[m];
+  const map={'완료':'완료drill','자체수리':'자체수리drill','apply':'applyDrill','repair':'repairDrill','미정':'미정drill'};
+  const drill=d[map[cat]]||[],label={'완료':'처리완료','자체수리':'자체수리','apply':'Apply 발행완료','repair':'Repair 대기','미정':'처리방안 미정'}[cat]||cat;
+  const total=drill.reduce((s,r)=>s+r.cnt,0);
+  document.getElementById('modalTitle').textContent=`${ML[m]} ${label} 상세`;
+  document.getElementById('modalSub').textContent=`총 ${total}건`;
+  document.getElementById('modalBody').innerHTML=buildDrillTable(drill,total);
+  document.getElementById('drillModal').classList.add('open');
+}
+function buildDrillTable(drill,total){
+  if(!drill.length)return'<p style="color:var(--text3);text-align:center;padding:20px">데이터 없음</p>';
+  const byC={};drill.forEach(r=>{if(!byC[r.cust])byC[r.cust]=0;byC[r.cust]+=r.cnt;});
+  const mx=Math.max(...drill.map(r=>r.cnt),1);
+  let h=`<table class="drill-table"><thead><tr><th>거래처 / 모델</th><th style="text-align:right">수량</th></tr></thead><tbody>`;
+  Object.entries(byC).sort((a,b)=>b[1]-a[1]).forEach(([cust,ct])=>{
+    h+=`<tr class="drill-group-head"><td>${cust}</td><td>${ct}건</td></tr>`;
+    drill.filter(r=>r.cust===cust).sort((a,b)=>b.cnt-a.cnt).forEach(r=>{
+      h+=`<tr><td><div class="drill-model">${r.model}</div></td><td><div class="drill-cnt-bar"><div class="drill-mini-bar"><div class="drill-mini-fill" style="width:${Math.round(r.cnt/mx*100)}%"></div></div>${r.cnt}</div></td></tr>`;
+    });
+  });
+  return h+`</tbody></table><div class="drill-total"><span>합계</span><span>${total}건</span></div>`;
+}
+function openLongDrill(range){
+  const rows=LONG_DATA[range]||[];const total=rows.reduce((s,r)=>s+r.cnt,0);
+  document.getElementById('modalTitle').textContent=`장기 미처리 — ${range}`;
+  document.getElementById('modalSub').textContent=`${rows.length}개 항목 · 총 ${total}건`;
+  if(!rows.length){document.getElementById('modalBody').innerHTML='<p style="color:var(--text3);text-align:center;padding:20px">해당 구간 없음</p>';}
+  else{let h=`<table class="drill-table"><thead><tr><th>거래처</th><th>모델</th><th style="text-align:right">경과일</th><th style="text-align:right">수량</th></tr></thead><tbody>`;
+    rows.sort((a,b)=>b.days-a.days).forEach(r=>{const c=r.days>=90?'var(--red-t)':r.days>=50?'var(--orange-t)':'var(--text)';h+=`<tr><td>${r.cust}</td><td><span style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.model}</span></td><td style="text-align:right;color:${c};font-weight:600">${r.days}일</td><td>${r.cnt}건</td></tr>`;});
+    document.getElementById('modalBody').innerHTML=h+`</tbody></table><div class="drill-total"><span>합계</span><span>${total}건</span></div>`;
+  }
+  document.getElementById('drillModal').classList.add('open');
+}
+function closeModal(){document.getElementById('drillModal').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+new Chart(document.getElementById('shipExportChart'),{type:'bar',data:{labels:["26-01", "26-02", "26-03", "26-04", "26-05"],datasets:[{label:'수출 건수',data:[139, 11, 501, 96, 18],backgroundColor:'rgba(37,99,235,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('shipDestChart'),{type:'bar',data:{labels:["SUZHOU", "TAIWAN", "QISDA", "XIAMEN", "Taiwan", "Suzhou", "-"],datasets:[{label:'건수',data:[617, 108, 46, 24, 5, 2, 1],backgroundColor:['rgba(37,99,235,.8)','rgba(124,58,237,.8)','rgba(22,163,74,.8)','rgba(217,119,6,.8)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'}},y:{grid:{display:false}}}}});
+
+/* ════════════════════════════════════════════════════════
+   엑셀 업로드 → ACC 자동 재계산
+   ════════════════════════════════════════════════════════ */
+function showToast(msg,ok=true){
+  const t=document.getElementById('uploadToast');
+  t.textContent=msg;
+  t.style.background=ok?'#166534':'#991b1b';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function classifyStatus(처리내용, 검토결과){
+  if(검토결과==='자체수리완료')return'자체수리';
+  if(!처리내용)return'미정';
+  const p=String(처리내용).trim(), pl=p.toLowerCase();
+  if(/apply/i.test(pl))return'apply';
+  if(/^\d{12,}$/.test(p))return'repair';
+  if(/rma 대기중|정림보상대기|미대상반송대기|증상검토중|보관요청|진행예정|보상여부 확인|처리예정|발송 예정|출고예정|정림재고전환 예정/.test(pl))return'repair';
+  if(/return|선교환완료|품질보상완료|미대상반송:soc|폐기완료|양품화완료|수리완료|전달완료|입고초기불량|dhl|발송완료|repair 출고완료|직수령|지하창고이동|출고완료|미대상 발송/.test(pl))return'완료';
+  if(/\d{6,}\s*\/\s*\d{6}/.test(p))return'완료';
+  return'미정';
+}
+
+function topN(map, n=10){
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([name,cnt])=>({name,cnt}));
+}
+function topNDrill(map, n=20){
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([key,cnt])=>{
+    const [cust,model]=key.split('\x00');
+    return {cust,model,cnt};
+  });
+}
+
+function buildAccFromRows(allRows){
+  // allRows: {month, week, status, route, cust, model, defect, bu}[]
+  const months={};
+  allRows.forEach(r=>{
+    if(!months[r.month])months[r.month]={rows:[]};
+    months[r.month].rows.push(r);
+  });
+
+  const newACC={};
+  Object.keys(months).sort((a,b)=>a-b).forEach(m=>{
+    const rows=months[m].rows;
+    const acc={
+      total:rows.length,
+      완료cnt:0, applyCnt:0, repairCnt:0, 자체수리cnt:0, 미정cnt:0,
+      완료drill:{}, applyDrill:{}, repairDrill:{}, 자체수리drill:{}, 미정drill:{},
+      routes:{}, bu:{}, defects:{}, customers:{}, rmaModels:{},
+      selfFixModels:{}, weeks:{}
+    };
+
+    rows.forEach(r=>{
+      const key=r.cust+'\x00'+(r.model||'');
+      // 상태별 카운트
+      if(r.status==='자체수리'){acc.자체수리cnt++;acc.완료cnt++;if(key in acc.자체수리drill)acc.자체수리drill[key]++;else acc.자체수리drill[key]=1;if(r.cust+'\x00'+(r.model||'') in acc.selfFixModels)acc.selfFixModels[key]++;else acc.selfFixModels[key]=1;}
+      else if(r.status==='완료'){acc.완료cnt++;if(key in acc.완료drill)acc.완료drill[key]++;else acc.완료drill[key]=1;}
+      else if(r.status==='apply'){acc.applyCnt++;if(key in acc.applyDrill)acc.applyDrill[key]++;else acc.applyDrill[key]=1;}
+      else if(r.status==='repair'){acc.repairCnt++;if(key in acc.repairDrill)acc.repairDrill[key]++;else acc.repairDrill[key]=1;}
+      else{acc.미정cnt++;if(key in acc.미정drill)acc.미정drill[key]++;else acc.미정drill[key]=1;}
+
+      // 경로(검토결과)
+      if(r.route){acc.routes[r.route]=(acc.routes[r.route]||0)+1;}
+      // BU
+      if(r.bu){acc.bu[r.bu]=(acc.bu[r.bu]||0)+1;}
+      // 불량 (raw)
+      if(r.defect){acc.defects[r.defect]=(acc.defects[r.defect]||0)+1;}
+      // 거래처
+      if(r.cust){acc.customers[r.cust]=(acc.customers[r.cust]||0)+1;}
+      // RMA 품목 (repair 상태 모델)
+      if(r.status==='repair'&&r.model){acc.rmaModels[r.model]=(acc.rmaModels[r.model]||0)+1;}
+
+      // 주차별
+      const wk=r.week;
+      if(!acc.weeks[wk])acc.weeks[wk]={total:0,완료cnt:0,applyCnt:0,repairCnt:0,자체수리cnt:0,미정cnt:0,custs:{},models:{}};
+      const w=acc.weeks[wk];
+      w.total++;
+      if(r.status==='자체수리'){w.자체수리cnt++;w.완료cnt++;}
+      else if(r.status==='완료')w.완료cnt++;
+      else if(r.status==='apply')w.applyCnt++;
+      else if(r.status==='repair')w.repairCnt++;
+      else w.미정cnt++;
+      if(r.cust)w.custs[r.cust]=(w.custs[r.cust]||0)+1;
+      if(r.model)w.models[r.model]=(w.models[r.model]||0)+1;
+    });
+
+    // issues: model + normalizeDefect 기준 집계
+    const issueMap={};
+    rows.forEach(r=>{
+      if(!r.model||!r.defect)return;
+      const nd=normalizeDefect(r.defect);
+      const k=r.model+'|||'+nd;
+      issueMap[k]=(issueMap[k]||0)+1;
+    });
+    const issues=Object.entries(issueMap)
+      .sort((a,b)=>b[1]-a[1]).slice(0,9)
+      .map(([k,cnt])=>{
+        const [model,defect]=k.split('|||');
+        const lv=cnt>=30?'crit':cnt>=10?'warn':'info';
+        return {model,defect,cnt,lv,custs:{}};
+      });
+
+    // selfFix
+    const sfModels=topNDrill(acc.selfFixModels,20);
+    const selfFix={total:acc.자체수리cnt,models:sfModels,defects:[],customers:[]};
+
+    // 주차 정리
+    const weeks={};
+    Object.keys(acc.weeks).sort((a,b)=>a-b).forEach(wk=>{
+      const w=acc.weeks[wk];
+      weeks[wk]={
+        total:w.total,완료cnt:w.완료cnt,applyCnt:w.applyCnt,
+        repairCnt:w.repairCnt,자체수리cnt:w.자체수리cnt,미정cnt:w.미정cnt,
+        topCusts:topN(w.custs,5),topModels:topN(w.models,5)
+      };
+    });
+
+    newACC[parseInt(m)]={
+      total:acc.total,완료cnt:acc.완료cnt,applyCnt:acc.applyCnt,
+      repairCnt:acc.repairCnt,자체수리cnt:acc.자체수리cnt,미정cnt:acc.미정cnt,
+      완료drill:topNDrill(acc.완료drill,20),
+      applyDrill:topNDrill(acc.applyDrill,20),
+      repairDrill:topNDrill(acc.repairDrill,20),
+      자체수리drill:topNDrill(acc.자체수리drill,20),
+      미정drill:topNDrill(acc.미정drill,10),
+      routes:topN(acc.routes,15),
+      bu:topN(acc.bu,5),
+      defects:topN(acc.defects,10),
+      customers:topN(acc.customers,10),
+      rmaTop10:topN(acc.rmaModels,10),
+      selfFix,issues,weeks
+    };
+  });
+  return newACC;
+}
+
+
+/* ════════════════════════════════════════════════════
+   GitHub 연동 — rma_data.json 자동 fetch/push
+   ════════════════════════════════════════════════════ */
+const GH_RMA = {
+  token: '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',
+  repo:  'rma-dashboard',
+  file:  'rma_data.json',
+  user:  'sungmin216-jlrma'
+};
+
+async function ghRmaFetch(url, opts={}){
+  return fetch(url, {
+    ...opts,
+    headers: {
+      'Authorization': `token ${GH_RMA.token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      ...(opts.headers||{})
+    }
+  });
+}
+
+async function loadRmaData(){
+  const overlay = document.getElementById('loadingOverlay');
+  if(overlay) overlay.style.display='flex';
+  try {
+    // 사용자명 가져오기
+    // username 하드코딩됨, API 호출 불필요
+    const rawUrl = `https://raw.githubusercontent.com/${GH_RMA.user}/${GH_RMA.repo}/main/${GH_RMA.file}?t=${Date.now()}`;
+    const r = await fetch(rawUrl);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    Object.keys(data).forEach(k => { ACC[parseInt(k)||k] = data[k]; });
+    // 렌더링
+    const activeTab = document.querySelector('.mtab.active');
+    const mon = activeTab ? parseInt(activeTab.dataset.m||1) : 1;
+    document.getElementById('acc-panels').innerHTML = renderAcc(mon);
+    // 마지막 업데이트 표시
+    const navYear = document.getElementById('nav-year');
+    if(navYear) navYear.textContent = '2026 누적 · 품질팀 (최신)';
+  } catch(e) {
+    console.warn('GitHub 데이터 로드 실패, 기본 데이터 유지:', e.message);
+  } finally {
+    if(overlay) overlay.style.display='none';
+  }
+}
+
+async function pushRmaDataToGitHub(accData){
+  // username 하드코딩됨
+  const url = `https://api.github.com/repos/${GH_RMA.user}/${GH_RMA.repo}/contents/${GH_RMA.file}`;
+  // 현재 SHA 확인
+  const cur = await ghRmaFetch(url);
+  const curJson = await cur.json();
+  const sha = curJson.sha;
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(accData, null, 2))));
+  const body = { message: `Update RMA data ${new Date().toISOString().slice(0,10)}`, content };
+  if(sha) body.sha = sha;
+  const res = await ghRmaFetch(url, { method:'PUT', body: JSON.stringify(body), headers:{'Content-Type':'application/json'} });
+  if(!res.ok){
+    const err = await res.json();
+    throw new Error(err.message||`HTTP ${res.status}`);
+  }
+  return true;
+}
+
+// 페이지 로드 시 GitHub에서 데이터 자동 로드
+// loadRmaData는 스크립트 말미에서 직접 호출
+
+async function handleExcelUpload(input){
+  const file=input.files[0];
+  if(!file)return;
+  input.value='';
+  showToast('파일 읽는 중…', true);
+
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellDates:true});
+      const sheetName='통합data';
+      if(!wb.SheetNames.includes(sheetName)){showToast('통합data 시트를 찾을 수 없습니다.',false);return;}
+      const ws=wb.Sheets[sheetName];
+      const raw=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
+      const headers=raw[0];
+      // 컬럼 인덱스 맵핑
+      const ci={};
+      headers.forEach((h,i)=>{if(h)ci[String(h).trim()]=i;});
+      const get=(row,name)=>{
+        const keys=Object.keys(ci).filter(k=>k===name||k.replace(/\s/g,'')===(name.replace(/\s/g,'')));
+        return keys.length?row[ci[keys[0]]]:null;
+      };
+
+      const allRows=[];
+      raw.slice(1).forEach(row=>{
+        let d=get(row,'입고일');
+        if(!d)return;
+        // SheetJS date serial
+        if(typeof d==='number'){d=new Date(Math.round((d-25569)*86400*1000));}
+        else if(d instanceof Date){}
+        else{d=new Date(d);}
+        if(isNaN(d.getTime())||d.getFullYear()!==2026)return;
+
+        const month=d.getMonth()+1;
+        const week=Math.ceil(d.getDate()/7);
+        const 처리내용=get(row,'처리 내용')||get(row,'처리내용')||'';
+        const 검토결과=String(get(row,'검토결과')||'').trim();
+        const cust=String(get(row,'Customer')||'').trim();
+        const model=String(get(row,'Model')||'').trim();
+        const defect=String(get(row,'Defect')||'').trim();
+        const bu=String(get(row,'BU')||'').trim();
+        const status=classifyStatus(처리내용,검토결과);
+        allRows.push({month,week,status,route:검토결과,cust,model,defect,bu});
+      });
+
+      if(!allRows.length){showToast('2026년 데이터가 없습니다.',false);return;}
+
+      const newACC=buildAccFromRows(allRows);
+      Object.keys(newACC).forEach(k=>{ACC[k]=newACC[k];});
+
+      // GitHub에 push 후 로컬 렌더
+      showToast('GitHub에 저장 중…', true);
+      try {
+        await pushRmaDataToGitHub(newACC);
+        Object.keys(newACC).forEach(k=>{ ACC[k]=newACC[k]; });
+        const activeTab=document.querySelector('.mtab.active');
+        const activeMon=activeTab?parseInt(activeTab.dataset.m||1):1;
+        switchMonth(activeMon, activeTab);
+        showToast(`저장 완료 — ${allRows.length}건 · 링크 공유자도 자동 반영됨`, true);
+      } catch(e) {
+        showToast('GitHub 저장 실패: '+e.message, false);
+      }
+    }catch(err){
+      showToast('파싱 오류: '+err.message, false);
+      console.error(err);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+</script>
+</body></html>
